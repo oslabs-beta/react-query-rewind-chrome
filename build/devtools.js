@@ -1,0 +1,1 @@
+chrome.devtools.panels.create("MyPanel","","panel.html",(function(e){}));
