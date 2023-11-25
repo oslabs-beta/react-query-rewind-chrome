@@ -1,7 +1,7 @@
 {
-    "name": "DevToolsPanel",
+    "name": "RQRewind",
     "version": "0.1",
-    "description": "A bare-bones example of communication between devtools and an inspected page",
+    "description": "State management DevTools for React Query",
     "devtools_page": "devtools.html",
     "background": {
         "scripts": [
