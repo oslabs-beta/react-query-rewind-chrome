@@ -1,18 +1,18 @@
 {
+    "manifest_version": 3,
     "name": "RQRewind",
     "version": "0.1",
     "description": "State management DevTools for React Query",
     "devtools_page": "devtools.html",
     "background": {
-        "scripts": [
-            "background.js"
-        ]
+        "service_worker": "background.js"
     },
     "permissions": [
-        "tabs", 
-        "http://*/*",
-        "https://*/*",
+        "tabs",
+        "activeTab",
         "storage"
     ],
-    "manifest_version": 2
+    "host_permissions": [
+        "http://localhost:3000/"
+    ]
 }
