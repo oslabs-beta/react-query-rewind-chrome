@@ -7,12 +7,18 @@
     "background": {
         "service_worker": "background.js"
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
     "permissions": [
         "tabs",
         "activeTab",
         "storage"
     ],
     "host_permissions": [
-        "http://localhost:3000/"
+        "http://localhost:8080/"
     ]
 }
