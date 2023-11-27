@@ -1,8 +1,3 @@
-
-// chrome.storage.local.get(['message'],(res) => {
-//     console.log(res);
-// } )
-
 let devToolsPort = null;
 
 chrome.runtime.onConnect.addListener(function(port) {
