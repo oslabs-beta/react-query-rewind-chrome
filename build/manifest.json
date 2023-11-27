@@ -1,12 +1,23 @@
 {
-  "manifest_version": 3,
-  "name": "My DevTools Extension",
-  "version": "1.0",
-  "description": "A custom DevTools extension",
-  "action": {
-    "default_popup": "js/index.html",
-    "default_title": "React Chrome Extension"
-},
-  "devtools_page": "devtools.html",
-  "permissions": ["storage"]
+    "manifest_version": 3,
+    "name": "RQRewind",
+    "version": "0.1",
+    "description": "State management DevTools for React Query",
+    "devtools_page": "devtools.html",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://localhost/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "storage",
+        "scripting"
+    ],
+    "host_permissions": ["http://localhost/*"]
 }

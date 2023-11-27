@@ -4,8 +4,7 @@
 }
 
 .container {
-    width: 15rem;
-    height: 15rem;
-    background-color: green;
-
+    width: 30rem;
+    height: 50rem;
+    background-color: rgb(115, 18, 179);
 }
