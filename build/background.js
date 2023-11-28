@@ -1,3 +1,4 @@
+//declare background port
 let devToolsPort = null;
 
 chrome.runtime.onConnect.addListener(function(port) {
@@ -16,3 +17,4 @@ chrome.runtime.onConnect.addListener(function(port) {
         devToolsPort = null;
     });
 });
+
