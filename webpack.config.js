@@ -3,11 +3,10 @@ const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 
-module.exports = {
+const config = {
     entry: {
         index: "./src/index.jsx"
     },
-    mode: "production",
     module: {
         rules: [
             {
@@ -73,3 +72,29 @@ function getHtmlPlugins(chunks) {
             })
     );
 }
+// Production config
+if (process.env.NODE_ENV !== 'development') {
+    config.mode = "production"
+    config.output = {
+        path: path.join(__dirname, "build/js"),
+        filename: "[name].js",
+    }
+    // config.plugins.push(new BomPlugin(true))
+}
+
+// Development config
+if (process.env.NODE_ENV === 'development') {
+    config.mode = "development"
+    config.output = {
+        path: path.join(__dirname, "dev"),
+        filename: "[name].js",
+    }
+    config.devServer = {
+        static: path.join(__dirname, 'dev'), // The root directory for the dev server to serve files from
+        port: 3000, // Specify the port. Default is 8080 if not specified
+        open: true, // Open the browser after server had been started
+        hot: true, // Enable webpack's Hot Module Replacement feature
+    }
+}
+
+module.exports = config;
