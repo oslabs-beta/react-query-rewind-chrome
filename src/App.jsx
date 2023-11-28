@@ -3,6 +3,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import BasicTabs from "./BasicTabs";
+import JsonFormatter from "./components/JsonFormatter";
 
 function App() {
   const [list, setList] = useState([]);
@@ -33,6 +34,7 @@ function App() {
         <BasicTabs />
       </div>
       <div>{items}</div>
+      <JsonFormatter/>
     </div>
   );
 }
