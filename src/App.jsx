@@ -1,27 +1,29 @@
 import React from "react";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import BasicTabs from "./BasicTabs";
 
 function App() {
-  let port = chrome.runtime.connect({ name: "devtools-panel" });
   const [list, setList] = useState([]);
 
-  // port.postMessage({greeting: "hello from DevTools panel"});
-
-  port.onMessage.addListener(function (msg) {
-    if (msg.message.data) {
-      const newList = [...list];
-      newList.push(msg);
-      setList(newList);
-    } else {
-      console.log("here");
-      setList([]);
-    }
-
+ useEffect(() => {
+  let port = chrome.runtime.connect({ name: "devtools-panel" });
+  port.onMessage.addListener((msg) => {
+      setList(prev => [...prev, msg]);
     // Handle messages from background script
   });
+ }, []);
+
+ useEffect(() => {
+  chrome.devtools.network.onNavigated.addListener(() => {
+    // This event is fired when the inspected window navigates to a new page.
+    // You can use it to trigger a reload of your DevTools extension
+    console.log('here');
+    // Reload your DevTools extension panel or perform necessary refresh actions here.
+    window.location.reload(true); // This reloads the DevTools extension panel itself.
+});
+ }, []);
 
   const items = list.map((msg, i) => <ListItem msg={msg} key={i} />);
 
