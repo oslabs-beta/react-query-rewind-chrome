@@ -30,6 +30,7 @@ const names = [
 
 export default function MultiSelect() {
   const [personName, setPersonName] = React.useState<string[]>([]);
+  // const [queryInfo, setQueryInfo] = React.useState<Record<string, any>>({});
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {
@@ -41,18 +42,63 @@ export default function MultiSelect() {
     );
   };
 
+    // // Add a state to store the query information
+    // const [queryInfo, setQueryInfo] = React.useState<Record<string, any>>({});
+
+    // // Subscribe to window messages
+    // React.useEffect(() => {
+    //   const handleMessage = (event: MessageEvent) => {
+    //     if (event.data.type === 'react-query-rewind') {
+    //       const payload = event.data.payload;
+    //       // Update queryInfo state based on the received payload
+    //       setQueryInfo((prevQueryInfo) => ({
+    //         ...prevQueryInfo,
+    //         [payload.queryKey]: payload,
+    //       }));
+    //     }
+    //   };
+  
+    //   window.addEventListener('message', handleMessage);
+  
+    //   return () => {
+    //     window.removeEventListener('message', handleMessage);
+    //   };
+    // }, []);
+
+  // // Subscribe to window messages
+  // React.useEffect(() => {
+  //   const handleMessage = (event: MessageEvent) => {
+  //     if (event.data.type === 'react-query-rewind') {
+  //       const payload = event.data.payload;
+  //       // Update queryInfo state based on the received payload
+  //       setQueryInfo((prevQueryInfo) => ({
+  //         ...prevQueryInfo,
+  //         [payload.queryKey]: payload,
+  //       }));
+  //     }
+  //   };
+
+  //   window.addEventListener('message', handleMessage);
+
+  //   return () => {
+  //     window.removeEventListener('message', handleMessage);
+  //   };
+  // }, []);
+
+  // // Get dynamically updated names based on queryInfo
+  // const updatedNames = Object.keys(queryInfo);
+
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Choose your queries</InputLabel>
+        <InputLabel id="demo-multiple-checkbox-label">Queries</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
           value={personName}
           onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          // renderValue={(selected) => selected.length > 0 ? selected.join(', ') : 'Select your queries'}
+          input={<OutlinedInput label="Queries" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
@@ -64,6 +110,12 @@ export default function MultiSelect() {
           ))}
         </Select>
       </FormControl>
+      {/* {personName.map((selectedQuery) => (
+        <div key={selectedQuery}>
+          <h3>{selectedQuery}</h3>
+          <pre>{JSON.stringify(queryInfo[selectedQuery], null, 2)}</pre>
+        </div>
+      ))} */}
     </div>
   );
 }

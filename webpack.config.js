@@ -1,6 +1,10 @@
 const path = require("path");
 const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin")
+// var webpack = require('webpack');
+
+// // import plugin
+// var BomPlugin = require('webpack-utf8-bom');
 
 module.exports = {
     entry: {
@@ -49,6 +53,7 @@ module.exports = {
         //     ],
         // }),
         ...getHtmlPlugins(["index"]),
+        // new BomPlugin(true),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".jsx"],
