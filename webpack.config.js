@@ -5,7 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 const config = {
     entry: {
-        index: "./src/index.jsx"
+        index: "./src/index.tsx"
     },
     module: {
         rules: [

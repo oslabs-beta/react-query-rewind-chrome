@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import MultiSelect from './MultiSelect';
+import MultiSelect from '../components/MultiSelect';
 
 interface TabPanelProps {
   children?: React.ReactNode;
