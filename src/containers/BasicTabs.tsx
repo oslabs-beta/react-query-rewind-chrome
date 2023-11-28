@@ -3,7 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import MultiSelect from './MultiSelect';
+import Container from '@mui/material/Container';
+import MultiSelect from '../components/MultiSelect';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,9 +24,12 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
+        <Container>
+          <Box sx={{ p: 3 }}>
+            {/* <Typography>{children}</Typography> */}
+            { children }
+          </Box>
+        </Container>
       )}
     </div>
   );

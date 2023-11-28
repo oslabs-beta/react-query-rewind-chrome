@@ -5,7 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 const config = {
     entry: {
-        index: "./src/index.jsx"
+        index: "./src/index.tsx"
     },
     module: {
         rules: [
@@ -40,14 +40,11 @@ const config = {
         ],
     },
     plugins: [
-        // new CopyPlugin({
-        //     patterns: [
-        //         { from: "./public/manifest.json", to: "../manifest.json" },
-        //         { from: "./public/devtools.html", to: "../devtools.html" },
-        //         { from: "./public/devtools.js", to: "../devtools.js" },
-        //         { from: "./public/panel.html", to: "../panel.html" }
-        //     ],
-        // }),
+        new CopyPlugin({
+            patterns: [
+                { from: "./public", to: "./" }
+            ],
+        }),
         ...getHtmlPlugins(["index"]),
     ],
     resolve: {
@@ -57,7 +54,7 @@ const config = {
               },
     },
     output: {
-        path: path.join(__dirname, "build/js"),
+        path: path.join(__dirname, "build"),
         filename: "[name].js",
     },
 };
@@ -76,7 +73,7 @@ function getHtmlPlugins(chunks) {
 if (process.env.NODE_ENV !== 'development') {
     config.mode = "production"
     config.output = {
-        path: path.join(__dirname, "build/js"),
+        path: path.join(__dirname, "build"),
         filename: "[name].js",
     }
     // config.plugins.push(new BomPlugin(true))
