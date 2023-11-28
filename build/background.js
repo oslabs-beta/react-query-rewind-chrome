@@ -1,6 +1,10 @@
+
+//declare background port
+
 // chrome.storage.local.get(['message'],(res) => {
 //     console.log(res);
 // } )
+
 
 let devToolsPort = null;
 
@@ -25,3 +29,4 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   return true;
 });
+
