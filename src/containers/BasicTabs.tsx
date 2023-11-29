@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import MultiSelect from '../components/MultiSelect';
 import { QueryKey } from '@tanstack/react-query';
+import QueryDisplay from '../components/QueryDisplay';
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -67,7 +68,6 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
   const [combinedUpdates, setCombinedUpdates] = useState<QueryEvent[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     console.log('combinedUpdates', combinedUpdates);
@@ -115,6 +115,10 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
           queryOptions={queryOptions}
         />
         {/* insert time traveling code here but we need access to data from Multiselect */}
+        <QueryDisplay
+          combinedUpdates={combinedUpdates}
+          selectedQueries={selectedQueries}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Metrics
