@@ -5,6 +5,9 @@ import ListItem from "./components/ListItem";
 import BasicTabs from "./containers/BasicTabs";
 import JsonFormatter from "./components/JsonFormatter";
 import MaterialUI from "./components/MaterialUI";
+import JsonDiffRaw from "./components/JsonDiffRaw";
+import JsonDiffTree from "./components/JsonDiffTree";
+
 
 function App() {
   const [list, setList] = useState([]);
@@ -36,6 +39,8 @@ function App() {
       </div>
       {/* <div>{items}</div> */}
       <JsonFormatter/>
+      <JsonDiffRaw/>
+      <JsonDiffTree/>
       <MaterialUI/>
     </div>
   );

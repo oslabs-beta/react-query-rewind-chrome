@@ -1,7 +1,7 @@
 const path = require("path");
 const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-
+require('dotenv')
 
 const config = {
     entry: {
@@ -14,9 +14,9 @@ const config = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
-                   presets: ['@babel/preset-env', '@babel/preset-react'],
-                 },
-              },
+                    presets: ['@babel/preset-env', '@babel/preset-react'],
+                },
+            },
             {
                 test: /\.tsx?$/,
                 use: [
@@ -50,8 +50,8 @@ const config = {
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".jsx"],
         alias: {
-                 '@mui/styled-engine': '@mui/styled-engine-sc'
-              },
+            '@mui/styled-engine': '@mui/styled-engine-sc'
+        }
     },
     output: {
         path: path.join(__dirname, "build"),

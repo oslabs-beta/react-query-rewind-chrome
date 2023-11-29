@@ -35,7 +35,10 @@ const expand = (keyPath: ReadonlyArray<string | number >, value: any, layer: num
   // console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)
   // console.log('value: ', value); // value: value in that keypath
   // console.log('layer: ', layer); // layer: the depth
-  return true; // always expand all
+  
+  // expand first level
+  if (layer < 2) return true;
+  return false
 }
 
 type JsonDataType = {
