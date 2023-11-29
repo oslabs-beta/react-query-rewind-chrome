@@ -36,10 +36,6 @@ const QueryDisplay = ({
   const currentUpdate = combinedUpdates[currentIndex];
 
   useEffect(() => {
-    console.log(querySnapshot);
-  }, [querySnapshot]);
-
-  useEffect(() => {
     const initialSnapshot: QuerySnapshot = {};
 
     selectedQueries.forEach(queryName => {
@@ -53,13 +49,11 @@ const QueryDisplay = ({
   }, [queryData, selectedQueries]);
 
   useEffect(() => {
-    if (currentUpdate) {
-      setQuerySnapshot(prevSnapshot => ({
-        ...prevSnapshot,
-        [currentUpdate.queryHash]: currentUpdate,
-      }));
-    }
-  }, [currentUpdate]);
+    // Update currentIndex to the last update when combinedUpdates changes
+    setCurrentIndex(
+      combinedUpdates.length > 0 ? combinedUpdates.length - 1 : 0
+    );
+  }, [combinedUpdates]);
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -71,12 +65,12 @@ const QueryDisplay = ({
     );
   };
 
-  function formatTimestamp(timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     const date = new Date(timestamp);
 
     const day = date.getDate();
-    const month = date.getMonth() + 1; // Month is 0-indexed
-    const year = date.getFullYear() % 100; // Get the last two digits of the year
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear() % 100;
 
     let hours = date.getHours();
     const minutes = date.getMinutes();
@@ -84,12 +78,12 @@ const QueryDisplay = ({
     const ampm = hours >= 12 ? 'PM' : 'AM';
 
     hours = hours % 12;
-    hours = hours ? hours : 12; // '0' hour should be '12'
+    hours = hours ? hours : 12;
     const minutesFormatted = minutes < 10 ? '0' + minutes : minutes;
     const secondsFormatted = seconds < 10 ? '0' + seconds : seconds;
 
     return `${month}/${day}/${year} - ${hours}:${minutesFormatted}:${secondsFormatted}${ampm}`;
-  }
+  };
 
   return (
     <>
@@ -127,13 +121,17 @@ const QueryDisplay = ({
           return (
             <div key={queryName}>
               <h3>Query: {queryName}</h3>
-              {update && (
+              {currentUpdate && (
                 <>
-                  <p>Timestamp: {formatTimestamp(update.timestamp)}</p>
-                  {update.queryData && (
+                  <strong>
+                    Timestamp: {formatTimestamp(currentUpdate.timestamp)}
+                  </strong>
+                  {currentUpdate.queryData && (
                     <div style={{ whiteSpace: 'pre-wrap' }}>
                       <strong>State:</strong>
-                      <pre>{JSON.stringify(update.queryData, null, 2)}</pre>
+                      <pre>
+                        {JSON.stringify(currentUpdate.queryData, null, 2)}
+                      </pre>
                     </div>
                   )}
                 </>
