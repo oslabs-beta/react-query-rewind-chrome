@@ -1,40 +1,85 @@
-import React from "react";
-import "./App.css";
-import { useState, useEffect } from "react";
-import ListItem from "./components/ListItem";
-import BasicTabs from "./containers/BasicTabs";
-import JsonFormatter from "./components/JsonFormatter";
+import React from 'react';
+import './App.css';
+import { useState, useEffect } from 'react';
+import ListItem from './components/ListItem';
+import BasicTabs from './containers/BasicTabs';
+import JsonFormatter from './components/JsonFormatter';
+import { QueryKey } from '@tanstack/react-query';
+
+type QueryEvent = {
+  eventType: string;
+  queryKey: QueryKey;
+  queryHash: string;
+  timestamp: Date;
+  queryData?: any;
+};
+
+type QueryData = {
+  [queryName: string]: {
+    updates: QueryEvent[];
+  };
+};
 
 function App() {
-  const [list, setList] = useState([]);
+  // state to store changes to query cache
+  const [queryData, setQueryData] = useState<QueryData>({});
+  const [queryOptions, setQueryOptions] = useState<string[]>([]);
 
-//  useEffect(() => {
-//   let port = chrome.runtime.connect({ name: "devtools-panel" });
-//   port.onMessage.addListener((msg) => {
-//       setList(prev => [...prev, msg]);
-//     // Handle messages from background script
-//   });
-//  }, []);
+  // adds event listeners when component mounts
+  useEffect(() => {
+    // connects to background.js and listens for messages
+    let port = chrome.runtime.connect({ name: 'devtools-panel' });
+    port.onMessage.addListener(message => {
+      if (
+        message.event &&
+        typeof message.event === 'object' &&
+        'queryHash' in message.event
+      ) {
+        const newEvent = message.event;
+        const queryHash = newEvent.queryHash;
 
-//  useEffect(() => {
-//   chrome.devtools.network.onNavigated.addListener(() => {
-//     // This event is fired when the inspected window navigates to a new page.
-//     // You can use it to trigger a reload of your DevTools extension
-//     console.log('here');
-//     // Reload your DevTools extension panel or perform necessary refresh actions here.
-//     window.location.reload(true); // This reloads the DevTools extension panel itself.
-// });
-//  }, []);
+        // adds new events to queryData object based on queryKey
+        setQueryData(prevQueryData => {
+          const existingUpdates = prevQueryData[queryHash]?.updates || [];
 
-  // const items = list.map((msg, i) => <ListItem msg={msg} key={i} />);
+          return {
+            ...prevQueryData,
+            [queryHash]: {
+              updates: [...existingUpdates, newEvent],
+            },
+          };
+        });
+      }
+    });
+
+    // reloads DevTool panel
+    // need to define exact function for the listener to be removed in return
+    const windowReloaded = () => {
+      window.location.reload();
+    };
+
+    // event listner triggered when user navigates to new tab / reloads page
+    chrome.devtools.network.onNavigated.addListener(windowReloaded);
+
+    // cleanup 2 listeners on component dismount
+    return () => {
+      port.disconnect();
+      chrome.devtools.network.onNavigated.removeListener(windowReloaded);
+    };
+  }, []);
+
+  useEffect(() => {
+    const newQueryOptions = Object.keys(queryData);
+    setQueryOptions(newQueryOptions);
+  }, [queryData]);
 
   return (
     <div className="App">
       <div>
-        <BasicTabs />
+        <BasicTabs queryData={queryData} queryOptions={queryOptions} />
       </div>
       {/* <div>{items}</div> */}
-      <JsonFormatter/>
+      {/* <JsonFormatter /> */}
     </div>
   );
 }

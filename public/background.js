@@ -1,15 +1,13 @@
-
 //declare background port
 
 // chrome.storage.local.get(['message'],(res) => {
 //     console.log(res);
 // } )
 
-
 let devToolsPort = null;
 
 chrome.runtime.onConnect.addListener(function (port) {
-  console.log("background");
+  console.log('Background Connected');
   devToolsPort = port;
 
   port.onMessage.addListener(function (msg) {
@@ -21,12 +19,11 @@ chrome.runtime.onConnect.addListener(function (port) {
   });
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  message = msg;
-  console.log(msg);
+chrome.runtime.onMessage.addListener((newEvent, sender, sendResponse) => {
+  // message = msg;
+  // console.log(msg);
   if (devToolsPort) {
-    devToolsPort.postMessage({ message: message });
+    devToolsPort.postMessage({ event: newEvent });
   }
-  return true;
+  // return true;
 });
-
