@@ -5,7 +5,6 @@ import ListItem from "./components/ListItem";
 import BasicTabs from "./containers/BasicTabs";
 import JsonFormatter from "./components/JsonFormatter";
 
-
 function App() {
   const [list, setList] = useState([]);
 

@@ -7,12 +7,16 @@ const testData = {
   queryKey1: {
     post1: {
       checked: false,
-      value: 'Test'
+      value: 'Test',
+      nested1: {
+        first: 1,
+        second: 2
+      }
     },
     post2: {
       checked: false,
       value: 'Test Again',
-      nested: {
+      nested2: {
         arr: [1,4,5] 
       }
     }
@@ -21,52 +25,42 @@ const testData = {
 
 
 // https://github.com/reduxjs/redux-devtools/tree/75322b15ee7ba03fddf10ac3399881e302848874/src/react/themes
-const theme2 = {
-  scheme: 'isotope',
-  author: 'jan t. sott',
-  base00: '#000000',
-  base01: '#404040',
-  base02: '#606060',
-  base03: '#808080',
-  base04: '#c0c0c0',
-  base05: '#d0d0d0',
-  base06: '#e0e0e0',
-  base07: '#ffffff',
-  base08: '#ff0000',
-  base09: '#ff9900',
-  base0A: '#ff0099',
-  base0B: '#33ff00',
-  base0C: '#00ffff',
-  base0D: '#0066ff',
-  base0E: '#cc00ff',
-  base0F: '#3300ff'
-};
-
 const theme = {
-  scheme: 'monokai', // not sure this is doing anything - I can just copy past themes from : https://github.com/reduxjs/redux-devtools/tree/75322b15ee7ba03fddf10ac3399881e302848874/src/react/themes
-  base00: 'transparent',  // Background color
-  // base01: '#1c1c1c',      // Light background (for nested nodes)
-  // base02: '#262626',      // Selection background
-  // base03: '#9e9e9e',      // Comments, Invisibles, Line Highlighting
-  // base04: '#b4b7b4',      // Dark foreground (used for status bars)
-  // base05: '#dcdcdc',      // Default Foreground, Caret, Delimiters, Operators
-  // base06: '#e8e8e8',      // Light foreground (not often used)
-  // base07: '#f5f5f5',      // Light background (not often used)
-  // base08: '#ab4642',      // Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-  // base09: '#dc9656',      // Integers, Boolean, Constants, XML Attributes, Markup Link Url
-  // base0A: '#f7ca88',      // Classes, Markup Bold, Search Text Background
-  // base0B: '#a1b56c',      // Strings, Inherited Class, Markup Code, Diff Inserted
-  // base0C: '#86c1b9',      // Support, Regular Expressions, Escape Characters, Markup Quotes
-  // base0D: '#7cafc2',      // Functions, Methods, Attribute IDs, Headings
-  // base0E: '#ba8baf',      // Keywords, Storage, Selector, Markup Italic, Diff Changed
-  // base0F: '#a16946'       // Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
-
+  base00: 'transparent'
 };
 
-const JsonFormatter = () => {
+const expand = (keyPath: ReadonlyArray<string | number >, value: any, layer: number) => {
+  // Gets recurisved called and traverses the json in depth first search so we could use it to trac the nodes that are open at any given time
+
+  // console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)
+  // console.log('value: ', value); // value: value in that keypath
+  // console.log('layer: ', layer); // layer: the depth
+  return true; // always expand all
+}
+
+type JsonDataType = {
+  [key: string]: any;
+}
+
+type JsonFormatterType = {
+  jsonData?: JsonDataType
+}
+
+const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData }) => {
+  // hideRoot: hides the root node
+  // shouldExpandNodeInitially: function that determines what is initially expanded. Might be a challenge to track this from node to node
+  
+  // delete later - simply for testing
+  if (!jsonData) jsonData = testData;
+
   return (
     <div>
-      <JSONTree data={testData} theme={theme}/>
+      <JSONTree
+        data={jsonData}
+        theme={theme}
+        hideRoot={true}
+        shouldExpandNodeInitially={expand}
+      />
     </div>
   )
 }
