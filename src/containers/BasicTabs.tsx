@@ -70,8 +70,9 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // console.log('combinedUpdates', combinedUpdates);
-    // console.log('queryData', queryData);
+    console.log('combinedUpdates', combinedUpdates);
+    console.log('queryData', queryData);
+    console.log('selectedQueries', selectedQueries);
   }, [combinedUpdates]);
 
   useEffect(() => {

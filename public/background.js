@@ -25,5 +25,5 @@ chrome.runtime.onMessage.addListener((newEvent, sender, sendResponse) => {
   if (devToolsPort) {
     devToolsPort.postMessage({ event: newEvent });
   }
-  return true;
+  // return true;
 });
