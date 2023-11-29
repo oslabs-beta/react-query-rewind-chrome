@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import ListItem from "./components/ListItem";
 import BasicTabs from "./containers/BasicTabs";
 import JsonFormatter from "./components/JsonFormatter";
-import MaterialUI from "./components/MaterialUI";
 
 function App() {
   const [list, setList] = useState([]);
@@ -36,7 +35,6 @@ function App() {
       </div>
       {/* <div>{items}</div> */}
       <JsonFormatter/>
-      <MaterialUI/>
     </div>
   );
 }
