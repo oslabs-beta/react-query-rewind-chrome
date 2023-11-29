@@ -70,12 +70,6 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
   const [combinedUpdates, setCombinedUpdates] = useState<QueryEvent[]>([]);
 
   useEffect(() => {
-    console.log('combinedUpdates', combinedUpdates);
-    console.log('queryData', queryData);
-    console.log('selectedQueries', selectedQueries);
-  }, [combinedUpdates]);
-
-  useEffect(() => {
     // Combine updates from selected queries and sort them by timestamp
     const updates = Object.entries(queryData)
       .filter(([queryName]) => selectedQueries.includes(queryName))
@@ -118,6 +112,7 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
         <QueryDisplay
           combinedUpdates={combinedUpdates}
           selectedQueries={selectedQueries}
+          queryData={queryData}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QueryKey } from '@tanstack/react-query';
 
 type QueryEvent = {
@@ -9,9 +9,16 @@ type QueryEvent = {
   queryData?: any;
 };
 
+type QueryData = {
+  [queryName: string]: {
+    updates: QueryEvent[];
+  };
+};
+
 type QueryDisplayProps = {
   combinedUpdates: QueryEvent[];
   selectedQueries: string[];
+  queryData: QueryData;
 };
 
 type QuerySnapshot = {
@@ -21,9 +28,38 @@ type QuerySnapshot = {
 const QueryDisplay = ({
   combinedUpdates,
   selectedQueries,
+  queryData,
 }: QueryDisplayProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [querySnapshot, setQuerySnapshot] = useState<QuerySnapshot>({});
+
+  const currentUpdate = combinedUpdates[currentIndex];
+
+  useEffect(() => {
+    console.log(querySnapshot);
+  }, [querySnapshot]);
+
+  useEffect(() => {
+    const initialSnapshot: QuerySnapshot = {};
+
+    selectedQueries.forEach(queryName => {
+      const data = queryData[queryName];
+      if (data && data.updates.length > 0) {
+        initialSnapshot[queryName] = data.updates[data.updates.length - 1];
+      }
+    });
+
+    setQuerySnapshot(initialSnapshot);
+  }, [queryData, selectedQueries]);
+
+  useEffect(() => {
+    if (currentUpdate) {
+      setQuerySnapshot(prevSnapshot => ({
+        ...prevSnapshot,
+        [currentUpdate.queryHash]: currentUpdate,
+      }));
+    }
+  }, [currentUpdate]);
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -34,6 +70,26 @@ const QueryDisplay = ({
       Math.min(prevIndex + 1, combinedUpdates.length - 1)
     );
   };
+
+  function formatTimestamp(timestamp: Date) {
+    const date = new Date(timestamp);
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Month is 0-indexed
+    const year = date.getFullYear() % 100; // Get the last two digits of the year
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // '0' hour should be '12'
+    const minutesFormatted = minutes < 10 ? '0' + minutes : minutes;
+    const secondsFormatted = seconds < 10 ? '0' + seconds : seconds;
+
+    return `${month}/${day}/${year} - ${hours}:${minutesFormatted}:${secondsFormatted}${ampm}`;
+  }
 
   return (
     <>
@@ -65,8 +121,7 @@ const QueryDisplay = ({
       </div>
 
       <div className="data">
-        {Object.entries(selectedQueries).map(([queryName, isSelected]) => {
-          if (!isSelected) return null;
+        {selectedQueries.map(queryName => {
           const update = querySnapshot[queryName];
 
           return (
@@ -74,8 +129,7 @@ const QueryDisplay = ({
               <h3>Query: {queryName}</h3>
               {update && (
                 <>
-                  <p>Event Type: {update.eventType}</p>
-                  <p>Timestamp: {update.timestamp.toLocaleString()}</p>
+                  <p>Timestamp: {formatTimestamp(update.timestamp)}</p>
                   {update.queryData && (
                     <div style={{ whiteSpace: 'pre-wrap' }}>
                       <strong>State:</strong>
