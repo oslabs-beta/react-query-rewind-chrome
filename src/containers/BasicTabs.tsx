@@ -1,16 +1,40 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import MultiSelect from '../components/MultiSelect';
+import { QueryKey } from '@tanstack/react-query';
 
-interface TabPanelProps {
+type TabPanelProps = {
   children?: React.ReactNode;
   index: number;
   value: number;
-}
+};
+
+type QueryEvent = {
+  eventType: string;
+  queryKey: QueryKey;
+  queryHash: string;
+  timestamp: Date;
+  queryData?: any;
+};
+
+type QueryData = {
+  [queryName: string]: {
+    updates: QueryEvent[];
+  };
+};
+
+type BasicTabsProps = {
+  queryData: QueryData;
+  queryOptions: string[];
+};
+
+type QuerySnapshot = {
+  [queryHash: string]: QueryEvent;
+};
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -25,10 +49,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Container>
-          <Box sx={{ p: 3 }}>
-            {/* <Typography>{children}</Typography> */}
-            { children }
-          </Box>
+          <Box sx={{ p: 3 }}>{children}</Box>
         </Container>
       )}
     </div>
@@ -42,27 +63,63 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs() {
+const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
+  const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
+  const [combinedUpdates, setCombinedUpdates] = useState<QueryEvent[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    // console.log('combinedUpdates', combinedUpdates);
+    // console.log('queryData', queryData);
+  }, [combinedUpdates]);
+
+  useEffect(() => {
+    // Combine updates from selected queries and sort them by timestamp
+    const updates = Object.entries(queryData)
+      .filter(([queryName]) => selectedQueries.includes(queryName))
+      .flatMap(([, data]) => data.updates)
+      .sort((a, b) => {
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
+        return dateA.getTime() - dateB.getTime();
+      });
+
+    setCombinedUpdates(updates);
+  }, [queryData, selectedQueries]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const handleSelectionChange = (queries: string[]) => {
+    setSelectedQueries(queries);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
           <Tab label="Query" {...a11yProps(0)} />
           <Tab label="Metrics" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <MultiSelect />
+        <MultiSelect
+          onSelectionChange={handleSelectionChange}
+          queryOptions={queryOptions}
+        />
+        {/* insert time traveling code here but we need access to data from Multiselect */}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Metrics
       </CustomTabPanel>
     </Box>
   );
-}
+};
+
+export default BasicTabs;

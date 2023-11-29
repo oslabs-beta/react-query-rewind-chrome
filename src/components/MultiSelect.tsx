@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,75 +18,25 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Query 1',
-  'Query 2',
-  'Query 3',
-  'Query 4',
-  'Query 5',
-  'Query 6',
-  'Query 7',
-];
+type MultiSelectProps = {
+  onSelectionChange: (selected: string[]) => void;
+  queryOptions: string[];
+};
 
-export default function MultiSelect() {
-  const [personName, setPersonName] = React.useState<string[]>([]);
-  // const [queryInfo, setQueryInfo] = React.useState<Record<string, any>>({});
+export default function MultiSelect({
+  onSelectionChange,
+  queryOptions,
+}: MultiSelectProps) {
+  const [personName, setPersonName] = useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    const newSelection = typeof value === 'string' ? value.split(',') : value;
+    setPersonName(newSelection);
+    onSelectionChange(newSelection); // Call the callback with the new selection
   };
-
-    // // Add a state to store the query information
-    // const [queryInfo, setQueryInfo] = React.useState<Record<string, any>>({});
-
-    // // Subscribe to window messages
-    // React.useEffect(() => {
-    //   const handleMessage = (event: MessageEvent) => {
-    //     if (event.data.type === 'react-query-rewind') {
-    //       const payload = event.data.payload;
-    //       // Update queryInfo state based on the received payload
-    //       setQueryInfo((prevQueryInfo) => ({
-    //         ...prevQueryInfo,
-    //         [payload.queryKey]: payload,
-    //       }));
-    //     }
-    //   };
-  
-    //   window.addEventListener('message', handleMessage);
-  
-    //   return () => {
-    //     window.removeEventListener('message', handleMessage);
-    //   };
-    // }, []);
-
-  // // Subscribe to window messages
-  // React.useEffect(() => {
-  //   const handleMessage = (event: MessageEvent) => {
-  //     if (event.data.type === 'react-query-rewind') {
-  //       const payload = event.data.payload;
-  //       // Update queryInfo state based on the received payload
-  //       setQueryInfo((prevQueryInfo) => ({
-  //         ...prevQueryInfo,
-  //         [payload.queryKey]: payload,
-  //       }));
-  //     }
-  //   };
-
-  //   window.addEventListener('message', handleMessage);
-
-  //   return () => {
-  //     window.removeEventListener('message', handleMessage);
-  //   };
-  // }, []);
-
-  // // Get dynamically updated names based on queryInfo
-  // const updatedNames = Object.keys(queryInfo);
 
   return (
     <div>
@@ -99,10 +49,10 @@ export default function MultiSelect() {
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput label="Queries" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
+          renderValue={selected => selected.join(', ')}
+          // MenuProps={MenuProps} // Ensure MenuProps is defined or remove this line
         >
-          {names.map((name) => (
+          {queryOptions.map(name => (
             <MenuItem key={name} value={name}>
               <Checkbox checked={personName.indexOf(name) > -1} />
               <ListItemText primary={name} />
@@ -110,12 +60,6 @@ export default function MultiSelect() {
           ))}
         </Select>
       </FormControl>
-      {/* {personName.map((selectedQuery) => (
-        <div key={selectedQuery}>
-          <h3>{selectedQuery}</h3>
-          <pre>{JSON.stringify(queryInfo[selectedQuery], null, 2)}</pre>
-        </div>
-      ))} */}
     </div>
   );
 }
