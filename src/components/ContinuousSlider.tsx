@@ -13,6 +13,11 @@ export default function ContinuousSlider() {
   return (
     <Box sx={{ width: 300 }}>
       <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+      <Slider
+          value={value}
+          onChange={handleChange}
+          aria-labelledby="continuous-slider"
+        />
       </Stack>
     </Box>
   );

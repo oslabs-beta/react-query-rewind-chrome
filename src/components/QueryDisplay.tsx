@@ -40,6 +40,9 @@ const QueryDisplay = ({
 }: QueryDisplayProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [querySnapshot, setQuerySnapshot] = useState<QuerySnapshot>({});
+  const [isPlaying, setIsPlaying] = useState(false);/////
+  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null); // to store the interval ID
+
 
   const currentUpdate = combinedUpdates[currentIndex];
 
@@ -62,6 +65,36 @@ const QueryDisplay = ({
       combinedUpdates.length > 0 ? combinedUpdates.length - 1 : 0
     );
   }, [combinedUpdates]);
+
+
+const handleAll = () => {
+  setIsPlaying(true);
+
+  // Clear any existing interval
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+  }
+
+  // Start a new interval to move to the next update every 5 seconds
+  const id = setInterval(() => {
+    setCurrentIndex((prevIndex) =>
+      Math.min(prevIndex + 1, combinedUpdates.length - 1)
+    );
+  }, 3000);
+
+  // Store the interval ID for later cleanup
+  setIntervalId(id);
+};
+
+// Cleanup the interval when component unmounts or when isPlaying changes to false
+useEffect(() => {
+  return () => {
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+    }
+  };
+}, [intervalId]);
+
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -125,10 +158,12 @@ const QueryDisplay = ({
 
       <div className="navigation">
         {/* <Stack direction="row" alignItems="center" spacing={-1}> */}
-        <Box sx={{ width: '100%', display: 'flex' }}>
+        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
         <IconButton aria-label="delete" 
       size="large"
+      disabled={isPlaying === true}
+      onClick={handleAll}
       sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
         <PlayArrowIcon fontSize="inherit" />
       </IconButton>
