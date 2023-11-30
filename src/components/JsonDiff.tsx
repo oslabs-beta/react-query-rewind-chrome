@@ -66,6 +66,7 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
       console.log(buttonElem.parentElement);
       htmlFormatter.showUnchanged(true);
     }
+    // the showUnchanged and hideUnchanged are not crazy complicated functions - they just update class names. So may be best for me to just define my own functions that do the same thing
 
     return (
       <div className='json-container'>
