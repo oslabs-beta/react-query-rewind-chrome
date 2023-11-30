@@ -126,7 +126,11 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
             <PlayArrowIcon fontSize="inherit" />
           </IconButton>
 
-          <ContinuousSlider />
+          <ContinuousSlider
+            value={currentIndex}
+            maxValue={queryDisplay.length - 1}
+            onChange={(newIndex: number) => setCurrentIndex(newIndex)}
+          />
 
           <IconButton
             aria-label="previous"
