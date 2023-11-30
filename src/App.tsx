@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import { useState, useEffect } from 'react';
 import BasicTabs from './containers/BasicTabs';
-import JsonFormatter from './components/JsonFormatter';
 import { QueryKey } from '@tanstack/react-query';
 import { QueryEvent } from './types';
 
