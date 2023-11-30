@@ -19,37 +19,99 @@ type QueryDisplayProps = {
   combinedUpdates: QueryEvent[];
   selectedQueries: string[];
   queryData: QueryData;
+  queryEvents: QueryEvent[];
 };
 
 type QuerySnapshot = {
   [queryHash: string]: QueryEvent;
 };
 
+type QueryDisplay = {
+  queryKey: string;
+  queryData: any;
+};
+
 const QueryDisplay = ({
   combinedUpdates,
   selectedQueries,
-  queryData,
+  queryEvents,
 }: QueryDisplayProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [querySnapshot, setQuerySnapshot] = useState<QuerySnapshot>({});
+  // state to track query data that is displayed
+  const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
+
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const currentUpdate = combinedUpdates[currentIndex];
 
-  useEffect(() => {
-    const initialSnapshot: QuerySnapshot = {};
+  // define the starting query
+  // useEffect(() => {
+  //   setQueryDisplay(() => {
+  //     return selectedQueries.map(queryKey => {
+  //       return {
+  //         queryKey: queryKey,
+  //         queryData: 'N/A',
+  //       };
+  //     });
+  //   });
+  // }, [selectedQueries, queryEvents]);
 
-    selectedQueries.forEach(queryName => {
-      const data = queryData[queryName];
-      if (data && data.updates.length > 0) {
-        initialSnapshot[queryName] = data.updates[data.updates.length - 1];
-      }
+  // array of all possible changes
+  useEffect(() => {
+    const allDisplays: QueryDisplay[][] = [];
+
+    const startDisplay: QueryDisplay[] = selectedQueries.map(queryKey => {
+      return {
+        queryKey: queryKey,
+        queryData: 'N/A',
+      };
     });
 
-    setQuerySnapshot(initialSnapshot);
-  }, [queryData, selectedQueries]);
+    allDisplays.push(startDisplay);
+
+    const selectedQueryEvents = queryEvents.filter(queryEvent =>
+      selectedQueries.includes(queryEvent.queryHash)
+    );
+
+    selectedQueryEvents.forEach(queryEvent => {
+      const prevDisplay = [...allDisplays[allDisplays.length - 1]];
+      const newDisplay = prevDisplay.map(display => {
+        if (display.queryKey === queryEvent.queryHash) {
+          return { ...display, queryData: queryEvent.queryData };
+        }
+        return display;
+      });
+      allDisplays.push(newDisplay);
+    });
+
+    setQueryDisplay(allDisplays);
+  }, [selectedQueries, queryEvents]);
 
   useEffect(() => {
-    // Update currentIndex to the last update when combinedUpdates changes
+    console.log(queryDisplay);
+  }, queryDisplay);
+
+  // provides display of most recent query data on initial load
+  // useEffect(() => {
+  //   setQueryDisplay(() => {
+  //     return selectedQueries.map(queryKey => {
+  //       const reversedQueryEvents = [...queryEvents].reverse();
+  //       const newestEvent = reversedQueryEvents.find(
+  //         event => event.queryHash === queryKey
+  //       );
+
+  //       return {
+  //         queryKey: queryKey,
+  //         queryData: newestEvent?.queryData,
+  //       };
+  //     });
+  //   });
+  // }, [selectedQueries, queryEvents]);
+
+  useEffect(() => {
+    console.log(queryDisplay);
+  }, [queryDisplay]);
+
+  useEffect(() => {
     setCurrentIndex(
       combinedUpdates.length > 0 ? combinedUpdates.length - 1 : 0
     );
@@ -116,8 +178,6 @@ const QueryDisplay = ({
 
       <div className="data">
         {selectedQueries.map(queryName => {
-          const update = querySnapshot[queryName];
-
           return (
             <div key={queryName}>
               <h3>Query: {queryName}</h3>

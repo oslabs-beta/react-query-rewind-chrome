@@ -24,32 +24,14 @@ function App() {
   // state to store changes to query cache
   const [queryData, setQueryData] = useState<QueryData>({});
   const [queryOptions, setQueryOptions] = useState<string[]>([]);
+  const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
 
   // adds event listeners when component mounts
   useEffect(() => {
     // connects to background.js and listens for messages
     let port = chrome.runtime.connect({ name: 'devtools-panel' });
     port.onMessage.addListener(message => {
-      if (
-        message.event &&
-        typeof message.event === 'object' &&
-        'queryHash' in message.event
-      ) {
-        const newEvent = message.event;
-        const queryHash = newEvent.queryHash;
-
-        // adds new events to queryData object based on queryKey
-        setQueryData(prevQueryData => {
-          const existingUpdates = prevQueryData[queryHash]?.updates || [];
-
-          return {
-            ...prevQueryData,
-            [queryHash]: {
-              updates: [...existingUpdates, newEvent],
-            },
-          };
-        });
-      }
+      setQueryEvents(queryEvents => [...queryEvents, message.event]);
     });
 
     // reloads DevTool panel
@@ -69,14 +51,19 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const newQueryOptions = Object.keys(queryData);
-    setQueryOptions(newQueryOptions);
-  }, [queryData]);
+    const newQueryOptions = queryEvents.map(event => event.queryHash);
+    const uniqueQueryOptions = Array.from(new Set(newQueryOptions));
+    setQueryOptions(uniqueQueryOptions);
+  }, [queryEvents]);
 
   return (
     <div className="App">
       <div>
-        <BasicTabs queryData={queryData} queryOptions={queryOptions} />
+        <BasicTabs
+          queryData={queryData}
+          queryOptions={queryOptions}
+          queryEvents={queryEvents}
+        />
       </div>
       {/* <div>{items}</div> */}
       {/* <JsonFormatter /> */}

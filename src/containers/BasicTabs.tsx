@@ -31,6 +31,7 @@ type QueryData = {
 type BasicTabsProps = {
   queryData: QueryData;
   queryOptions: string[];
+  queryEvents: QueryEvent[];
 };
 
 type QuerySnapshot = {
@@ -64,7 +65,11 @@ function a11yProps(index: number) {
   };
 }
 
-const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
+const BasicTabs = ({
+  queryData,
+  queryOptions,
+  queryEvents,
+}: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
   const [combinedUpdates, setCombinedUpdates] = useState<QueryEvent[]>([]);
@@ -113,6 +118,7 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
           combinedUpdates={combinedUpdates}
           selectedQueries={selectedQueries}
           queryData={queryData}
+          queryEvents={queryEvents}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
