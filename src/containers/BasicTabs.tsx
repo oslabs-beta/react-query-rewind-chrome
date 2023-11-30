@@ -7,9 +7,9 @@ import Container from '@mui/material/Container';
 import MultiSelect from '../components/MultiSelect';
 import { QueryKey } from '@tanstack/react-query';
 import QueryDisplay from '../components/QueryDisplay';
-import ContinuousSlider from '../components/ContinuousSlider';
+//import ContinuousSlider from '../components/ContinuousSlider';
 // import IconButtonSizes from '../components/Buttons';
-import PlayButton from '../components/PlayButton';
+//import PlayButton from '../components/PlayButton';
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -118,9 +118,6 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
           queryData={queryData}
         />
         <Box sx={{ display: 'flex' }}>
-        <PlayButton />
-        <ContinuousSlider />
-        {/* <IconButtonSizes /> */}
         </Box>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>

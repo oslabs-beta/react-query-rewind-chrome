@@ -5,7 +5,10 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import Stack from '@mui/material/Stack';
+//import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import ContinuousSlider from './ContinuousSlider';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 type QueryEvent = {
   eventType: string;
@@ -93,49 +96,6 @@ const QueryDisplay = ({
 
   return (
     <>
-      <div className="navigation">
-        <Stack direction="row" alignItems="center" spacing={-1}>
-        <IconButton 
-        aria-label="previous" 
-        size="large"
-        disabled={currentIndex === 0}
-        onClick={() => setCurrentIndex(0)}
-        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
-          <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
-        </IconButton>
-
-        <IconButton 
-        aria-label="previous" 
-        size="large"
-        disabled={currentIndex === 0}
-        onClick={handlePrevious}
-        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
-          <KeyboardArrowLeftIcon fontSize="inherit" />
-        </IconButton>
-
-        <span>
-          {currentIndex + 1} / {combinedUpdates.length}
-        </span>
-
-        <IconButton
-        aria-label="next"
-        size="large"
-        disabled={currentIndex === combinedUpdates.length - 1}
-        onClick={handleNext}
-        sx={{'&:hover': {display: 'flex'}}}>
-        <KeyboardArrowRightIcon fontSize="inherit" />
-      </IconButton>
-
-        <IconButton
-        aria-label="next"
-        size="large"
-        disabled={currentIndex === combinedUpdates.length - 1}
-        onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
-        sx={{'&:hover': {display: 'flex'}}}>
-        <KeyboardDoubleArrowRightIcon fontSize="inherit" />
-      </IconButton>
-      </Stack>
-      </div>
 
       <div className="data">
         {selectedQueries.map(queryName => {
@@ -163,6 +123,64 @@ const QueryDisplay = ({
           );
         })}
       </div>
+
+      <div className="navigation">
+        {/* <Stack direction="row" alignItems="center" spacing={-1}> */}
+        <Box sx={{ width: '100%', display: 'flex' }}>
+
+        <IconButton aria-label="delete" 
+      size="large"
+      sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
+        <PlayArrowIcon fontSize="inherit" />
+      </IconButton>
+
+        <ContinuousSlider />
+
+        <IconButton 
+        aria-label="previous" 
+        size="large"
+        disabled={currentIndex === 0}
+        onClick={() => setCurrentIndex(0)}
+        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
+          <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
+        </IconButton>
+
+        <IconButton 
+        aria-label="previous" 
+        size="large"
+        disabled={currentIndex === 0}
+        onClick={handlePrevious}
+        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
+          <KeyboardArrowLeftIcon fontSize="inherit" />
+        </IconButton>
+
+        <span style={{ alignSelf: 'center' }}>
+          {currentIndex + 1} / {combinedUpdates.length}
+        </span>
+
+        <IconButton
+        aria-label="next"
+        size="large"
+        disabled={currentIndex === combinedUpdates.length - 1}
+        onClick={handleNext}
+        sx={{'&:hover': {display: 'flex'}}}>
+        <KeyboardArrowRightIcon fontSize="inherit" />
+      </IconButton>
+
+        <IconButton
+        aria-label="next"
+        size="large"
+        disabled={currentIndex === combinedUpdates.length - 1}
+        onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
+        sx={{'&:hover': {display: 'flex'}}}>
+        <KeyboardDoubleArrowRightIcon fontSize="inherit" />
+      </IconButton>
+      {/* </Stack> */}
+      </Box>
+
+      </div>
+
+
     </>
   );
 };

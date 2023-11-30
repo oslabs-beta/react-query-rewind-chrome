@@ -11,9 +11,10 @@ export default function ContinuousSlider() {
   };
 
   return (
-    <Box sx={{ width: 400 }}>
+    <Box sx={{ width: 300 }}>
       <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
       </Stack>
     </Box>
   );
 }
+
