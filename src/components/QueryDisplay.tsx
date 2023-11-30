@@ -113,7 +113,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
           }}
         >
           <IconButton
@@ -121,7 +121,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
             size="large"
             disabled={isPlaying === true}
             onClick={handleAll}
-            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+            sx={{'& .MuiTouchRipple-root': { width: 20, height: 20 } }}
           >
             <PlayArrowIcon fontSize="inherit" />
           </IconButton>
