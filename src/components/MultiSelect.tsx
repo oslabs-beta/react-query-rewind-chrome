@@ -35,7 +35,7 @@ export default function MultiSelect({
     } = event;
     const newSelection = typeof value === 'string' ? value.split(',') : value;
     setPersonName(newSelection);
-    onSelectionChange(newSelection); // Call the callback with the new selection
+    onSelectionChange(newSelection);
   };
 
   return (
@@ -50,7 +50,6 @@ export default function MultiSelect({
           onChange={handleChange}
           input={<OutlinedInput label="Queries" />}
           renderValue={selected => selected.join(', ')}
-          // MenuProps={MenuProps} // Ensure MenuProps is defined or remove this line
         >
           {queryOptions.map(name => (
             <MenuItem key={name} value={name}>

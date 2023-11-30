@@ -5,37 +5,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import MultiSelect from '../components/MultiSelect';
-import { QueryKey } from '@tanstack/react-query';
 import QueryDisplay from '../components/QueryDisplay';
-
-type TabPanelProps = {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-};
-
-type QueryEvent = {
-  eventType: string;
-  queryKey: QueryKey;
-  queryHash: string;
-  timestamp: Date;
-  queryData?: any;
-};
-
-type QueryData = {
-  [queryName: string]: {
-    updates: QueryEvent[];
-  };
-};
-
-type BasicTabsProps = {
-  queryData: QueryData;
-  queryOptions: string[];
-};
-
-type QuerySnapshot = {
-  [queryHash: string]: QueryEvent;
-};
+import { TabPanelProps, BasicTabsProps } from '../types';
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -64,24 +35,9 @@ function a11yProps(index: number) {
   };
 }
 
-const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
+const BasicTabs = ({ queryOptions, queryEvents }: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
-  const [combinedUpdates, setCombinedUpdates] = useState<QueryEvent[]>([]);
-
-  useEffect(() => {
-    // Combine updates from selected queries and sort them by timestamp
-    const updates = Object.entries(queryData)
-      .filter(([queryName]) => selectedQueries.includes(queryName))
-      .flatMap(([, data]) => data.updates)
-      .sort((a, b) => {
-        const dateA = new Date(a.timestamp);
-        const dateB = new Date(b.timestamp);
-        return dateA.getTime() - dateB.getTime();
-      });
-
-    setCombinedUpdates(updates);
-  }, [queryData, selectedQueries]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -108,11 +64,9 @@ const BasicTabs = ({ queryData, queryOptions }: BasicTabsProps) => {
           onSelectionChange={handleSelectionChange}
           queryOptions={queryOptions}
         />
-        {/* insert time traveling code here but we need access to data from Multiselect */}
         <QueryDisplay
-          combinedUpdates={combinedUpdates}
           selectedQueries={selectedQueries}
-          queryData={queryData}
+          queryEvents={queryEvents}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
