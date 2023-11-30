@@ -1,7 +1,6 @@
 import React from 'react'
 import { JSONTree } from 'react-json-tree';
 
-
 // dummy data and themes
 const testData = {
   queryKey1: {
