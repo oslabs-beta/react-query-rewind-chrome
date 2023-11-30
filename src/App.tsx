@@ -1,28 +1,13 @@
 import React from 'react';
 import './App.css';
 import { useState, useEffect } from 'react';
-import ListItem from './components/ListItem';
 import BasicTabs from './containers/BasicTabs';
 import JsonFormatter from './components/JsonFormatter';
 import { QueryKey } from '@tanstack/react-query';
-
-type QueryEvent = {
-  eventType: string;
-  queryKey: QueryKey;
-  queryHash: string;
-  timestamp: Date;
-  queryData?: any;
-};
-
-type QueryData = {
-  [queryName: string]: {
-    updates: QueryEvent[];
-  };
-};
+import { QueryEvent } from './types';
 
 function App() {
   // state to store changes to query cache
-  const [queryData, setQueryData] = useState<QueryData>({});
   const [queryOptions, setQueryOptions] = useState<string[]>([]);
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
 
@@ -59,14 +44,8 @@ function App() {
   return (
     <div className="App">
       <div>
-        <BasicTabs
-          queryData={queryData}
-          queryOptions={queryOptions}
-          queryEvents={queryEvents}
-        />
+        <BasicTabs queryOptions={queryOptions} queryEvents={queryEvents} />
       </div>
-      {/* <div>{items}</div> */}
-      {/* <JsonFormatter /> */}
     </div>
   );
 }

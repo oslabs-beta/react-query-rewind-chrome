@@ -1,64 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { QueryKey } from '@tanstack/react-query';
+import { QueryDisplayProps, QueryDisplay } from '../types';
 
-type QueryEvent = {
-  eventType: string;
-  queryKey: QueryKey;
-  queryHash: string;
-  timestamp: Date;
-  queryData?: any;
-};
-
-type QueryData = {
-  [queryName: string]: {
-    updates: QueryEvent[];
-  };
-};
-
-type QueryDisplayProps = {
-  combinedUpdates: QueryEvent[];
-  selectedQueries: string[];
-  queryData: QueryData;
-  queryEvents: QueryEvent[];
-};
-
-type QuerySnapshot = {
-  [queryHash: string]: QueryEvent;
-};
-
-type QueryDisplay = {
-  queryKey: string;
-  queryData: any;
-};
-
-const QueryDisplay = ({
-  combinedUpdates,
-  selectedQueries,
-  queryEvents,
-}: QueryDisplayProps) => {
-  // state to track query data that is displayed
+const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
+  // holds all query events based on selected queries and query events
   const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
-
+  // current index of above array
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const currentUpdate = combinedUpdates[currentIndex];
-
-  // define the starting query
-  // useEffect(() => {
-  //   setQueryDisplay(() => {
-  //     return selectedQueries.map(queryKey => {
-  //       return {
-  //         queryKey: queryKey,
-  //         queryData: 'N/A',
-  //       };
-  //     });
-  //   });
-  // }, [selectedQueries, queryEvents]);
-
-  // array of all possible changes
+  // creates queryDisplay array with all query events
   useEffect(() => {
     const allDisplays: QueryDisplay[][] = [];
 
+    // selected queries start with no data
     const startDisplay: QueryDisplay[] = selectedQueries.map(queryKey => {
       return {
         queryKey: queryKey,
@@ -68,10 +21,12 @@ const QueryDisplay = ({
 
     allDisplays.push(startDisplay);
 
+    // filter for events of selected queries
     const selectedQueryEvents = queryEvents.filter(queryEvent =>
       selectedQueries.includes(queryEvent.queryHash)
     );
 
+    // traverse queries and update relevant query data for event and push to allDisplays
     selectedQueryEvents.forEach(queryEvent => {
       const prevDisplay = [...allDisplays[allDisplays.length - 1]];
       const newDisplay = prevDisplay.map(display => {
@@ -86,65 +41,15 @@ const QueryDisplay = ({
     setQueryDisplay(allDisplays);
   }, [selectedQueries, queryEvents]);
 
-  useEffect(() => {
-    console.log(queryDisplay);
-  }, queryDisplay);
-
-  // provides display of most recent query data on initial load
-  // useEffect(() => {
-  //   setQueryDisplay(() => {
-  //     return selectedQueries.map(queryKey => {
-  //       const reversedQueryEvents = [...queryEvents].reverse();
-  //       const newestEvent = reversedQueryEvents.find(
-  //         event => event.queryHash === queryKey
-  //       );
-
-  //       return {
-  //         queryKey: queryKey,
-  //         queryData: newestEvent?.queryData,
-  //       };
-  //     });
-  //   });
-  // }, [selectedQueries, queryEvents]);
-
-  useEffect(() => {
-    console.log(queryDisplay);
-  }, [queryDisplay]);
-
-  useEffect(() => {
-    setCurrentIndex(
-      combinedUpdates.length > 0 ? combinedUpdates.length - 1 : 0
-    );
-  }, [combinedUpdates]);
-
+  // functions to traverse through query states
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
   };
 
   const handleNext = () => {
     setCurrentIndex(prevIndex =>
-      Math.min(prevIndex + 1, combinedUpdates.length - 1)
+      Math.min(prevIndex + 1, queryDisplay.length - 1)
     );
-  };
-
-  const formatTimestamp = (timestamp: Date) => {
-    const date = new Date(timestamp);
-
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear() % 100;
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const minutesFormatted = minutes < 10 ? '0' + minutes : minutes;
-    const secondsFormatted = seconds < 10 ? '0' + seconds : seconds;
-
-    return `${month}/${day}/${year} - ${hours}:${minutesFormatted}:${secondsFormatted}${ampm}`;
   };
 
   return (
@@ -160,46 +65,36 @@ const QueryDisplay = ({
           Previous
         </button>
         <span>
-          {currentIndex + 1} / {combinedUpdates.length}
+          {selectedQueries.length === 0
+            ? '0 / 0'
+            : `${currentIndex + 1} / ${queryDisplay.length}`}
         </span>
         <button
           onClick={handleNext}
-          disabled={currentIndex === combinedUpdates.length - 1}
+          disabled={currentIndex === queryDisplay.length - 1}
         >
           Next
         </button>
         <button
-          onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
-          disabled={currentIndex === combinedUpdates.length - 1}
+          onClick={() => setCurrentIndex(queryDisplay.length - 1)}
+          disabled={currentIndex === queryDisplay.length - 1}
         >
           Latest
         </button>
       </div>
 
-      <div className="data">
-        {selectedQueries.map(queryName => {
-          return (
-            <div key={queryName}>
-              <h3>Query: {queryName}</h3>
-              {currentUpdate && (
-                <>
-                  <strong>
-                    Timestamp: {formatTimestamp(currentUpdate.timestamp)}
-                  </strong>
-                  {currentUpdate.queryData && (
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                      <strong>State:</strong>
-                      <pre>
-                        {JSON.stringify(currentUpdate.queryData, null, 2)}
-                      </pre>
-                    </div>
-                  )}
-                </>
-              )}
+      {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
+        <div className="data">
+          {queryDisplay[currentIndex].map(queryState => (
+            <div key={queryState.queryKey}>
+              <h3>{queryState.queryKey}</h3>
+              <div style={{ whiteSpace: 'pre-wrap' }}>
+                <pre>{JSON.stringify(queryState.queryData, null, 2)}</pre>
+              </div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };
