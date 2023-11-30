@@ -9,6 +9,8 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import Box from '@mui/material/Box';
 import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+
 
 const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   // holds all query events based on selected queries and query events
@@ -18,6 +20,8 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
 
   const [isPlaying, setIsPlaying] = useState(false); /////
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null); // to store the interval ID
+  const [playIcon, setPlayIcon] = useState(<PlayArrowIcon fontSize="inherit" />);
+
 
   useEffect(() => {
     const allDisplays: QueryDisplay[][] = [];
@@ -55,23 +59,24 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   }, [selectedQueries, queryEvents]);
 
   const handleAll = () => {
-    setIsPlaying(true);
-
-    // Clear any existing interval
-    if (intervalId !== null) {
-      clearInterval(intervalId);
+    setIsPlaying(prevIsPlaying => !prevIsPlaying);
     }
-
+    useEffect(() => {
+      if (isPlaying) {
     // Start a new interval to move to the next update every 5 seconds
     const id = setInterval(() => {
       setCurrentIndex(prevIndex =>
         Math.min(prevIndex + 1, queryDisplay.length - 1)
       );
-    }, 3000);
+    }, 1000);
 
     // Store the interval ID for later cleanup
     setIntervalId(id);
-  };
+  } else if (intervalId !== null) {
+    clearInterval(intervalId);
+    setIntervalId(null);
+  }
+}, [isPlaying]);
 
   // Cleanup the interval when component unmounts or when isPlaying changes to false
   useEffect(() => {
@@ -81,6 +86,25 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
       }
     };
   }, [intervalId]);
+
+  // useEffect(() => {
+  //   // Change the icon based on the isPlaying state
+  //   console.log('isPlaying:', isPlaying);
+  //   setPlayIcon(isPlaying ? <PauseIcon fontSize="inherit" /> : <PlayArrowIcon fontSize="inherit" />);
+  // }, [isPlaying, setPlayIcon]);
+
+  useEffect(() => {
+    // Change the icon based on the isPlaying state
+    console.log('isPlaying:', isPlaying);
+    
+    if (isPlaying) {
+      setPlayIcon(<PauseIcon fontSize="inherit" />);
+      console.log('PauseIcon should be set')
+    } else {
+      setPlayIcon(<PlayArrowIcon fontSize="inherit" />);
+    }
+  }, [isPlaying, setPlayIcon]);
+  
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -108,22 +132,22 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
       )}
 
       <div className="navigation">
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+      <Box sx={{ width: '100%', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'flex-start', 
+        flexWrap: 'wrap',
+        position: 'fixed',
+        bottom: 0, 
+        backgroundColor: 'rgba(40, 40, 40, 1)'}}>
           <IconButton
             aria-label="delete"
             size="large"
-            disabled={isPlaying === true}
+            // disabled={isPlaying === true}
             onClick={handleAll}
-            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+            sx={{ '&:hover': { display: 'flex' } }}
           >
-            <PlayArrowIcon fontSize="inherit" />
+            <PlayArrowIcon />
           </IconButton>
 
           <ContinuousSlider />
@@ -133,7 +157,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
             size="large"
             disabled={currentIndex === 0}
             onClick={() => setCurrentIndex(0)}
-            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+            sx={{ '&:hover': { display: 'flex' } }}
           >
             <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
           </IconButton>
@@ -143,7 +167,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
             size="large"
             disabled={currentIndex === 0}
             onClick={handlePrevious}
-            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+            sx={{ '&:hover': { display: 'flex' } }}
           >
             <KeyboardArrowLeftIcon fontSize="inherit" />
           </IconButton>
