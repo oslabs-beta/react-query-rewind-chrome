@@ -9,6 +9,8 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import Box from '@mui/material/Box';
 import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import JsonFormatter from './JsonFormatter';
+import Typography from '@mui/material/Typography';
 
 const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   // holds all query events based on selected queries and query events
@@ -97,12 +99,10 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
         <div className="data">
           {queryDisplay[currentIndex].map(queryState => (
-            <div key={queryState.queryKey}>
-              <h3>{queryState.queryKey}</h3>
-              <div style={{ whiteSpace: 'pre-wrap' }}>
-                <pre>{JSON.stringify(queryState.queryData, null, 2)}</pre>
-              </div>
-            </div>
+            <>
+              <Typography variant='h5'>{queryState.queryKey}</Typography>
+              <JsonFormatter key={queryState.queryKey} jsonData={queryState.queryData} />
+            </>
           ))}
         </div>
       )}
