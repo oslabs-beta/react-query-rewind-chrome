@@ -5,7 +5,6 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-//import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
