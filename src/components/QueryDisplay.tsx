@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { QueryKey } from '@tanstack/react-query';
+import { QueryDisplayProps, QueryDisplay } from '../types';
+
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -9,92 +10,77 @@ import Box from '@mui/material/Box';
 import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-type QueryEvent = {
-  eventType: string;
-  queryKey: QueryKey;
-  queryHash: string;
-  timestamp: Date;
-  queryData?: any;
-};
+const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
+  // holds all query events based on selected queries and query events
+  const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
+  // current index of above array
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-type QueryData = {
-  [queryName: string]: {
-    updates: QueryEvent[];
-  };
-};
-
-type QueryDisplayProps = {
-  combinedUpdates: QueryEvent[];
-  selectedQueries: string[];
-  queryData: QueryData;
-};
-
-type QuerySnapshot = {
-  [queryHash: string]: QueryEvent;
-};
-
-const QueryDisplay = ({
-  combinedUpdates,
-  selectedQueries,
-  queryData,
-}: QueryDisplayProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [querySnapshot, setQuerySnapshot] = useState<QuerySnapshot>({});
-  const [isPlaying, setIsPlaying] = useState(false);/////
+  const [isPlaying, setIsPlaying] = useState(false); /////
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null); // to store the interval ID
 
-
-  const currentUpdate = combinedUpdates[currentIndex];
-
   useEffect(() => {
-    const initialSnapshot: QuerySnapshot = {};
+    const allDisplays: QueryDisplay[][] = [];
 
-    selectedQueries.forEach(queryName => {
-      const data = queryData[queryName];
-      if (data && data.updates.length > 0) {
-        initialSnapshot[queryName] = data.updates[data.updates.length - 1];
-      }
+    // selected queries start with no data
+    const startDisplay: QueryDisplay[] = selectedQueries.map(queryKey => {
+      return {
+        queryKey: queryKey,
+        queryData: 'N/A',
+      };
     });
 
-    setQuerySnapshot(initialSnapshot);
-  }, [queryData, selectedQueries]);
+    allDisplays.push(startDisplay);
 
-  useEffect(() => {
-    // Update currentIndex to the last update when combinedUpdates changes
-    setCurrentIndex(
-      combinedUpdates.length > 0 ? combinedUpdates.length - 1 : 0
+    // filter for events of selected queries
+    const selectedQueryEvents = queryEvents.filter(queryEvent =>
+      selectedQueries.includes(queryEvent.queryHash)
     );
-  }, [combinedUpdates]);
 
+    // traverse queries and update the relevant query data for that event
+    selectedQueryEvents.forEach(queryEvent => {
+      const prevDisplay = [...allDisplays[allDisplays.length - 1]];
+      const newDisplay = prevDisplay.map(display => {
+        if (display.queryKey === queryEvent.queryHash) {
+          return { ...display, queryData: queryEvent.queryData };
+        }
+        return display;
+      });
+      allDisplays.push(newDisplay);
+    });
 
-const handleAll = () => {
-  setIsPlaying(true);
+    setQueryDisplay(allDisplays);
 
-  // Clear any existing interval
-  if (intervalId !== null) {
-    clearInterval(intervalId);
-  }
+    setCurrentIndex(0);
+  }, [selectedQueries, queryEvents]);
 
-  // Start a new interval to move to the next update every 5 seconds
-  const id = setInterval(() => {
-    setCurrentIndex((prevIndex) =>
-      Math.min(prevIndex + 1, combinedUpdates.length - 1)
-    );
-  }, 3000);
+  const handleAll = () => {
+    setIsPlaying(true);
 
-  // Store the interval ID for later cleanup
-  setIntervalId(id);
-};
-
-// Cleanup the interval when component unmounts or when isPlaying changes to false
-useEffect(() => {
-  return () => {
+    // Clear any existing interval
     if (intervalId !== null) {
       clearInterval(intervalId);
     }
-  };
-}, [intervalId]);
 
+    // Start a new interval to move to the next update every 5 seconds
+    const id = setInterval(() => {
+      setCurrentIndex(prevIndex =>
+        Math.min(prevIndex + 1, queryDisplay.length - 1)
+      );
+    }, 3000);
+
+    // Store the interval ID for later cleanup
+    setIntervalId(id);
+  };
+
+  // Cleanup the interval when component unmounts or when isPlaying changes to false
+  useEffect(() => {
+    return () => {
+      if (intervalId !== null) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [intervalId]);
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -102,119 +88,93 @@ useEffect(() => {
 
   const handleNext = () => {
     setCurrentIndex(prevIndex =>
-      Math.min(prevIndex + 1, combinedUpdates.length - 1)
+      Math.min(prevIndex + 1, queryDisplay.length - 1)
     );
-  };
-
-  const formatTimestamp = (timestamp: Date) => {
-    const date = new Date(timestamp);
-
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear() % 100;
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const minutesFormatted = minutes < 10 ? '0' + minutes : minutes;
-    const secondsFormatted = seconds < 10 ? '0' + seconds : seconds;
-
-    return `${month}/${day}/${year} - ${hours}:${minutesFormatted}:${secondsFormatted}${ampm}`;
   };
 
   return (
     <>
-
-      <div className="data">
-        {selectedQueries.map(queryName => {
-          const update = querySnapshot[queryName];
-
-          return (
-            <div key={queryName}>
-              <h3>Query: {queryName}</h3>
-              {currentUpdate && (
-                <>
-                  <strong>
-                    Timestamp: {formatTimestamp(currentUpdate.timestamp)}
-                  </strong>
-                  {currentUpdate.queryData && (
-                    <div style={{ whiteSpace: 'pre-wrap' }}>
-                      <strong>State:</strong>
-                      <pre>
-                        {JSON.stringify(currentUpdate.queryData, null, 2)}
-                      </pre>
-                    </div>
-                  )}
-                </>
-              )}
+      {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
+        <div className="data">
+          {queryDisplay[currentIndex].map(queryState => (
+            <div key={queryState.queryKey}>
+              <h3>{queryState.queryKey}</h3>
+              <div style={{ whiteSpace: 'pre-wrap' }}>
+                <pre>{JSON.stringify(queryState.queryData, null, 2)}</pre>
+              </div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="navigation">
-        {/* <Stack direction="row" alignItems="center" spacing={-1}> */}
-        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <IconButton
+            aria-label="delete"
+            size="large"
+            disabled={isPlaying === true}
+            onClick={handleAll}
+            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+          >
+            <PlayArrowIcon fontSize="inherit" />
+          </IconButton>
 
-        <IconButton aria-label="delete" 
-      size="large"
-      disabled={isPlaying === true}
-      onClick={handleAll}
-      sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
-        <PlayArrowIcon fontSize="inherit" />
-      </IconButton>
+          <ContinuousSlider />
 
-        <ContinuousSlider />
+          <IconButton
+            aria-label="previous"
+            size="large"
+            disabled={currentIndex === 0}
+            onClick={() => setCurrentIndex(0)}
+            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+          >
+            <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
+          </IconButton>
 
-        <IconButton 
-        aria-label="previous" 
-        size="large"
-        disabled={currentIndex === 0}
-        onClick={() => setCurrentIndex(0)}
-        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
-          <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
-        </IconButton>
+          <IconButton
+            aria-label="previous"
+            size="large"
+            disabled={currentIndex === 0}
+            onClick={handlePrevious}
+            sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}
+          >
+            <KeyboardArrowLeftIcon fontSize="inherit" />
+          </IconButton>
 
-        <IconButton 
-        aria-label="previous" 
-        size="large"
-        disabled={currentIndex === 0}
-        onClick={handlePrevious}
-        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
-          <KeyboardArrowLeftIcon fontSize="inherit" />
-        </IconButton>
+          <span>
+            {selectedQueries.length === 0
+              ? '0 / 0'
+              : `${currentIndex + 1} / ${queryDisplay.length}`}
+          </span>
 
-        <span style={{ alignSelf: 'center' }}>
-          {currentIndex + 1} / {combinedUpdates.length}
-        </span>
+          <IconButton
+            aria-label="next"
+            size="large"
+            disabled={currentIndex === queryDisplay.length - 1}
+            onClick={handleNext}
+            sx={{ '&:hover': { display: 'flex' } }}
+          >
+            <KeyboardArrowRightIcon fontSize="inherit" />
+          </IconButton>
 
-        <IconButton
-        aria-label="next"
-        size="large"
-        disabled={currentIndex === combinedUpdates.length - 1}
-        onClick={handleNext}
-        sx={{'&:hover': {display: 'flex'}}}>
-        <KeyboardArrowRightIcon fontSize="inherit" />
-      </IconButton>
-
-        <IconButton
-        aria-label="next"
-        size="large"
-        disabled={currentIndex === combinedUpdates.length - 1}
-        onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
-        sx={{'&:hover': {display: 'flex'}}}>
-        <KeyboardDoubleArrowRightIcon fontSize="inherit" />
-      </IconButton>
-      {/* </Stack> */}
-      </Box>
-
+          <IconButton
+            aria-label="next"
+            size="large"
+            disabled={currentIndex === queryDisplay.length - 1}
+            onClick={() => setCurrentIndex(queryDisplay.length - 1)}
+            sx={{ '&:hover': { display: 'flex' } }}
+          >
+            <KeyboardDoubleArrowRightIcon fontSize="inherit" />
+          </IconButton>
+        </Box>
       </div>
-
-
     </>
   );
 };
