@@ -6,6 +6,7 @@ import Container from '@mui/material/Container'
 import { TabPanelProps, BasicTabsProps, QueryDisplayProps } from '../types';
 import QueryDisplay from '../components/QueryDisplay'
 import JsonDiff from '../components/JsonDiff'
+import DiffDisplay from '../components/DiffDisplay'
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -48,7 +49,7 @@ const LowerLevelTabs = ({ selectedQueries, queryEvents }: QueryDisplayProps) => 
         />
       </CustomTabPanel>
       <CustomTabPanel value={activeTab} index={1}>
-        <JsonDiff/>
+        <DiffDisplay selectedQueries={selectedQueries} queryEvents={queryEvents}/>
       </CustomTabPanel>
     </div>
   )
