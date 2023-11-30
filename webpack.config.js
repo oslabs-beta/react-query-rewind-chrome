@@ -29,13 +29,13 @@ const config = {
                 exclude: /node_modules/,
             },
             {
-                exclude: /node_modules/,
-                test: /\.css$/i,
+                test: /\.css$/,
                 use: [
                     "style-loader",
                     "css-loader"
-                ]
-
+                ],
+                include: path.resolve(__dirname, 'node_modules/jsondiffpatch/dist/formatters-styles'),
+                // exclude: /node_modules/,
             },
         ],
     },

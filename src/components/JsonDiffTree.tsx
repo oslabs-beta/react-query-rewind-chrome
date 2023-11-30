@@ -2,6 +2,9 @@ import React from 'react'
 import JsonFormatter from './JsonFormatter'
 import Typography from '@mui/material/Typography'
 import jsondiffpatch from 'jsondiffpatch';
+import 'jsondiffpatch/dist/formatters-styles/html.css';
+import 'jsondiffpatch/dist/formatters-styles/annotated.css';
+
 
 // examples for testing
 const example1 = {
@@ -47,9 +50,28 @@ const JsonDiffTree: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
   const delta = jsondiffpatch.diff(oldJson, currentJson);
   console.log('delta: ', delta);
 
+
+  if (delta) {
+    const annotatedDiff = jsondiffpatch.formatters.annotated.format(delta, example1);
+
+    const htmlFormatter = jsondiffpatch.formatters.html; 
+    const htmlDiff = htmlFormatter.format(delta, example1);
+
+    const createMarkupAnnotated = () => ({ __html: annotatedDiff });
+    const createMarkupHtml = () => ({ __html: htmlDiff });
+
+    return (
+      <>
+        <div dangerouslySetInnerHTML={createMarkupAnnotated()}></div>
+        <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
+      </>
+    )
+  }
+
   return (
     <>
       <div>JsonDiffTree Title (Delete Later)</div>
+      <div>{JSON.stringify(delta)}</div>
       <JsonFormatter jsonData={delta}/>
     </>
     

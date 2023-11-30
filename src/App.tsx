@@ -39,6 +39,8 @@ function App() {
       </div>
       {/* <div>{items}</div> */}
       <JsonFormatter/>
+      <JsonFormatter/>
+      <JsonFormatter/>
       <JsonDiffRaw/>
       <JsonDiffTree/>
       <MaterialUI/>
