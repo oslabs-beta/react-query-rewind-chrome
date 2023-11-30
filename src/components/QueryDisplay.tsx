@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { QueryKey } from '@tanstack/react-query';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import Stack from '@mui/material/Stack';
 
 type QueryEvent = {
   eventType: string;
@@ -88,30 +94,47 @@ const QueryDisplay = ({
   return (
     <>
       <div className="navigation">
-        <button
-          onClick={() => setCurrentIndex(0)}
-          disabled={currentIndex === 0}
-        >
-          Start
-        </button>
-        <button onClick={handlePrevious} disabled={currentIndex === 0}>
-          Previous
-        </button>
+        <Stack direction="row" alignItems="center" spacing={-1}>
+        <IconButton 
+        aria-label="previous" 
+        size="large"
+        disabled={currentIndex === 0}
+        onClick={() => setCurrentIndex(0)}
+        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
+          <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
+        </IconButton>
+
+        <IconButton 
+        aria-label="previous" 
+        size="large"
+        disabled={currentIndex === 0}
+        onClick={handlePrevious}
+        sx={{ '& .MuiTouchRipple-root': { width: 20, height: 20 } }}>
+          <KeyboardArrowLeftIcon fontSize="inherit" />
+        </IconButton>
+
         <span>
           {currentIndex + 1} / {combinedUpdates.length}
         </span>
-        <button
-          onClick={handleNext}
-          disabled={currentIndex === combinedUpdates.length - 1}
-        >
-          Next
-        </button>
-        <button
-          onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
-          disabled={currentIndex === combinedUpdates.length - 1}
-        >
-          Latest
-        </button>
+
+        <IconButton
+        aria-label="next"
+        size="large"
+        disabled={currentIndex === combinedUpdates.length - 1}
+        onClick={handleNext}
+        sx={{'&:hover': {display: 'flex'}}}>
+        <KeyboardArrowRightIcon fontSize="inherit" />
+      </IconButton>
+
+        <IconButton
+        aria-label="next"
+        size="large"
+        disabled={currentIndex === combinedUpdates.length - 1}
+        onClick={() => setCurrentIndex(combinedUpdates.length - 1)}
+        sx={{'&:hover': {display: 'flex'}}}>
+        <KeyboardDoubleArrowRightIcon fontSize="inherit" />
+      </IconButton>
+      </Stack>
       </div>
 
       <div className="data">
