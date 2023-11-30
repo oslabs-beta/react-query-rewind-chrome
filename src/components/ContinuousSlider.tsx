@@ -3,11 +3,19 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 
-export default function ContinuousSlider() {
-  const [value, setValue] = React.useState<number>(30);
+type ContinuousSliderProps = {
+  value: number;
+  maxValue: number;
+  onChange: (newValue: number) => void;
+};
 
+export default function ContinuousSlider({
+  value,
+  maxValue,
+  onChange,
+}: ContinuousSliderProps) {
   const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
+    onChange(newValue as number);
   };
 
   return (
@@ -16,6 +24,7 @@ export default function ContinuousSlider() {
         <Slider
           value={value}
           onChange={handleChange}
+          max={maxValue}
           aria-labelledby="continuous-slider"
         />
       </Stack>
