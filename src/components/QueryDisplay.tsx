@@ -65,13 +65,17 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     if (isPlaying) {
       interval = window.setInterval(() => {
         setCurrentIndex(prevIndex => {
+          // Stop at the end of the array and change isPlaying to false
           if (prevIndex >= queryDisplay.length - 1) {
+            setIsPlaying(false);
             clearInterval(interval);
-            return 0;
+            return prevIndex;
           }
           return prevIndex + 1;
         });
-      }, 1000);
+      }, 1000); // 1000 milliseconds = 1 second
+    } else if (interval !== undefined) {
+      clearInterval(interval);
     }
 
     return () => {
@@ -140,7 +144,15 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   };
 
   const handleAll = () => {
-    setIsPlaying(prevIsPlaying => !prevIsPlaying);
+    setIsPlaying(prevIsPlaying => {
+      if (!prevIsPlaying) {
+        if (currentIndex >= queryDisplay.length - 1) {
+          setCurrentIndex(0);
+        }
+        return true;
+      }
+      return false;
+    });
   };
 
   return (
