@@ -39,7 +39,6 @@ function App() {
       {/* <div>{items}</div> */}
       <JsonFormatter/>
       <JsonDiff/>
-      <MaterialUI/>
     </div>
   );
 }

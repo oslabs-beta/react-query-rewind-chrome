@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import JsonFormatter from './JsonFormatter'
 import Typography from '@mui/material/Typography'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Switch from '@mui/material/Switch'
+import Container from '@mui/material/Container'
 import jsondiffpatch from 'jsondiffpatch';
 import '../css/global.css'
 
@@ -34,8 +38,11 @@ type JsonFormatterType = {
   currentJson?: JsonDataType // will need to be updated to be required
 }
 
-const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
-  
+const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson }) => {
+  // state to determine if unchanged are hidden or closed (if this needs to persist across time travels, it should live in a parent component)
+  const [isHidden, setIsHidden] = useState(false)
+
+
   // For testing purposes. Delete later
   if (!oldJson) oldJson = example1;
   if (!currentJson) currentJson = example2;
@@ -51,39 +58,51 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
 
 
   if (delta) {
-
-    const htmlFormatter = jsondiffpatch.formatters.html; 
+    // Use library's html formatter that generates vanilla CSS
+    const htmlFormatter = jsondiffpatch.formatters.html;
     const htmlDiff = htmlFormatter.format(delta, example1);
-
-    // hide and show on changed modify the entire body. Therefore I need to specify an element
-
     // React-specific functions to handle raw html
     const createMarkupHtml = () => ({ __html: htmlDiff });
 
     // function to hide/show unchanged data
-    const showChanged = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const buttonElem = e.target as HTMLElement
-      console.log(buttonElem.parentElement);
-      htmlFormatter.showUnchanged(true);
+    const toggleChange = () => {
+      const jsonDiffContainerElem = document.querySelector('.json-diff-container') as HTMLElement
+      if (jsonDiffContainerElem) {
+        // if currently hidden, remove class so unchanged are shown
+        if (isHidden) {
+          jsonDiffContainerElem.classList.remove('jsondiffpatch-unchanged-hidden');
+          setIsHidden(false);
+          return;
+        }
+        // if currently shown, add class so unchanged are hidden
+        jsonDiffContainerElem.classList.add('jsondiffpatch-unchanged-hidden');
+        setIsHidden(true);
+        return;
+      }
     }
-    // the showUnchanged and hideUnchanged are not crazy complicated functions - they just update class names. So may be best for me to just define my own functions that do the same thing
 
     return (
-      <div className='json-container'>
-        <button onClick={() => htmlFormatter.hideUnchanged()}>Hide Unchanged</button>
-        <button onClick={(e) => showChanged(e)}>Show Unchanged</button>
-        <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
+      <div className='json-diff-container'>
+        <Container>
+          <FormControlLabel
+            control={<Switch
+              checked={isHidden}
+              onChange={toggleChange}/>
+            }
+            label={`${isHidden ? "Show" : "Hide"} Unchanged Properties `}
+          />
+          <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
+        </Container>
       </div>
     )
   }
 
+  // handle errors by always returning something
   return (
     <>
-      <div>JsonDiffTree Title (Delete Later)</div>
-      <div>{JSON.stringify(delta)}</div>
-      <JsonFormatter jsonData={delta}/>
+      <Typography variant='h5'>No Diff to Show</Typography>
     </>
-    
+
   )
 }
 
