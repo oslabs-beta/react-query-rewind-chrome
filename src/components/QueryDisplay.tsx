@@ -11,7 +11,6 @@ import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-
 const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   // holds all query events based on selected queries and query events
   const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
@@ -20,9 +19,11 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
 
   const [isPlaying, setIsPlaying] = useState(false); /////
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null); // to store the interval ID
-  const [playIcon, setPlayIcon] = useState(<PlayArrowIcon fontSize="inherit" />);
+  const [playIcon, setPlayIcon] = useState(
+    <PlayArrowIcon fontSize="inherit" />
+  );
 
-
+  // creates array of all states based on selected queries
   useEffect(() => {
     const allDisplays: QueryDisplay[][] = [];
 
@@ -58,53 +59,75 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     setCurrentIndex(0);
   }, [selectedQueries, queryEvents]);
 
-  const handleAll = () => {
-    setIsPlaying(prevIsPlaying => !prevIsPlaying);
-    }
-    useEffect(() => {
-      if (isPlaying) {
-    // Start a new interval to move to the next update every 5 seconds
-    const id = setInterval(() => {
-      setCurrentIndex(prevIndex =>
-        Math.min(prevIndex + 1, queryDisplay.length - 1)
-      );
-    }, 1000);
-
-    // Store the interval ID for later cleanup
-    setIntervalId(id);
-  } else if (intervalId !== null) {
-    clearInterval(intervalId);
-    setIntervalId(null);
-  }
-}, [isPlaying]);
-
-  // Cleanup the interval when component unmounts or when isPlaying changes to false
   useEffect(() => {
+    let interval: number | undefined;
+
+    if (isPlaying) {
+      interval = window.setInterval(() => {
+        setCurrentIndex(prevIndex => {
+          if (prevIndex >= queryDisplay.length - 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prevIndex + 1;
+        });
+      }, 1000);
+    }
+
     return () => {
-      if (intervalId !== null) {
-        clearInterval(intervalId);
+      if (interval !== undefined) {
+        clearInterval(interval);
       }
     };
-  }, [intervalId]);
+  }, [isPlaying, queryDisplay.length]);
+
+  useEffect(() => {
+    setPlayIcon(
+      isPlaying ? (
+        <PauseIcon fontSize="inherit" />
+      ) : (
+        <PlayArrowIcon fontSize="inherit" />
+      )
+    );
+  }, [isPlaying]);
+
+  // useEffect(() => {
+  //   if (isPlaying) {
+  //     // Start a new interval to move to the next update every 5 seconds
+  //     const id = setInterval(() => {
+  //       setCurrentIndex(prevIndex =>
+  //         Math.min(prevIndex + 1, queryDisplay.length - 1)
+  //       );
+  //     }, 1000);
+
+  //     // Store the interval ID for later cleanup
+  //     setIntervalId(id);
+  //   } else if (intervalId !== null) {
+  //     clearInterval(intervalId);
+  //     setIntervalId(null);
+  //   }
+  // }, [isPlaying]);
+
+  // // Cleanup the interval when component unmounts or when isPlaying changes to false
+  // useEffect(() => {
+  //   return () => {
+  //     if (intervalId !== null) {
+  //       clearInterval(intervalId);
+  //     }
+  //   };
+  // }, [intervalId]);
 
   // useEffect(() => {
   //   // Change the icon based on the isPlaying state
   //   console.log('isPlaying:', isPlaying);
-  //   setPlayIcon(isPlaying ? <PauseIcon fontSize="inherit" /> : <PlayArrowIcon fontSize="inherit" />);
-  // }, [isPlaying, setPlayIcon]);
 
-  useEffect(() => {
-    // Change the icon based on the isPlaying state
-    console.log('isPlaying:', isPlaying);
-    
-    if (isPlaying) {
-      setPlayIcon(<PauseIcon fontSize="inherit" />);
-      console.log('PauseIcon should be set')
-    } else {
-      setPlayIcon(<PlayArrowIcon fontSize="inherit" />);
-    }
-  }, [isPlaying, setPlayIcon]);
-  
+  //   if (isPlaying) {
+  //     setPlayIcon(<PauseIcon fontSize="inherit" />);
+  //     console.log('PauseIcon should be set');
+  //   } else {
+  //     setPlayIcon(<PlayArrowIcon fontSize="inherit" />);
+  //   }
+  // }, [isPlaying, setPlayIcon]);
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -114,6 +137,10 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     setCurrentIndex(prevIndex =>
       Math.min(prevIndex + 1, queryDisplay.length - 1)
     );
+  };
+
+  const handleAll = () => {
+    setIsPlaying(prevIsPlaying => !prevIsPlaying);
   };
 
   return (
@@ -132,22 +159,25 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
       )}
 
       <div className="navigation">
-      <Box sx={{ width: '100%', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'flex-start', 
-        flexWrap: 'wrap',
-        position: 'fixed',
-        bottom: 0, 
-        backgroundColor: 'rgba(40, 40, 40, 1)'}}>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            flexWrap: 'wrap',
+            position: 'fixed',
+            bottom: 0,
+            backgroundColor: 'rgba(40, 40, 40, 1)',
+          }}
+        >
           <IconButton
-            aria-label="delete"
+            aria-label="play-pause"
             size="large"
-            // disabled={isPlaying === true}
             onClick={handleAll}
             sx={{ '&:hover': { display: 'flex' } }}
           >
-            <PlayArrowIcon />
+            {playIcon}
           </IconButton>
 
           <ContinuousSlider />
