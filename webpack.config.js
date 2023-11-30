@@ -34,8 +34,7 @@ const config = {
                     "style-loader",
                     "css-loader"
                 ],
-                include: path.resolve(__dirname, 'node_modules/jsondiffpatch/dist/formatters-styles'),
-                // exclude: /node_modules/,
+                exclude: /node_modules/,
             },
         ],
     },

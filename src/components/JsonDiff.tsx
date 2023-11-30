@@ -2,8 +2,7 @@ import React from 'react'
 import JsonFormatter from './JsonFormatter'
 import Typography from '@mui/material/Typography'
 import jsondiffpatch from 'jsondiffpatch';
-import 'jsondiffpatch/dist/formatters-styles/html.css';
-import 'jsondiffpatch/dist/formatters-styles/annotated.css';
+import '../css/global.css'
 
 
 // examples for testing
@@ -35,7 +34,7 @@ type JsonFormatterType = {
   currentJson?: JsonDataType // will need to be updated to be required
 }
 
-const JsonDiffTree: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
+const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
   
   // For testing purposes. Delete later
   if (!oldJson) oldJson = example1;
@@ -52,19 +51,28 @@ const JsonDiffTree: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
 
 
   if (delta) {
-    const annotatedDiff = jsondiffpatch.formatters.annotated.format(delta, example1);
 
     const htmlFormatter = jsondiffpatch.formatters.html; 
     const htmlDiff = htmlFormatter.format(delta, example1);
 
-    const createMarkupAnnotated = () => ({ __html: annotatedDiff });
+    // hide and show on changed modify the entire body. Therefore I need to specify an element
+
+    // React-specific functions to handle raw html
     const createMarkupHtml = () => ({ __html: htmlDiff });
 
+    // function to hide/show unchanged data
+    const showChanged = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const buttonElem = e.target as HTMLElement
+      console.log(buttonElem.parentElement);
+      htmlFormatter.showUnchanged(true);
+    }
+
     return (
-      <>
-        <div dangerouslySetInnerHTML={createMarkupAnnotated()}></div>
+      <div className='json-container'>
+        <button onClick={() => htmlFormatter.hideUnchanged()}>Hide Unchanged</button>
+        <button onClick={(e) => showChanged(e)}>Show Unchanged</button>
         <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
-      </>
+      </div>
     )
   }
 
@@ -78,4 +86,4 @@ const JsonDiffTree: React.FC<JsonFormatterType> = ({ oldJson, currentJson}) => {
   )
 }
 
-export default JsonDiffTree
+export default JsonDiff

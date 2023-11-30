@@ -5,8 +5,7 @@ import ListItem from "./components/ListItem";
 import BasicTabs from "./containers/BasicTabs";
 import JsonFormatter from "./components/JsonFormatter";
 import MaterialUI from "./components/MaterialUI";
-import JsonDiffRaw from "./components/JsonDiffRaw";
-import JsonDiffTree from "./components/JsonDiffTree";
+import JsonDiff from "./components/JsonDiff";
 
 
 function App() {
@@ -39,10 +38,7 @@ function App() {
       </div>
       {/* <div>{items}</div> */}
       <JsonFormatter/>
-      <JsonFormatter/>
-      <JsonFormatter/>
-      <JsonDiffRaw/>
-      <JsonDiffTree/>
+      <JsonDiff/>
       <MaterialUI/>
     </div>
   );

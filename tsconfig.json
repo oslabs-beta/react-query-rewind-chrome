@@ -20,11 +20,17 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-        "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
-        }
+      "@mui/styled-engine": [
+        "./node_modules/@mui/styled-engine-sc"
+      ]
+    },
+    "plugins": [
+      {"name": "typescript-plugin-css-modules"}
+    ]
   },
   "include": [
-    "src"
-, "tests/App.test.tsx", "tests/setupTests.ts"  ]
-
+    "src",
+    "tests/App.test.tsx",
+    "tests/setupTests.ts"
+  ]
 }
