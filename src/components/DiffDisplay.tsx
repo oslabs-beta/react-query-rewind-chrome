@@ -57,6 +57,7 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     });
 
     setQueryDisplay(allDisplays);
+    console.log('queryDisplay: ', queryDisplay);
 
     setCurrentIndex(0);
   }, [selectedQueries, queryEvents]);
@@ -119,16 +120,18 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     });
   };
 
+
   return (
     <>
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
         <div className="data">
-          {queryDisplay[currentIndex].map(queryState => (
+          {queryDisplay[currentIndex].map((queryState, i) => (
             <>
               <Typography variant="h5">{queryState.queryKey}</Typography>
               <JsonDiff
                 key={queryState.queryKey}
                 currentJson={queryState.queryData}
+                oldJson={i > 1 && queryState.queryKey ? queryDisplay[i-1].queryData : null}
               />
             </>
           ))}

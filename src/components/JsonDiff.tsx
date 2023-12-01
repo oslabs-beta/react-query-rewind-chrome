@@ -35,17 +35,12 @@ type JsonDataType = {
 
 type JsonFormatterType = {
   oldJson?: JsonDataType, // will need to stay as optional in case you're on first state
-  currentJson?: JsonDataType // will need to be updated to be required
+  currentJson: JsonDataType
 }
 
 const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson }) => {
   // state to determine if unchanged are hidden or closed (if this needs to persist across time travels, it should live in a parent component)
   const [isHidden, setIsHidden] = useState(false)
-
-
-  // For testing purposes. Delete later
-  if (!oldJson) oldJson = example1;
-  if (!currentJson) currentJson = example2;
 
   // handle scenario where we're on the first state (not sure if it should be handled here)
   if (!oldJson) return (
