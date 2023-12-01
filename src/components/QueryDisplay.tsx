@@ -160,7 +160,10 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
   return (
     <>
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-        <div className="data">
+        <div
+          className="data"
+          style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
+        >
           {queryDisplay[currentIndex].map(queryState => (
             <>
               <Typography variant="h5">{queryState.queryKey}</Typography>
