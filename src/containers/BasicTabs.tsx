@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 import MultiSelect from '../components/MultiSelect';
 import QueryDisplay from '../components/QueryDisplay';
 import { TabPanelProps, BasicTabsProps } from '../types';
+import LowerLevelTabs from './LowerLevelTabs';
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -64,7 +65,7 @@ const BasicTabs = ({ queryOptions, queryEvents }: BasicTabsProps) => {
           onSelectionChange={handleSelectionChange}
           queryOptions={queryOptions}
         />
-        <QueryDisplay
+        <LowerLevelTabs
           selectedQueries={selectedQueries}
           queryEvents={queryEvents}
         />
