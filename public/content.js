@@ -3,7 +3,7 @@ window.addEventListener("message", (event) => {
   if (event.source === window && event.data.type && event.data.type === "react-query-rewind") {
     // Handle the data
     const message = event.data.payload;
-    chrome.runtime.sendMessage(null, message);
+    chrome.runtime.sendMessage(message);
     console.log("message: ", message);
   }
 });

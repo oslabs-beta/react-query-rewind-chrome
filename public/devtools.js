@@ -1,7 +1,7 @@
 // Create a tab in the devtools area
 chrome.devtools.panels.create(
   "RQRewind",
-  null,
+  'icon.png',
   "panel.html",
   function (panel) {}
 );

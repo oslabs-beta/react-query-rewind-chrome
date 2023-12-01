@@ -22,17 +22,11 @@ function App() {
 
     // reloads DevTool panel
     // need to define exact function for the listener to be removed in return
-    const windowReloaded = () => {
-      window.location.reload();
-    };
-
-    // event listner triggered when user navigates to new tab / reloads page
-    chrome.devtools.network.onNavigated.addListener(windowReloaded);
-
+  
     // cleanup 2 listeners on component dismount
     return () => {
       port.disconnect();
-      chrome.devtools.network.onNavigated.removeListener(windowReloaded);
+      // chrome.devtools.network.onNavigated.removeListener(windowReloaded);
     };
   }, []);
 
