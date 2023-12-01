@@ -1,0 +1,1 @@
+let port=chrome.runtime.connect({name:"devtools-panel"});port.onMessage.addListener((function(e){const n=document.createElement("div");n.innerHTML=e.message.type,document.body.appendChild(n),console.log(e.message)}));
