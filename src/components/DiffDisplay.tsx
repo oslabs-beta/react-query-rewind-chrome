@@ -120,6 +120,16 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     });
   };
 
+  if (queryDisplay && currentIndex) {
+    console.log('new Query Display', queryDisplay);
+    console.log('current index: ', currentIndex);
+    queryDisplay[currentIndex].forEach((queryState, i) => {
+      console.log('queryState: ', queryState.queryData);
+      if (currentIndex > 0) {
+        console.log('Test: ',  queryDisplay[currentIndex - 1].find (obj => obj.queryKey === queryState.queryKey)?.queryData);
+      }
+    }) 
+  }
 
   return (
     <>
@@ -131,7 +141,7 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
               <JsonDiff
                 key={queryState.queryKey}
                 currentJson={queryState.queryData}
-                oldJson={i > 1 && queryState.queryKey ? queryDisplay[i-1].queryData : null}
+                oldJson={currentIndex > 1 && queryState.queryKey ? queryDisplay[currentIndex - 1].find(obj => obj.queryKey === queryState.queryKey)?.queryData : null}
               />
             </>
           ))}
