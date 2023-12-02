@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { QueryTabProps, QueryDisplay } from '../types';
+import a11yProps from '../functions/a11yProps';
 
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -13,9 +14,19 @@ import PauseIcon from '@mui/icons-material/Pause';
 import JsonFormatter from './JsonFormatter';
 import Typography from '@mui/material/Typography';
 import createDisplayArray from '../functions/createDisplayArray';
-import { Slider } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import CustomTabPanel from '../components/CustomTabPanel';
+
+import JsonDiff from './JsonDiff';
 
 const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   // holds all query events based on selected queries and query events
   const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
   // current index of above array
@@ -95,24 +106,59 @@ const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
 
   return (
     <>
-      {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-        <div
-          className="data"
-          style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
-        >
-          {queryDisplay[currentIndex].map(queryState => (
-            <>
-              <Typography variant="h5">{queryState.queryKey}</Typography>
-              <JsonFormatter
-                key={queryState.queryKey}
-                jsonData={queryState.queryData}
-              />
-            </>
-          ))}
-        </div>
-      )}
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="STATE" {...a11yProps(0)} />
+            <Tab label="DIFF" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
 
-      <Slider />
+        <CustomTabPanel value={value} index={0}>
+          {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
+            <div
+              className="data"
+              style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
+            >
+              {queryDisplay[currentIndex].map(queryState => (
+                <>
+                  <Typography variant="h5">{queryState.queryKey}</Typography>
+                  <JsonFormatter
+                    key={queryState.queryKey}
+                    jsonData={queryState.queryData}
+                  />
+                </>
+              ))}
+            </div>
+          )}
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
+            <div className="data">
+              {queryDisplay[currentIndex].map((queryState, i) => (
+                <>
+                  <Typography variant="h5">{queryState.queryKey}</Typography>
+                  <JsonDiff
+                    key={queryState.queryKey}
+                    currentJson={queryState.queryData}
+                    oldJson={
+                      currentIndex > 1 && queryState.queryKey
+                        ? queryDisplay[currentIndex - 1].find(
+                            obj => obj.queryKey === queryState.queryKey
+                          )?.queryData
+                        : null
+                    }
+                  />
+                </>
+              ))}
+            </div>
+          )}
+        </CustomTabPanel>
+      </Box>
 
       <div className="navigation">
         <Box

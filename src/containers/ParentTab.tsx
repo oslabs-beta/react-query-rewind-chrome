@@ -7,6 +7,7 @@ import CustomTabPanel from '../components/CustomTabPanel';
 import a11yProps from '../functions/a11yProps';
 import QueryTab from './QueryTab';
 import MetricsTab from './MetricsTab';
+import QueryDisplay from '../components/QueryDisplay';
 
 const ParentTab = ({ queryEvents, selectedQueries }: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
@@ -29,7 +30,10 @@ const ParentTab = ({ queryEvents, selectedQueries }: BasicTabsProps) => {
       </Box>
 
       <CustomTabPanel value={value} index={0}>
-        <QueryTab selectedQueries={selectedQueries} queryEvents={queryEvents} />
+        <QueryDisplay
+          selectedQueries={selectedQueries}
+          queryEvents={queryEvents}
+        />
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>
