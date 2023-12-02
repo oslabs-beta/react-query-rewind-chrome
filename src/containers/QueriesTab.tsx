@@ -2,24 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { QueryTabProps, QueryDisplay } from '../types';
 import a11yProps from '../functions/a11yProps';
 
-import IconButton from '@mui/material/IconButton';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import Box from '@mui/material/Box';
-import ContinuousSlider from '../components/ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import JsonFormatter from '../components/JsonFormatter';
-import Typography from '@mui/material/Typography';
 import createDisplayArray from '../functions/createDisplayArray';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
 
-import JsonDiff from '../components/JsonDiff';
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
 

@@ -33,9 +33,8 @@ const SliderSection = ({
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           flexWrap: 'wrap',
-          position: 'fixed',
           bottom: 0,
           backgroundColor: 'rgba(40, 40, 40, 1)',
         }}

@@ -4,6 +4,9 @@ import ParentTab from './containers/ParentTab';
 import { QueryEvent } from './types';
 import MultiSelect from './components/MultiSelect';
 
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+
 function App() {
   // state to store changes to query cache
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
@@ -39,14 +42,19 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <MultiSelect
-        onSelectionChange={handleSelectionChange}
-        queryEvents={queryEvents}
-      />
+    <Container maxWidth={false} style={{ height: '100vh', padding: 0 }}>
+      <Box sx={{ height: '100%', width: '100%', p: 5 }}>
+        <MultiSelect
+          onSelectionChange={handleSelectionChange}
+          queryEvents={queryEvents}
+        />
 
-      <ParentTab queryEvents={queryEvents} selectedQueries={selectedQueries} />
-    </div>
+        <ParentTab
+          queryEvents={queryEvents}
+          selectedQueries={selectedQueries}
+        />
+      </Box>
+    </Container>
   );
 }
 

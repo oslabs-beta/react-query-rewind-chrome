@@ -1,21 +1,4 @@
-export type QueryEvent = {
-  eventType: string;
-  queryKey: QueryKey;
-  queryHash: string;
-  timestamp: Date;
-  queryData?: any;
-};
-
-export type QueryData = {
-  [queryName: string]: {
-    updates: QueryEvent[];
-  };
-};
-
-export type QueryDisplay = {
-  queryKey: string;
-  queryData: any;
-};
+// component prop types
 
 export type TabPanelProps = {
   children?: React.ReactNode;
@@ -45,4 +28,25 @@ export type SliderSectionProps = {
   handleAutoPlay: () => void;
   selectedQueries: string[];
   isPlaying: boolean;
+};
+
+// variable types
+
+export type QueryEvent = {
+  eventType: string;
+  queryKey: QueryKey;
+  queryHash: string;
+  timestamp: Date;
+  queryData?: any;
+};
+
+export type QueryData = {
+  [queryName: string]: {
+    updates: QueryEvent[];
+  };
+};
+
+export type QueryDisplay = {
+  queryKey: string;
+  queryData: any;
 };

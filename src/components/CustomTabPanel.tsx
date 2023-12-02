@@ -18,8 +18,8 @@ const CustomTabPanel = ({
       {...other}
     >
       {value === index && (
-        <Container>
-          <Box sx={{ p: 3 }}>{children}</Box>
+        <Container style={{ padding: 0 }}>
+          <Box sx={{ pt: 3 }}>{children}</Box>
         </Container>
       )}
     </div>
