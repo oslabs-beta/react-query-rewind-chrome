@@ -10,16 +10,7 @@ import ContinuousSlider from './ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-import { QueryDisplay } from '../types';
-
-type SliderSectionProps = {
-  queryDisplay: QueryDisplay[][];
-  currentIndex: number;
-  setCurrentIndex: (selected: number) => void;
-  handleAutoPlay: () => void;
-  selectedQueries: string[];
-  isPlaying: boolean;
-};
+import { QueryDisplay, SliderSectionProps } from '../types';
 
 const SliderSection = ({
   queryDisplay,

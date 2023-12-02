@@ -20,7 +20,8 @@ import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
 
 import JsonDiff from '../components/JsonDiff';
-import { Slider } from '@mui/material';
+import StateTab from './StateTab';
+import DiffTab from './DiffTab';
 
 const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
@@ -53,23 +54,22 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     setIsPlaying(prevIsPlaying => {
       if (!prevIsPlaying) {
         if (currentIndex >= queryDisplay.length - 1) {
-          setCurrentIndex(0); // Reset to the beginning
+          setCurrentIndex(0);
         }
 
         const newIntervalId = window.setInterval(() => {
           setCurrentIndex(prevIndex => {
             if (prevIndex >= queryDisplay.length - 1) {
               clearInterval(newIntervalId);
-              return prevIndex; // Keep at the last index
+              return prevIndex;
             }
             return prevIndex + 1;
           });
         }, 1000);
 
         setIntervalId(newIntervalId);
-        return true; // Start playing
+        return true;
       } else {
-        // Stop playing
         if (intervalId !== undefined) {
           clearInterval(intervalId);
           setIntervalId(undefined);
@@ -81,7 +81,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
 
   useEffect(() => {
     if (currentIndex >= queryDisplay.length - 1 && isPlaying) {
-      setIsPlaying(false); // Stop playing when it reaches the end
+      setIsPlaying(false);
     }
   }, [currentIndex, queryDisplay.length, isPlaying]);
 
@@ -118,44 +118,11 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         </Box>
 
         <CustomTabPanel value={value} index={0}>
-          {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-            <div
-              className="data"
-              style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
-            >
-              {queryDisplay[currentIndex].map(queryState => (
-                <>
-                  <Typography variant="h5">{queryState.queryKey}</Typography>
-                  <JsonFormatter
-                    key={queryState.queryKey}
-                    jsonData={queryState.queryData}
-                  />
-                </>
-              ))}
-            </div>
-          )}
+          <StateTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
+
         <CustomTabPanel value={value} index={1}>
-          {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-            <div className="data">
-              {queryDisplay[currentIndex].map((queryState, i) => (
-                <>
-                  <Typography variant="h5">{queryState.queryKey}</Typography>
-                  <JsonDiff
-                    key={queryState.queryKey}
-                    currentJson={queryState.queryData}
-                    oldJson={
-                      currentIndex > 1 && queryState.queryKey
-                        ? queryDisplay[currentIndex - 1].find(
-                            obj => obj.queryKey === queryState.queryKey
-                          )?.queryData
-                        : null
-                    }
-                  />
-                </>
-              ))}
-            </div>
-          )}
+          <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
 

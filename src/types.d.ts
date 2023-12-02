@@ -32,3 +32,17 @@ export type QueryTabProps = {
   selectedQueries: string[];
   queryEvents: QueryEvent[];
 };
+
+export type DataTabProps = {
+  queryDisplay: QueryDisplay[][];
+  currentIndex: number;
+};
+
+export type SliderSectionProps = {
+  queryDisplay: QueryDisplay[][];
+  currentIndex: number;
+  setCurrentIndex: (selected: number) => void;
+  handleAutoPlay: () => void;
+  selectedQueries: string[];
+  isPlaying: boolean;
+};
