@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { QueryDisplayProps, QueryDisplay } from '../types';
+import { QueryTabProps, QueryDisplay } from '../types';
 
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -13,7 +13,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import Typography from '@mui/material/Typography';
 import JsonDiff from './JsonDiff';
 
-const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
+const DiffDisplay = ({ selectedQueries, queryEvents }: QueryTabProps) => {
   // holds all query events based on selected queries and query events
   const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
   // current index of above array
@@ -126,9 +126,14 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     queryDisplay[currentIndex].forEach((queryState, i) => {
       console.log('queryState: ', queryState.queryData);
       if (currentIndex > 0) {
-        console.log('Test: ',  queryDisplay[currentIndex - 1].find (obj => obj.queryKey === queryState.queryKey)?.queryData);
+        console.log(
+          'Test: ',
+          queryDisplay[currentIndex - 1].find(
+            obj => obj.queryKey === queryState.queryKey
+          )?.queryData
+        );
       }
-    }) 
+    });
   }
 
   return (
@@ -141,7 +146,13 @@ const DiffDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
               <JsonDiff
                 key={queryState.queryKey}
                 currentJson={queryState.queryData}
-                oldJson={currentIndex > 1 && queryState.queryKey ? queryDisplay[currentIndex - 1].find(obj => obj.queryKey === queryState.queryKey)?.queryData : null}
+                oldJson={
+                  currentIndex > 1 && queryState.queryKey
+                    ? queryDisplay[currentIndex - 1].find(
+                        obj => obj.queryKey === queryState.queryKey
+                      )?.queryData
+                    : null
+                }
               />
             </>
           ))}
