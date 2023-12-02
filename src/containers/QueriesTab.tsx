@@ -8,19 +8,21 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import Box from '@mui/material/Box';
-import ContinuousSlider from './ContinuousSlider';
+import ContinuousSlider from '../components/ContinuousSlider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import JsonFormatter from './JsonFormatter';
+import JsonFormatter from '../components/JsonFormatter';
 import Typography from '@mui/material/Typography';
 import createDisplayArray from '../functions/createDisplayArray';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CustomTabPanel from '../components/CustomTabPanel';
+import SliderSection from '../components/SliderSection';
 
-import JsonDiff from './JsonDiff';
+import JsonDiff from '../components/JsonDiff';
+import { Slider } from '@mui/material';
 
-const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
+const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -34,6 +36,8 @@ const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
+
   const [playIcon, setPlayIcon] = useState(
     <PlayArrowIcon fontSize="inherit" />
   );
@@ -41,36 +45,45 @@ const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   // creates array of all states based on selected queries
   useEffect(() => {
     const newQueryDisplay = createDisplayArray(queryEvents, selectedQueries);
-
     setQueryDisplay(newQueryDisplay);
-
     setCurrentIndex(0);
   }, [selectedQueries, queryEvents]);
 
-  useEffect(() => {
-    let interval: number | undefined;
+  const handleAutoPlay = () => {
+    setIsPlaying(prevIsPlaying => {
+      if (!prevIsPlaying) {
+        if (currentIndex >= queryDisplay.length - 1) {
+          setCurrentIndex(0); // Reset to the beginning
+        }
 
-    if (isPlaying) {
-      interval = window.setInterval(() => {
-        setCurrentIndex(prevIndex => {
-          if (prevIndex >= queryDisplay.length - 1) {
-            setIsPlaying(false);
-            clearInterval(interval);
-            return prevIndex;
-          }
-          return prevIndex + 1;
-        });
-      }, 1000);
-    } else if (interval !== undefined) {
-      clearInterval(interval);
-    }
+        const newIntervalId = window.setInterval(() => {
+          setCurrentIndex(prevIndex => {
+            if (prevIndex >= queryDisplay.length - 1) {
+              clearInterval(newIntervalId);
+              return prevIndex; // Keep at the last index
+            }
+            return prevIndex + 1;
+          });
+        }, 1000);
 
-    return () => {
-      if (interval !== undefined) {
-        clearInterval(interval);
+        setIntervalId(newIntervalId);
+        return true; // Start playing
+      } else {
+        // Stop playing
+        if (intervalId !== undefined) {
+          clearInterval(intervalId);
+          setIntervalId(undefined);
+        }
+        return false;
       }
-    };
-  }, [isPlaying, queryDisplay]);
+    });
+  };
+
+  useEffect(() => {
+    if (currentIndex >= queryDisplay.length - 1 && isPlaying) {
+      setIsPlaying(false); // Stop playing when it reaches the end
+    }
+  }, [currentIndex, queryDisplay.length, isPlaying]);
 
   useEffect(() => {
     setPlayIcon(
@@ -82,27 +95,13 @@ const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     );
   }, [isPlaying]);
 
-  const handlePrevious = () => {
-    setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex(prevIndex =>
-      Math.min(prevIndex + 1, queryDisplay.length - 1)
-    );
-  };
-
-  const handleAll = () => {
-    setIsPlaying(prevIsPlaying => {
-      if (!prevIsPlaying) {
-        if (currentIndex >= queryDisplay.length - 1) {
-          setCurrentIndex(0);
-        }
-        return true;
+  useEffect(() => {
+    return () => {
+      if (intervalId !== undefined) {
+        clearInterval(intervalId);
       }
-      return false;
-    });
-  };
+    };
+  }, [intervalId]);
 
   return (
     <>
@@ -160,83 +159,16 @@ const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         </CustomTabPanel>
       </Box>
 
-      <div className="navigation">
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            flexWrap: 'wrap',
-            position: 'fixed',
-            bottom: 0,
-            backgroundColor: 'rgba(40, 40, 40, 1)',
-          }}
-        >
-          <IconButton
-            aria-label="play-pause"
-            size="large"
-            onClick={handleAll}
-            sx={{ '&:hover': { display: 'flex' } }}
-          >
-            {playIcon}
-          </IconButton>
-
-          <ContinuousSlider
-            value={currentIndex}
-            maxValue={queryDisplay.length - 1}
-            onChange={(newIndex: number) => setCurrentIndex(newIndex)}
-          />
-
-          <IconButton
-            aria-label="previous"
-            size="large"
-            disabled={currentIndex === 0}
-            onClick={() => setCurrentIndex(0)}
-            sx={{ '&:hover': { display: 'flex' } }}
-          >
-            <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
-          </IconButton>
-
-          <IconButton
-            aria-label="previous"
-            size="large"
-            disabled={currentIndex === 0}
-            onClick={handlePrevious}
-            sx={{ '&:hover': { display: 'flex' } }}
-          >
-            <KeyboardArrowLeftIcon fontSize="inherit" />
-          </IconButton>
-
-          <span>
-            {selectedQueries.length === 0
-              ? '0 / 0'
-              : `${currentIndex + 1} / ${queryDisplay.length}`}
-          </span>
-
-          <IconButton
-            aria-label="next"
-            size="large"
-            disabled={currentIndex === queryDisplay.length - 1}
-            onClick={handleNext}
-            sx={{ '&:hover': { display: 'flex' } }}
-          >
-            <KeyboardArrowRightIcon fontSize="inherit" />
-          </IconButton>
-
-          <IconButton
-            aria-label="next"
-            size="large"
-            disabled={currentIndex === queryDisplay.length - 1}
-            onClick={() => setCurrentIndex(queryDisplay.length - 1)}
-            sx={{ '&:hover': { display: 'flex' } }}
-          >
-            <KeyboardDoubleArrowRightIcon fontSize="inherit" />
-          </IconButton>
-        </Box>
-      </div>
+      <SliderSection
+        queryDisplay={queryDisplay}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+        handleAutoPlay={handleAutoPlay}
+        selectedQueries={selectedQueries}
+        isPlaying={isPlaying}
+      />
     </>
   );
 };
 
-export default QueryDisplay;
+export default QuereisTab;
