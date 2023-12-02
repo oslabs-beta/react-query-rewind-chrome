@@ -95,23 +95,36 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   }, [intervalId]);
 
   return (
-    <>
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="STATE" {...a11yProps(0)} />
-            <Tab label="DIFF" {...a11yProps(1)} />
-          </Tabs>
-        </Box>
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        pt: 1,
+      }}
+    >
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="STATE" {...a11yProps(0)} />
+          <Tab label="DIFF" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
 
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          maxHeight: '60vh',
+        }}
+      >
         <CustomTabPanel value={value} index={0}>
           <StateTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
-
         <CustomTabPanel value={value} index={1}>
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
@@ -125,7 +138,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         selectedQueries={selectedQueries}
         isPlaying={isPlaying}
       />
-    </>
+    </Box>
   );
 };
 

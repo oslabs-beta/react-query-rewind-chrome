@@ -16,11 +16,16 @@ const CustomTabPanel = ({
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
+      style={{ flexGrow: 1, height: '100%' }}
     >
       {value === index && (
-        <Container style={{ padding: 0 }}>
-          <Box sx={{ pt: 3 }}>{children}</Box>
-        </Container>
+        <Box
+          sx={{
+            height: '100%',
+          }}
+        >
+          {children}
+        </Box>
       )}
     </div>
   );

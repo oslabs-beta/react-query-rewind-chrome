@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import JsonFormatter from '../components/JsonFormatter';
+import JsonDiff from '../components/JsonDiff';
 
 import { DataTabProps } from '../types';
 
@@ -7,16 +7,20 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   return (
     <>
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-        <div
-          className="data"
-          style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
-        >
-          {queryDisplay[currentIndex].map(queryState => (
+        <div className="data">
+          {queryDisplay[currentIndex].map((queryState, i) => (
             <>
               <Typography variant="h5">{queryState.queryKey}</Typography>
-              <JsonFormatter
+              <JsonDiff
                 key={queryState.queryKey}
-                jsonData={queryState.queryData}
+                currentJson={queryState.queryData}
+                oldJson={
+                  currentIndex > 1 && queryState.queryKey
+                    ? queryDisplay[currentIndex - 1].find(
+                        obj => obj.queryKey === queryState.queryKey
+                      )?.queryData
+                    : null
+                }
               />
             </>
           ))}
