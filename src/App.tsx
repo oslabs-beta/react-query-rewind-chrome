@@ -1,14 +1,13 @@
-import React from 'react';
-import './App.css';
+import './css/styles.css';
 import { useState, useEffect } from 'react';
-import BasicTabs from './containers/BasicTabs';
-import { QueryKey } from '@tanstack/react-query';
+import ParentTab from './containers/ParentTab';
 import { QueryEvent } from './types';
+import MultiSelect from './components/MultiSelect';
 
 function App() {
   // state to store changes to query cache
-  const [queryOptions, setQueryOptions] = useState<string[]>([]);
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
+  const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
 
   // adds event listeners when component mounts
   useEffect(() => {
@@ -34,17 +33,19 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    const newQueryOptions = queryEvents.map(event => event.queryHash);
-    const uniqueQueryOptions = Array.from(new Set(newQueryOptions));
-    setQueryOptions(uniqueQueryOptions);
-  }, [queryEvents]);
+  // updates state for selected queries
+  const handleSelectionChange = (queries: string[]) => {
+    setSelectedQueries(queries);
+  };
 
   return (
     <div className="App">
-      <div>
-        <BasicTabs queryOptions={queryOptions} queryEvents={queryEvents} />
-      </div>
+      <MultiSelect
+        onSelectionChange={handleSelectionChange}
+        queryEvents={queryEvents}
+      />
+
+      <ParentTab queryEvents={queryEvents} selectedQueries={selectedQueries} />
     </div>
   );
 }

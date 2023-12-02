@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { QueryDisplayProps, QueryDisplay } from '../types';
+import { QueryTabProps, QueryDisplay } from '../types';
 
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -12,51 +12,26 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import JsonFormatter from './JsonFormatter';
 import Typography from '@mui/material/Typography';
+import createDisplayArray from '../functions/createDisplayArray';
+import { Slider } from '@mui/material';
 
-const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
+const QueryDisplay = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   // holds all query events based on selected queries and query events
   const [queryDisplay, setQueryDisplay] = useState<QueryDisplay[][]>([]);
   // current index of above array
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const [isPlaying, setIsPlaying] = useState(false); /////
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null); // to store the interval ID
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const [playIcon, setPlayIcon] = useState(
     <PlayArrowIcon fontSize="inherit" />
   );
 
   // creates array of all states based on selected queries
   useEffect(() => {
-    const allDisplays: QueryDisplay[][] = [];
+    const newQueryDisplay = createDisplayArray(queryEvents, selectedQueries);
 
-    // selected queries start with no data
-    const startDisplay: QueryDisplay[] = selectedQueries.map(queryKey => {
-      return {
-        queryKey: queryKey,
-        queryData: 'N/A',
-      };
-    });
-
-    allDisplays.push(startDisplay);
-
-    // filter for events of selected queries
-    const selectedQueryEvents = queryEvents.filter(queryEvent =>
-      selectedQueries.includes(queryEvent.queryHash)
-    );
-
-    // traverse queries and update the relevant query data for that event
-    selectedQueryEvents.forEach(queryEvent => {
-      const prevDisplay = [...allDisplays[allDisplays.length - 1]];
-      const newDisplay = prevDisplay.map(display => {
-        if (display.queryKey === queryEvent.queryHash) {
-          return { ...display, queryData: queryEvent.queryData };
-        }
-        return display;
-      });
-      allDisplays.push(newDisplay);
-    });
-
-    setQueryDisplay(allDisplays);
+    setQueryDisplay(newQueryDisplay);
 
     setCurrentIndex(0);
   }, [selectedQueries, queryEvents]);
@@ -67,7 +42,6 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
     if (isPlaying) {
       interval = window.setInterval(() => {
         setCurrentIndex(prevIndex => {
-          // Stop at the end of the array and change isPlaying to false
           if (prevIndex >= queryDisplay.length - 1) {
             setIsPlaying(false);
             clearInterval(interval);
@@ -75,7 +49,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
           }
           return prevIndex + 1;
         });
-      }, 1000); // 1000 milliseconds = 1 second
+      }, 1000);
     } else if (interval !== undefined) {
       clearInterval(interval);
     }
@@ -85,7 +59,7 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
         clearInterval(interval);
       }
     };
-  }, [isPlaying, queryDisplay.length]);
+  }, [isPlaying, queryDisplay]);
 
   useEffect(() => {
     setPlayIcon(
@@ -96,44 +70,6 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
       )
     );
   }, [isPlaying]);
-
-  // useEffect(() => {
-  //   if (isPlaying) {
-  //     // Start a new interval to move to the next update every 5 seconds
-  //     const id = setInterval(() => {
-  //       setCurrentIndex(prevIndex =>
-  //         Math.min(prevIndex + 1, queryDisplay.length - 1)
-  //       );
-  //     }, 1000);
-
-  //     // Store the interval ID for later cleanup
-  //     setIntervalId(id);
-  //   } else if (intervalId !== null) {
-  //     clearInterval(intervalId);
-  //     setIntervalId(null);
-  //   }
-  // }, [isPlaying]);
-
-  // // Cleanup the interval when component unmounts or when isPlaying changes to false
-  // useEffect(() => {
-  //   return () => {
-  //     if (intervalId !== null) {
-  //       clearInterval(intervalId);
-  //     }
-  //   };
-  // }, [intervalId]);
-
-  // useEffect(() => {
-  //   // Change the icon based on the isPlaying state
-  //   console.log('isPlaying:', isPlaying);
-
-  //   if (isPlaying) {
-  //     setPlayIcon(<PauseIcon fontSize="inherit" />);
-  //     console.log('PauseIcon should be set');
-  //   } else {
-  //     setPlayIcon(<PlayArrowIcon fontSize="inherit" />);
-  //   }
-  // }, [isPlaying, setPlayIcon]);
 
   const handlePrevious = () => {
     setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
@@ -175,6 +111,8 @@ const QueryDisplay = ({ selectedQueries, queryEvents }: QueryDisplayProps) => {
           ))}
         </div>
       )}
+
+      <Slider />
 
       <div className="navigation">
         <Box

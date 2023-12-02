@@ -12,6 +12,11 @@ export type QueryData = {
   };
 };
 
+export type QueryDisplay = {
+  queryKey: string;
+  queryData: any;
+};
+
 export type TabPanelProps = {
   children?: React.ReactNode;
   index: number;
@@ -19,16 +24,11 @@ export type TabPanelProps = {
 };
 
 export type BasicTabsProps = {
-  queryOptions: string[];
   queryEvents: QueryEvent[];
+  selectedQueries: string[];
 };
 
-export type QueryDisplayProps = {
+export type QueryTabProps = {
   selectedQueries: string[];
   queryEvents: QueryEvent[];
-};
-
-export type QueryDisplay = {
-  queryKey: string;
-  queryData: any;
 };
