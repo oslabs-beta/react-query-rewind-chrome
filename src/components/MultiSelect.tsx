@@ -25,6 +25,25 @@ export default function MultiSelect({
     const uniqueQueryOptions = Array.from(new Set(newQueryOptions));
     setQueryOptions(uniqueQueryOptions);
     // when there are new query options, we need to check with local storage and see if any of them are set
+    chrome.storage.local.get(['selectedQueries'], (result) => {
+      // check that data exists and it's an array
+      if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
+        // get the queries out of local storage
+        const arrayQueries = result.selectedQueries
+        console.log('Currently stored: ', arrayQueries);
+        const intersectionOfStorageAndAvailable: string[] = [];
+        // iterate through query keys stored in local storage and check if the query key is currently available in the drop-down
+        arrayQueries.forEach( (queryKey: string) => {
+          console.log(`${queryKey} should be selected`);
+          if (uniqueQueryOptions.includes(queryKey)) {
+            intersectionOfStorageAndAvailable.push(queryKey);
+          }
+        });
+        // invoke functions that 1) set checked values in the UI and 2) set the checked values in state so that the correct data is displayed
+        setIsChecked(intersectionOfStorageAndAvailable);
+        onSelectionChange(intersectionOfStorageAndAvailable);
+      }
+    })
   }, [queryEvents]);
 
   const handleChange = (event: SelectChangeEvent<typeof isChecked>) => {

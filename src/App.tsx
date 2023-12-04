@@ -39,15 +39,24 @@ function App() {
   // updates state for selected queries
   const handleSelectionChange = (queries: string[]) => {
     setSelectedQueries(queries);
+    console.log('handle selection change called');
     // store selected queries in local storage
-    chrome.storage.local.set({selectedQueries: JSON.stringify(queries)}, () => {
-      console.log('Stored selected queries: ', queries);
-    })
-    // retrieve past selection
+    // need to first get existing (not sure if this allows you to ever remove?)
     chrome.storage.local.get(['selectedQueries'], (result) => {
-      const arrayQueries = JSON.parse(result.selectedQueries)
-      console.log('Retrieved below queries from local storage: ', arrayQueries);
-    })
+      // get the queries out of local storage and store them as an array
+      let existingQueries: string[] = [];
+      if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
+        existingQueries = result.selectedQueries;
+      }
+
+      // combine existing queries with the new ones and handle duplicates
+      const combinedQueries = Array.from( new Set([...existingQueries, ...queries]))
+
+      // add the combinedQueries into local storage
+      chrome.storage.local.set({selectedQueries: combinedQueries}, () => {
+        console.log('Stored selected queries: ', combinedQueries);
+      })
+    });
   };
 
   return (

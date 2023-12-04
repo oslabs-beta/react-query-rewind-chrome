@@ -27,9 +27,9 @@ const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData, queryKey }) => {
   ) => {
     // Gets recurisved called and traverses the json in depth first search so we could use it to trac the nodes that are open at any given time
   
-    console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)
-    console.log('value: ', value); // value: value in that keypath
-    console.log('layer: ', layer); // layer: the depth
+    // console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)
+    // console.log('value: ', value); // value: value in that keypath
+    // console.log('layer: ', layer); // layer: the depth
     // expand first level
     if (layer < 2) return true;
     return false;
