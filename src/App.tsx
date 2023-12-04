@@ -43,16 +43,25 @@ function App() {
 
   return (
     <Container maxWidth={false} style={{ height: '100vh', padding: 0 }}>
-      <Box sx={{ height: '100%', width: '100%', p: 5 }}>
+      <Box
+        sx={{
+          height: '100%',
+          width: '100%',
+          p: 5,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <MultiSelect
           onSelectionChange={handleSelectionChange}
           queryEvents={queryEvents}
         />
-
-        <ParentTab
-          queryEvents={queryEvents}
-          selectedQueries={selectedQueries}
-        />
+        <Box sx={{ flexGrow: 1 }}>
+          <ParentTab
+            queryEvents={queryEvents}
+            selectedQueries={selectedQueries}
+          />
+        </Box>
       </Box>
     </Container>
   );
