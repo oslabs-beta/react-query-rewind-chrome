@@ -17,21 +17,22 @@ export default function MultiSelect({
   onSelectionChange,
   queryEvents,
 }: MultiSelectProps) {
-  const [personName, setPersonName] = useState<string[]>([]);
+  const [isChecked, setIsChecked] = useState<string[]>([]);
   const [queryOptions, setQueryOptions] = useState<string[]>([]);
 
   useEffect(() => {
     const newQueryOptions = queryEvents.map(event => event.queryHash);
     const uniqueQueryOptions = Array.from(new Set(newQueryOptions));
     setQueryOptions(uniqueQueryOptions);
+    // when there are new query options, we need to check with local storage and see if any of them are set
   }, [queryEvents]);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof isChecked>) => {
     const {
       target: { value },
     } = event;
     const newSelection = typeof value === 'string' ? value.split(',') : value;
-    setPersonName(newSelection);
+    setIsChecked(newSelection);
     onSelectionChange(newSelection);
   };
 
@@ -43,14 +44,14 @@ export default function MultiSelect({
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={personName}
+          value={isChecked}
           onChange={handleChange}
           input={<OutlinedInput label="Queries" />}
           renderValue={selected => selected.join(', ')}
         >
           {queryOptions.map(name => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
+              <Checkbox checked={isChecked.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}

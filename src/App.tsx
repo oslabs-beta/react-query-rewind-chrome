@@ -39,6 +39,15 @@ function App() {
   // updates state for selected queries
   const handleSelectionChange = (queries: string[]) => {
     setSelectedQueries(queries);
+    // store selected queries in local storage
+    chrome.storage.local.set({selectedQueries: JSON.stringify(queries)}, () => {
+      console.log('Stored selected queries: ', queries);
+    })
+    // retrieve past selection
+    chrome.storage.local.get(['selectedQueries'], (result) => {
+      const arrayQueries = JSON.parse(result.selectedQueries)
+      console.log('Retrieved below queries from local storage: ', arrayQueries);
+    })
   };
 
   return (
