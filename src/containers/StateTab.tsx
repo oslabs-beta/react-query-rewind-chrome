@@ -1,4 +1,3 @@
-import Typography from '@mui/material/Typography';
 import JsonFormatter from '../components/JsonFormatter';
 
 import { DataTabProps } from '../types';
@@ -13,9 +12,9 @@ const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
         >
           {queryDisplay[currentIndex].map(queryState => (
             <>
-              <Typography variant="h5">{queryState.queryKey}</Typography>
               <JsonFormatter
                 key={queryState.queryKey}
+                queryKey={queryState.queryKey}
                 jsonData={queryState.queryData}
               />
             </>
