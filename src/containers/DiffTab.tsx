@@ -11,20 +11,7 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
 
   // function to hide/show unchanged data
   const toggleChangedProperties = () => {
-    // select all json diff objects and modify their classlist to hide/show unchanged props
-    const jsonDiffContainerElems = Array.from(document.querySelectorAll('.json-diff-container')) as HTMLElement[]
-    for (const elem of jsonDiffContainerElems) {
-      // if currently hidden, remove class so unchanged are shown
-      if (isHidden) {
-        elem.classList.remove('jsondiffpatch-unchanged-hidden');
-        setIsHidden(false);
-        return;
-      }
-      // if currently shown, add class so unchanged are hidden
-      elem.classList.add('jsondiffpatch-unchanged-hidden');
-      setIsHidden(true);
-      return;
-    }
+    setIsHidden(!isHidden);
   }
 
   return (
