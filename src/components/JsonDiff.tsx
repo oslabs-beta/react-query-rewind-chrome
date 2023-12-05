@@ -10,15 +10,19 @@ type JsonDataType = {
 }
 
 type JsonFormatterType = {
-  oldJson?: JsonDataType, // will need to stay as optional in case you're on first state
-  currentJson: JsonDataType,
-  queryKey: string
+  oldJson?: JsonDataType | string, // optional in case you're on first state
+  currentJson: JsonDataType | string, // or string since state gets initialized to an empty string
+  queryKey: string,
+  isHidden: boolean
 }
 
-const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey }) => {
-
-  // handle scenario where we're on the first state (this shows up on the first and second time travels because first state is nothing?)
-  if (!oldJson) return (
+const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey, isHidden }) => {
+  console.log('QueryKey: ', queryKey);
+  console.log('old:', oldJson);
+  console.log('currentJson:', currentJson);
+  
+  // handle scenario where we're on the first state - getting currentJson but not oldJson
+  if (currentJson === '') return (
     <Typography
       variant='body1'
       style={{fontStyle: 'italic'}}
@@ -29,10 +33,8 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey 
 
   // get comparison obj
   const delta = jsondiffpatch.diff(oldJson, currentJson);
-  // console.log('old:', oldJson);
-  // console.log('currentJson:', currentJson);
+  // delta is undefined if the 2 objects are the exact same - not sure how I can render this
   console.log('delta: ', delta);
-
 
   if (delta) {
     // Use library's html formatter that generates vanilla CSS
@@ -42,7 +44,7 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey 
     const createMarkupHtml = () => ({ __html: htmlDiff });
 
     return (
-      <div className='json-diff-container'>
+      <div className={`json-diff-container ${isHidden ? 'jsondiffpatch-unchanged-hidden' : ''}`}>
         <Container>
           <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
         </Container>
@@ -50,13 +52,13 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey 
     )
   }
 
-  // handle errors by always returning something
+  // handle errors - this is appearing when there is no change tho?
   return (
     <Typography
       variant='body1'
       style={{fontStyle: 'italic'}}
     >
-      No Diff to Show
+      QueryKey data not modified on this state change
     </Typography>
 
   )

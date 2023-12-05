@@ -30,6 +30,7 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   return (
     <>
       <FormControlLabel
+      sx={{color: 'primary.main'}}
         control={<Switch
           checked={isHidden}
           onChange={toggleChangedProperties} />
@@ -40,11 +41,12 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
         <div className="data">
           {queryDisplay[currentIndex].map((queryState, i) => (
             <>
-              <Typography variant="h5" sx={{ color: 'secondary.main' }}>{queryState.queryKey}</Typography>
+              <Typography variant="h6" sx={{ color: 'secondary.main' }}>{queryState.queryKey}</Typography>
               <JsonDiff
                 key={queryState.queryKey}
                 queryKey={queryState.queryKey}
                 currentJson={queryState.queryData}
+                isHidden={isHidden}
                 oldJson={
                   currentIndex > 1 && queryState.queryKey
                     ? queryDisplay[currentIndex - 1].find(
