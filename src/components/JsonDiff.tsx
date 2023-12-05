@@ -35,16 +35,22 @@ type JsonDataType = {
 
 type JsonFormatterType = {
   oldJson?: JsonDataType, // will need to stay as optional in case you're on first state
-  currentJson: JsonDataType
+  currentJson: JsonDataType,
+  queryKey: string
 }
 
-const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson }) => {
+const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey }) => {
   // state to determine if unchanged are hidden or closed (if this needs to persist across time travels, it should live in a parent component)
   const [isHidden, setIsHidden] = useState(false)
 
   // handle scenario where we're on the first state (not sure if it should be handled here)
   if (!oldJson) return (
-    <Typography variant='h5'>Initial state - no comparison available</Typography>
+    <Typography
+      variant='body1'
+      style={{fontStyle: 'italic'}}
+    >
+      Initial state - no comparison available
+    </Typography>
   )
 
   // get comparison obj
@@ -94,9 +100,12 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson }) => {
 
   // handle errors by always returning something
   return (
-    <>
-      <Typography variant='h5'>No Diff to Show</Typography>
-    </>
+    <Typography
+      variant='body1'
+      style={{fontStyle: 'italic'}}
+    >
+      No Diff to Show
+    </Typography>
 
   )
 }

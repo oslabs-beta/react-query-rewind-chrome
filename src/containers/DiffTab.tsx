@@ -13,6 +13,7 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
               <Typography variant="h5">{queryState.queryKey}</Typography>
               <JsonDiff
                 key={queryState.queryKey}
+                queryKey={queryState.queryKey}
                 currentJson={queryState.queryData}
                 oldJson={
                   currentIndex > 1 && queryState.queryKey
@@ -30,4 +31,4 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   );
 };
 
-export default DiffTab;
+export default DiffTab; 
