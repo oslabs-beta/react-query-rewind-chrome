@@ -30,11 +30,9 @@ export default function MultiSelect({
       if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
         // get the queries out of local storage
         const arrayQueries = result.selectedQueries
-        console.log('Currently stored: ', arrayQueries);
         const intersectionOfStorageAndAvailable: string[] = [];
         // iterate through query keys stored in local storage and check if the query key is currently available in the drop-down
         arrayQueries.forEach( (queryKey: string) => {
-          console.log(`${queryKey} should be selected`);
           if (uniqueQueryOptions.includes(queryKey)) {
             intersectionOfStorageAndAvailable.push(queryKey);
           }
