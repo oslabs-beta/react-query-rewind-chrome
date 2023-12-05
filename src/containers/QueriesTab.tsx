@@ -109,9 +109,18 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
+          indicatorColor='secondary'
         >
-          <Tab label="STATE" {...a11yProps(0)} />
-          <Tab label="DIFF" {...a11yProps(1)} />
+          <Tab
+            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
+            label="STATE"
+            {...a11yProps(0)}
+          />
+          <Tab
+            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
+            label="DIFF"
+            {...a11yProps(1)}
+          />
         </Tabs>
       </Box>
 

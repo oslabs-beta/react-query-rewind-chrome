@@ -10,7 +10,7 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
         <div className="data">
           {queryDisplay[currentIndex].map((queryState, i) => (
             <>
-              <Typography variant="h5">{queryState.queryKey}</Typography>
+              <Typography variant="h5" sx={{color: 'secondary.main'}}>{queryState.queryKey}</Typography>
               <JsonDiff
                 key={queryState.queryKey}
                 queryKey={queryState.queryKey}
