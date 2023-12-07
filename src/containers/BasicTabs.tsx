@@ -8,6 +8,7 @@ import MultiSelect from '../components/MultiSelect';
 import QueryDisplay from '../components/QueryDisplay';
 import { TabPanelProps, BasicTabsProps } from '../types';
 import LowerLevelTabs from './LowerLevelTabs';
+import TreeGraph from '../components/Tree';
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -72,6 +73,7 @@ const BasicTabs = ({ queryOptions, queryEvents }: BasicTabsProps) => {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Metrics
+        <TreeGraph />
       </CustomTabPanel>
     </Box>
   );
