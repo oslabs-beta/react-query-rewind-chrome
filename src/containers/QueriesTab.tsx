@@ -61,6 +61,8 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     ) {
       chrome.runtime.sendMessage ({
         sender: 'UpdateUI',
+        sender1: 'x',
+        currentQuery1: 'a',
         currentQuery: queryDisplay[currentIndex],
       })
     };
