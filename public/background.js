@@ -20,10 +20,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 chrome.runtime.onMessage.addListener((newEvent, sender, sendResponse) => {
-  // message = msg;
-  // console.log(msg);
   if (devToolsPort) {
-    devToolsPort.postMessage({ event: newEvent });
+    devToolsPort.postMessage(newEvent);
   }
   // return true;
 });
