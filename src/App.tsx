@@ -1,21 +1,25 @@
 import './css/styles.css';
 import { useState, useEffect } from 'react';
 import ParentTab from './containers/ParentTab';
-import { QueryEvent } from './types';
+import { QueryEvent, QueryMetrics } from './types';
 import MultiSelect from './components/MultiSelect';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-
-type QueryMetrics = {
-  // [queryKey: ]
-};
+import trackMetrics from './functions/trackMetrics';
 
 function App() {
-  // state to store changes to query cache
-  const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
-  const [queryMetrics, setQueryMetrics] = useState();
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
+  const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
+  const [queryMetrics, setQueryMetrics] = useState<QueryMetrics>({
+    successful: [],
+    failed: [],
+    retries: [],
+  });
+
+  useEffect(() => {
+    console.log(queryMetrics);
+  }, [queryMetrics]);
 
   // adds event listeners when component mounts
   useEffect(() => {
@@ -24,12 +28,16 @@ function App() {
 
     // listents for messages from npm package
     port.onMessage.addListener(message => {
+      // store state of query cache changes
       if (message.type === 'event') {
         setQueryEvents(queryEvents => [...queryEvents, message.event]);
       }
 
+      // store state of query metrics
       if (message.type === 'metric') {
-        console.log(message.metric);
+        const metricType = message.metric.type;
+        const metric = message.metric.data;
+        trackMetrics(metricType, metric, setQueryMetrics);
       }
     });
 

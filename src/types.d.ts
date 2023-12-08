@@ -50,3 +50,22 @@ export type QueryDisplay = {
   queryKey: string;
   queryData: any;
 };
+
+export type Successful = {
+  queryKey: string;
+  timestamp: string;
+  executionTime: number;
+};
+
+export type Failed = {
+  queryKey: string;
+  timestamp: string;
+};
+
+export type Metric = Successful | Failed;
+
+export type QueryMetrics = {
+  successful: Successful[];
+  failed: Failed[];
+  retries: Failed[];
+};
