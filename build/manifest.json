@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "_RQRewind",
+    "name": "RQRewind",
     "version": "0.1",
     "description": "State management DevTools for React Query",
     "devtools_page": "devtools.html",

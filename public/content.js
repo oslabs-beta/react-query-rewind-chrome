@@ -17,13 +17,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
   if (message.sender === "UpdateUI") {
     const event = new CustomEvent("UpdateUI", {
-      detail: { queryKey: message.queryKey, queryData: message.queryData },
+      detail: { currentQuery: message.currentQuery },
     });
     window.dispatchEvent(event);
   }
   if (message.sender === 'TimeTravel') {
     const event = new CustomEvent('TimeTravel', {
-      detail: {timeTravel: message.timeTravel}
+      detail: { timeTravel: message.timeTravel }
     });
     window.dispatchEvent(event);
   }

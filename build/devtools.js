@@ -1,1 +1,1 @@
-chrome.devtools.panels.create("_RQRewind","icon.png","panel.html",(function(e){}));
+chrome.devtools.panels.create("RQRewind","icon.png","panel.html",(function(e){}));

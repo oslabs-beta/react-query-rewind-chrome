@@ -49,22 +49,21 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   }, [timeTravel]);
 
   const currentQuery = queryDisplay[currentIndex];
+  console.log(queryDisplay);
+  console.log(currentIndex);
+  console.log(queryDisplay[currentIndex]);
+  console.log('yes');
 
   useEffect(() => {
     if (
       currentQuery &&
-      currentQuery.length !== 0 &&
-      currentQuery[0].queryData !== "N/A" 
+      currentQuery.length !== 0
     ) {
-      console.log("exist");
-      
       chrome.runtime.sendMessage ({
         sender: 'UpdateUI',
-        queryKey: currentQuery[0].queryKey,
-        queryData: [...currentQuery[0].queryData],
+        currentQuery: queryDisplay[currentIndex],
       })
     };
-
   }, [currentIndex]);
 
   // creates array of all states based on selected queries
