@@ -10,6 +10,7 @@ import {
 } from "../helperFuncs/helperFuncs.js";
 import { useCallback, useState } from "react";
 
+//set up a centered tree visualization
 function ComponentTree({ fiberTree }) {
   const useCenteredTree = (defaultTranslate = { x: 0, y: 0 }) => {
     const [translate, setTranslate] = useState(defaultTranslate);

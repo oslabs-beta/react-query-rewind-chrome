@@ -49,7 +49,7 @@ const BasicTabs = ({ queryOptions, queryEvents }: BasicTabsProps) => {
   const handleSelectionChange = (queries: string[]) => {
     setSelectedQueries(queries);
   };
-  ///////////////////////
+
   const [idk, setIdk] = useState<any[]>([]);
   //state for navigating between tree and charts
   const [view, setView] = useState<string>("treeView");
@@ -103,41 +103,29 @@ const BasicTabs = ({ queryOptions, queryEvents }: BasicTabsProps) => {
     };
   }, [recStat]);
 
-/////////////////////////
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Query" {...a11yProps(0)} />
-          <Tab label="Metrics" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-        <MultiSelect
-          onSelectionChange={handleSelectionChange}
-          queryOptions={queryOptions}
-        />
-        <LowerLevelTabs
-          selectedQueries={selectedQueries}
-          queryEvents={queryEvents}
-        />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Metrics
-        <ProfilingToggle onClick={() => setStatus()}>
-            {recButton}
-          </ProfilingToggle>
-          <div className="ct">
-          </div>
-        {view === "treeView" && (
-          <ComponentTree fiberTree={idk[idk.length - 1]} />
-        )}      </CustomTabPanel>
+return (
+  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
+      <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tab label="Query" {...a11yProps(0)} />
+        <Tab label="Metrics" {...a11yProps(1)} />
+      </Tabs>
     </Box>
-  );
+    <CustomTabPanel value={value} index={0}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <MultiSelect onSelectionChange={handleSelectionChange} queryOptions={queryOptions} />
+        <LowerLevelTabs selectedQueries={selectedQueries} queryEvents={queryEvents} />
+      </div>
+    </CustomTabPanel>
+    <CustomTabPanel value={value} index={1}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <ProfilingToggle onClick={() => setStatus()}>{recButton}</ProfilingToggle>
+        <div className="ct"></div>
+        {view === "treeView" && <ComponentTree fiberTree={idk[idk.length - 1]} />}
+      </div>
+    </CustomTabPanel>
+  </Box>
+);
 };
 
 export default BasicTabs;

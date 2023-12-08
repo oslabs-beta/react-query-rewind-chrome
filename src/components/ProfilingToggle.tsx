@@ -69,7 +69,6 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
     return (
         <FormGroup>
         <Stack direction="row" spacing={1} alignItems="center">
-        {/* <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} /> */}
         <AntSwitch checked={checked} onChange={handleToggle} inputProps={{ 'aria-label': 'ant design' }} />
         {children}
       </Stack>
