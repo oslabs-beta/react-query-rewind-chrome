@@ -40,13 +40,25 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   // state for switching in and out of timetravel mode
   const [timeTravel, setTimeTravel] = useState<boolean>(false);
 
-  // sends message to the content script whenever timeTravel changes
+  // sends message to the background script whenever timeTravel changes
   useEffect(() => {
     chrome.runtime.sendMessage({
       sender: "TimeTravel",
       timeTravel: timeTravel,
     });
   }, [timeTravel]);
+
+  const currentQuery = queryDisplay[currentIndex];
+  
+  // sends message to the background script whenever currentIndex changes
+  useEffect(() => {
+    if (currentQuery && currentQuery.length !== 0) {
+      chrome.runtime.sendMessage({
+        sender: "UpdateUI",
+        currentQuery: queryDisplay[currentIndex],
+      });
+    }
+  }, [currentIndex]);
 
   // creates array of all states based on selected queries
   useEffect(() => {
@@ -108,20 +120,6 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     };
   }, [intervalId]);
 
-  const currentQuery = queryDisplay[currentIndex];
-  console.log(queryDisplay);
-  console.log(currentIndex);
-  console.log(queryDisplay[currentIndex]);
-  console.log("yes");
-
-  useEffect(() => {
-    if (currentQuery && currentQuery.length !== 0) {
-      chrome.runtime.sendMessage({
-        sender: "UpdateUI",
-        currentQuery: queryDisplay[currentIndex],
-      });
-    }
-  }, [currentIndex]);
 
   return (
     <Box

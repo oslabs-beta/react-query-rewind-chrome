@@ -1,4 +1,4 @@
-window.addEventListener("message", (event) => {
+const windowListener = (event) => {
   // Validate the message origin and structure
   if (
     event.source === window &&
@@ -10,9 +10,10 @@ window.addEventListener("message", (event) => {
     chrome.runtime.sendMessage({ sender: "content script", message: message });
     console.log("message: ", message);
   }
-});
+};
+window.addEventListener("message", windowListener);
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+const messageListener = (message, sender, sendResponse) => {
   console.log("Message received:", message);
 
   if (message.sender === "UpdateUI") {
@@ -21,10 +22,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     });
     window.dispatchEvent(event);
   }
-  if (message.sender === 'TimeTravel') {
-    const event = new CustomEvent('TimeTravel', {
-      detail: { timeTravel: message.timeTravel }
+  if (message.sender === "TimeTravel") {
+    const event = new CustomEvent("TimeTravel", {
+      detail: { timeTravel: message.timeTravel },
     });
     window.dispatchEvent(event);
   }
-});
+};
+chrome.runtime.onMessage.addListener(messageListener);
+
+

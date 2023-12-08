@@ -1,14 +1,15 @@
 let devToolsPort = null;
 
-chrome.runtime.onConnect.addListener(function (port) {
+const connectListener = (port) => {
   console.log("Background Connected");
 
   if (port.name === "devtool panel") {
     devToolsPort = port;
   }
-});
+};
+chrome.runtime.onConnect.addListener(connectListener);
 
-const listener = (newEvent, sender, sendResponse) => {
+const messageListener = (newEvent, sender, sendResponse) => {
   console.log("message received from content");
 
   if (newEvent.sender === "content script") {
@@ -35,4 +36,10 @@ const listener = (newEvent, sender, sendResponse) => {
     });
   }
 };
-chrome.runtime.onMessage.addListener(listener);
+
+chrome.runtime.onMessage.addListener(messageListener);
+
+chrome.runtime.onSuspend.addListener(() => {
+  chrome.runtime.onConnect.removeListener(connectListener);
+  chrome.runtime.onMessage.removeListener(messageListener);
+});
