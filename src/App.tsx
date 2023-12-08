@@ -23,9 +23,9 @@ function App() {
     let port = chrome.runtime.connect({ name: 'devtools-panel' });
 
     // listents for messages from npm package
-    port.onMessage.addListener(message => {
+    port.onMessage.addListener((message) => {
       if (message.type === 'event') {
-        setQueryEvents(queryEvents => [...queryEvents, message.event]);
+        setQueryEvents((queryEvents) => [...queryEvents, message.event]);
       }
 
       if (message.type === 'metric') {
@@ -65,7 +65,7 @@ function App() {
 
     // to allow users to remove queries, we will separately store the data from the session as "thisSessionsQueries" - this will allow us to see when a query has been removed
     const queriesSet = new Set(queries);
-    chrome.storage.local.get(['thisSessionsQueries'], result => {
+    chrome.storage.local.get(['thisSessionsQueries'], (result) => {
       if (
         result.thisSessionsQueries &&
         Array.isArray(result.thisSessionsQueries)
@@ -78,7 +78,7 @@ function App() {
         }
 
         // get the query keys that were stored from previous sessions
-        chrome.storage.local.get(['selectedQueries'], result => {
+        chrome.storage.local.get(['selectedQueries'], (result) => {
           // get the queries out of local storage and store them as an array
           let existingQueries: string[] = [];
           if (result.selectedQueries && Array.isArray(result.selectedQueries)) {

@@ -21,7 +21,7 @@ export default function MultiSelect({
   const [queryOptions, setQueryOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    const newQueryOptions = queryEvents.map(event => event.queryHash);
+    const newQueryOptions = queryEvents.map((event) => event.queryHash);
     const uniqueQueryOptions = Array.from(new Set(newQueryOptions));
     setQueryOptions(uniqueQueryOptions);
     // when there are new query options, we need to check with local storage and see if any of them are set
@@ -29,10 +29,10 @@ export default function MultiSelect({
       // check that data exists and it's an array
       if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
         // get the queries out of local storage
-        const arrayQueries = result.selectedQueries
+        const arrayQueries = result.selectedQueries;
         const intersectionOfStorageAndAvailable: string[] = [];
         // iterate through query keys stored in local storage and check if the query key is currently available in the drop-down
-        arrayQueries.forEach( (queryKey: string) => {
+        arrayQueries.forEach((queryKey: string) => {
           if (uniqueQueryOptions.includes(queryKey)) {
             intersectionOfStorageAndAvailable.push(queryKey);
           }
@@ -41,7 +41,7 @@ export default function MultiSelect({
         setIsChecked(intersectionOfStorageAndAvailable);
         onSelectionChange(intersectionOfStorageAndAvailable);
       }
-    })
+    });
   }, [queryEvents]);
 
   const handleChange = (event: SelectChangeEvent<typeof isChecked>) => {
@@ -56,17 +56,17 @@ export default function MultiSelect({
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Queries</InputLabel>
+        <InputLabel id='demo-multiple-checkbox-label'>Queries</InputLabel>
         <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
+          labelId='demo-multiple-checkbox-label'
+          id='demo-multiple-checkbox'
           multiple
           value={isChecked}
           onChange={handleChange}
-          input={<OutlinedInput label="Queries" />}
-          renderValue={selected => selected.join(', ')}
+          input={<OutlinedInput label='Queries' />}
+          renderValue={(selected) => selected.join(', ')}
         >
-          {queryOptions.map(name => (
+          {queryOptions.map((name) => (
             <MenuItem key={name} value={name}>
               <Checkbox checked={isChecked.indexOf(name) > -1} />
               <ListItemText primary={name} />

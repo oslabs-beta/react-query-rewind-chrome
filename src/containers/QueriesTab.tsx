@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QueryTabProps, QueryDisplay } from '../types';
 import a11yProps from '../functions/a11yProps';
 
@@ -8,8 +8,12 @@ import PauseIcon from '@mui/icons-material/Pause';
 import createDisplayArray from '../functions/createDisplayArray';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
+import ToggleButton from '@mui/material/ToggleButton';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
@@ -31,39 +35,48 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
 
   const [playIcon, setPlayIcon] = useState(
-    <PlayArrowIcon fontSize="inherit" />
+    <PlayArrowIcon fontSize='inherit' />
   );
 
-  // creates array of all states based on selected queries
-  const prevSelectedQueriesRef = useRef(selectedQueries);
+  // state for switching in and out of timetravel mode
+  const [timeTravel, setTimeTravel] = useState<boolean>(false);
 
+  // sends message to the background script whenever timeTravel changes
+  useEffect(() => {
+    chrome.runtime.sendMessage({
+      sender: 'TimeTravel',
+      timeTravel: timeTravel,
+    });
+  }, [timeTravel]);
+
+  const currentQuery = queryDisplay[currentIndex];
+
+  // sends message to the background script whenever currentIndex changes
+  useEffect(() => {
+    if (currentQuery && currentQuery.length !== 0) {
+      chrome.runtime.sendMessage({
+        sender: 'UpdateUI',
+        currentQuery: queryDisplay[currentIndex],
+      });
+    }
+  }, [currentIndex]);
+
+  // creates array of all states based on selected queries
   useEffect(() => {
     const newQueryDisplay = createDisplayArray(queryEvents, selectedQueries);
     setQueryDisplay(newQueryDisplay);
-
-    // Check if selected queries have changed
-    if (
-      JSON.stringify(selectedQueries) !==
-      JSON.stringify(prevSelectedQueriesRef.current)
-    ) {
-      if (newQueryDisplay.length > 0) {
-        setCurrentIndex(newQueryDisplay.length - 1); // Set to last index on new selection
-      }
-      prevSelectedQueriesRef.current = selectedQueries; // Update ref to current selected queries
-    }
-
-    // Do not update currentIndex if only queryEvents change
+    setCurrentIndex(0);
   }, [selectedQueries, queryEvents]);
 
   const handleAutoPlay = () => {
-    setIsPlaying(prevIsPlaying => {
+    setIsPlaying((prevIsPlaying) => {
       if (!prevIsPlaying) {
         if (currentIndex >= queryDisplay.length - 1) {
           setCurrentIndex(0);
         }
 
         const newIntervalId = window.setInterval(() => {
-          setCurrentIndex(prevIndex => {
+          setCurrentIndex((prevIndex) => {
             if (prevIndex >= queryDisplay.length - 1) {
               clearInterval(newIntervalId);
               return prevIndex;
@@ -93,9 +106,9 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   useEffect(() => {
     setPlayIcon(
       isPlaying ? (
-        <PauseIcon fontSize="inherit" />
+        <PauseIcon fontSize='inherit' />
       ) : (
-        <PlayArrowIcon fontSize="inherit" />
+        <PlayArrowIcon fontSize='inherit' />
       )
     );
   }, [isPlaying]);
@@ -122,10 +135,10 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label='basic tabs example'
         >
-          <Tab label="STATE" {...a11yProps(0)} />
-          <Tab label="DIFF" {...a11yProps(1)} />
+          <Tab label='STATE' {...a11yProps(0)} />
+          <Tab label='DIFF' {...a11yProps(1)} />
         </Tabs>
       </Box>
 
@@ -143,6 +156,24 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
+
+      <FormControl component='fieldset'>
+        <FormControlLabel
+          value='timeTravel'
+          control={<Switch color='primary' />}
+          label='Time Travel'
+          labelPlacement='start'
+          onChange={() => setTimeTravel(!timeTravel)}
+        />
+      </FormControl>
+
+      {/* <ToggleButton
+        value="check"
+        selected={timeTravel}
+        onChange={() => setTimeTravel(!timeTravel)}
+      >
+        {timeTravel ? "ON" : "OFF"}
+      </ToggleButton> */}
 
       <SliderSection
         queryDisplay={queryDisplay}

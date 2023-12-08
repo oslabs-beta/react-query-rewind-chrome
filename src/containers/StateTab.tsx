@@ -7,10 +7,10 @@ const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
     <>
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
         <div
-          className="data"
+          className='data'
           style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
         >
-          {queryDisplay[currentIndex].map(queryState => (
+          {queryDisplay[currentIndex].map((queryState) => (
             <>
               <JsonFormatter
                 key={queryState.queryKey}
