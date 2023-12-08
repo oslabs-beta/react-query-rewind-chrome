@@ -1,1 +1,0 @@
-window.addEventListener("message",(e=>{if(e.source===window&&e.data.type&&"react-query-rewind"===e.data.type){const a=e.data.payload;chrome.runtime.sendMessage(null,a)}}));
