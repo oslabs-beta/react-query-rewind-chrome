@@ -13,6 +13,7 @@ import SliderSection from '../components/SliderSection';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
+import LogTab from './LogTab';
 
 const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
@@ -126,6 +127,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         >
           <Tab label="STATE" {...a11yProps(0)} />
           <Tab label="DIFF" {...a11yProps(1)} />
+          <Tab label="LOG" {...a11yProps(2)} />
         </Tabs>
       </Box>
 
@@ -139,8 +141,13 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         <CustomTabPanel value={value} index={0}>
           <StateTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
+
         <CustomTabPanel value={value} index={1}>
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
+        </CustomTabPanel>
+
+        <CustomTabPanel value={value} index={2}>
+          <LogTab queryEvents={queryEvents} selectedQueries={selectedQueries} />
         </CustomTabPanel>
       </Box>
 

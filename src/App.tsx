@@ -17,10 +17,6 @@ function App() {
     retries: [],
   });
 
-  useEffect(() => {
-    console.log(queryMetrics);
-  }, [queryMetrics]);
-
   // adds event listeners when component mounts
   useEffect(() => {
     // connects to background.js
