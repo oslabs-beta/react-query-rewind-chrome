@@ -1,1 +1,1 @@
-let devToolsPort=null;chrome.runtime.onConnect.addListener((function(o){console.log("Background Connected"),devToolsPort=o,o.onMessage.addListener((function(o){})),o.onDisconnect.addListener((function(){devToolsPort=null}))})),chrome.runtime.onMessage.addListener(((o,e,n)=>{devToolsPort&&devToolsPort.postMessage({event:o})}));
+(()=>{var e=null;chrome.runtime.onConnect.addListener((function(n){console.log("Background Connected"),e=n})),chrome.runtime.onMessage.addListener((function(n,o,t){e&&e.postMessage({event:n})}))})();
