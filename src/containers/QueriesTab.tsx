@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { QueryTabProps, QueryDisplay } from '../types';
 import a11yProps from '../functions/a11yProps';
 
@@ -35,10 +35,24 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   );
 
   // creates array of all states based on selected queries
+  const prevSelectedQueriesRef = useRef(selectedQueries);
+
   useEffect(() => {
     const newQueryDisplay = createDisplayArray(queryEvents, selectedQueries);
     setQueryDisplay(newQueryDisplay);
-    setCurrentIndex(0);
+
+    // Check if selected queries have changed
+    if (
+      JSON.stringify(selectedQueries) !==
+      JSON.stringify(prevSelectedQueriesRef.current)
+    ) {
+      if (newQueryDisplay.length > 0) {
+        setCurrentIndex(newQueryDisplay.length - 1); // Set to last index on new selection
+      }
+      prevSelectedQueriesRef.current = selectedQueries; // Update ref to current selected queries
+    }
+
+    // Do not update currentIndex if only queryEvents change
   }, [selectedQueries, queryEvents]);
 
   const handleAutoPlay = () => {
