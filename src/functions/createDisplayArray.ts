@@ -21,14 +21,14 @@ const createDisplayArray = (
 
   // filter for events of selected queries
   const selectedQueryEvents = queryEvents.filter(queryEvent =>
-    selectedQueries.includes(queryEvent.queryHash)
+    selectedQueries.includes(queryEvent.queryKey[0])
   );
 
   // traverse queries and update the relevant query data for that event
   selectedQueryEvents.forEach(queryEvent => {
     const prevDisplay = [...allDisplays[allDisplays.length - 1]];
     const newDisplay = prevDisplay.map(display => {
-      if (display.queryKey === queryEvent.queryHash) {
+      if (display.queryKey === queryEvent.queryKey[0]) {
         return { ...display, queryData: queryEvent.queryData };
       }
       return display;
