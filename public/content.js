@@ -7,7 +7,6 @@ window.addEventListener("message", (event) => {
   ) {
     // Handle the data
     const message = event.data.payload;
-    // let port = chrome.runtime.connect({ name: 'content script'});
     chrome.runtime.sendMessage({ sender: "content script", message: message });
     console.log("message: ", message);
   }

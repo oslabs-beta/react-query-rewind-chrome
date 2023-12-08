@@ -15,7 +15,7 @@ function App() {
   // adds event listeners when component mounts
   useEffect(() => {
     // connects to background.js and listens for messages
-    let port = chrome.runtime.connect({ name: "devtools-panel" });
+    let port = chrome.runtime.connect({ name: "devtool panel" });
     port.onMessage.addListener((message) => {
       setQueryEvents((queryEvents) => [...queryEvents, message.event]);
     });
