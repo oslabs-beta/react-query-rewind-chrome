@@ -1,1 +1,0 @@
-(()=>{var e=null;chrome.runtime.onConnect.addListener((function(n){console.log("Background Connected"),e=n})),chrome.runtime.onMessage.addListener((function(n,o,t){e&&e.postMessage({event:n})}))})();
