@@ -1,1 +1,0 @@
-chrome.devtools.panels.create("RQRewind",null,"panel.html",(function(e){}));
