@@ -34,7 +34,7 @@ export type SliderSectionProps = {
 
 export type QueryEvent = {
   eventType: string;
-  queryKey: QueryKey;
+  queryKey: string[];
   queryHash: string;
   timestamp: Date;
   queryData?: any;
