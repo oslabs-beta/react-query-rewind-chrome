@@ -43,10 +43,29 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   // sends message to the content script whenever timeTravel changes
   useEffect(() => {
     chrome.runtime.sendMessage({
-      sender: "QueriesTab",
+      sender: "TimeTravel",
       timeTravel: timeTravel,
     });
   }, [timeTravel]);
+
+  const currentQuery = queryDisplay[currentIndex];
+
+  useEffect(() => {
+    if (
+      currentQuery &&
+      currentQuery.length !== 0 &&
+      currentQuery[0].queryData !== "N/A" 
+    ) {
+      console.log("exist");
+      
+      chrome.runtime.sendMessage ({
+        sender: 'UpdateUI',
+        queryKey: currentQuery[0].queryKey,
+        queryData: [...currentQuery[0].queryData],
+      })
+    };
+
+  }, [currentIndex]);
 
   // creates array of all states based on selected queries
   useEffect(() => {

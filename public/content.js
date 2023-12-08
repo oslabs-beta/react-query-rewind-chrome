@@ -16,13 +16,13 @@ window.addEventListener("message", (event) => {
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   console.log("Message received:", message);
 
-  if (message.sender === "StateTab") {
+  if (message.sender === "UpdateUI") {
     const event = new CustomEvent("UpdateUI", {
       detail: { queryKey: message.queryKey, queryData: message.queryData },
     });
     window.dispatchEvent(event);
   }
-  if (message.sender === 'App') {
+  if (message.sender === 'TimeTravel') {
     const event = new CustomEvent('TimeTravel', {
       detail: {timeTravel: message.timeTravel}
     });
