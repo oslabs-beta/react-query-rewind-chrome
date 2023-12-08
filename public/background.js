@@ -5,14 +5,15 @@ const connectListener = (port) => {
 
   if (port.name === "devtool panel") {
     devToolsPort = port;
-  }
+  };
+  return true;
 };
 chrome.runtime.onConnect.addListener(connectListener);
 
-const messageListener = (newEvent, sender, sendResponse) => {
+const messageListener = async (newEvent, sender, sendResponse) => {
   console.log("message received from content");
 
-  if (newEvent.sender === "content script") {
+  if (newEvent.sender === "content script" && devToolsPort) {
     devToolsPort.postMessage({ event: newEvent.message });
   }
 
@@ -34,7 +35,8 @@ const messageListener = (newEvent, sender, sendResponse) => {
         timeTravel: newEvent.timeTravel,
       });
     });
-  }
+  };
+  return true;
 };
 
 chrome.runtime.onMessage.addListener(messageListener);

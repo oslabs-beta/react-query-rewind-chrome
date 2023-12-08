@@ -13,7 +13,7 @@ const windowListener = (event) => {
 };
 window.addEventListener("message", windowListener);
 
-const messageListener = (message, sender, sendResponse) => {
+const messageListener = async (message, sender, sendResponse) => {
   console.log("Message received:", message);
 
   if (message.sender === "UpdateUI") {
@@ -27,7 +27,8 @@ const messageListener = (message, sender, sendResponse) => {
       detail: { timeTravel: message.timeTravel },
     });
     window.dispatchEvent(event);
-  }
+  };
+  return true;
 };
 chrome.runtime.onMessage.addListener(messageListener);
 
