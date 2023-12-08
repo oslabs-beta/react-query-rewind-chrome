@@ -169,6 +169,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           control={<Switch color="primary" />}
           label="Time Travel"
           labelPlacement="start"
+          onChange={() => setTimeTravel(!timeTravel)}
         />
     </FormControl>
 
