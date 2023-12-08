@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { QueryTabProps, QueryDisplay } from '../types';
-import a11yProps from '../functions/a11yProps';
+import React, { useState, useEffect } from "react";
+import { QueryTabProps, QueryDisplay } from "../types";
+import a11yProps from "../functions/a11yProps";
 
-import Box from '@mui/material/Box';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import createDisplayArray from '../functions/createDisplayArray';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import CustomTabPanel from '../components/CustomTabPanel';
-import SliderSection from '../components/SliderSection';
+import Box from "@mui/material/Box";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import createDisplayArray from "../functions/createDisplayArray";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import CustomTabPanel from "../components/CustomTabPanel";
+import SliderSection from "../components/SliderSection";
 
-import StateTab from './StateTab';
-import DiffTab from './DiffTab';
+import StateTab from "./StateTab";
+import DiffTab from "./DiffTab";
 
 const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
@@ -34,6 +37,17 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     <PlayArrowIcon fontSize="inherit" />
   );
 
+  // state for switching in and out of timetravel mode
+  const [timeTravel, setTimeTravel] = useState<boolean>(false);
+
+  // sends message to the content script whenever timeTravel changes
+  useEffect(() => {
+    chrome.runtime.sendMessage({
+      sender: "QueriesTab",
+      timeTravel: timeTravel,
+    });
+  }, [timeTravel]);
+
   // creates array of all states based on selected queries
   useEffect(() => {
     const newQueryDisplay = createDisplayArray(queryEvents, selectedQueries);
@@ -42,14 +56,14 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   }, [selectedQueries, queryEvents]);
 
   const handleAutoPlay = () => {
-    setIsPlaying(prevIsPlaying => {
+    setIsPlaying((prevIsPlaying) => {
       if (!prevIsPlaying) {
         if (currentIndex >= queryDisplay.length - 1) {
           setCurrentIndex(0);
         }
 
         const newIntervalId = window.setInterval(() => {
-          setCurrentIndex(prevIndex => {
+          setCurrentIndex((prevIndex) => {
             if (prevIndex >= queryDisplay.length - 1) {
               clearInterval(newIntervalId);
               return prevIndex;
@@ -97,14 +111,14 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   return (
     <Box
       sx={{
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         pt: 1,
       }}
     >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -118,8 +132,8 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: 'auto',
-          maxHeight: '60vh',
+          overflowY: "auto",
+          maxHeight: "60vh",
         }}
       >
         <CustomTabPanel value={value} index={0}>
@@ -129,6 +143,16 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
+
+      <FormControl component="fieldset">
+        <FormControlLabel
+          value="timeTravel"
+          control={<Switch color="primary" />}
+          label="Time Travel"
+          labelPlacement="start"
+        />
+    </FormControl>
+
 
       <SliderSection
         queryDisplay={queryDisplay}

@@ -1,30 +1,28 @@
-import './css/styles.css';
-import { useState, useEffect } from 'react';
-import ParentTab from './containers/ParentTab';
-import { QueryEvent } from './types';
-import MultiSelect from './components/MultiSelect';
+import "./css/styles.css";
+import { useState, useEffect } from "react";
+import ParentTab from "./containers/ParentTab";
+import { QueryEvent } from "./types";
+import MultiSelect from "./components/MultiSelect";
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 
 function App() {
   // state to store changes to query cache
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
-  // state for switching in and out of timetravel mode 
-  const [timeTravel, setTimeTravel] = useState<boolean>(false);
 
   // adds event listeners when component mounts
   useEffect(() => {
     // connects to background.js and listens for messages
-    let port = chrome.runtime.connect({ name: 'devtools-panel' });
-    port.onMessage.addListener(message => {
-      setQueryEvents(queryEvents => [...queryEvents, message.event]);
+    let port = chrome.runtime.connect({ name: "devtools-panel" });
+    port.onMessage.addListener((message) => {
+      setQueryEvents((queryEvents) => [...queryEvents, message.event]);
     });
 
     // reloads DevTool panel
     // need to define exact function for the listener to be removed in return
-  
+
     // cleanup 2 listeners on component dismount
     return () => {
       port.disconnect();
@@ -38,27 +36,30 @@ function App() {
 
     // *** Persisting Query Selection ***
     // this is complex because we may store queries that are not yet visible in the drop-down
-    
+
     // *** Refactor notes: handle errors (maybe update to promises)
 
     // set thisSessionsQueries to the queries array the function takes in because on page load, queries will be an empty array, effectively resetting it. If queries is an empty array, we initialize it here to an empty array. When queries is not empty, we will set it at the end of the function
     if (queries.length === 0) {
-      chrome.storage.local.set({thisSessionsQueries: queries})
+      chrome.storage.local.set({ thisSessionsQueries: queries });
     }
 
     // to allow users to remove queries, we will separately store the data from the session as "thisSessionsQueries" - this will allow us to see when a query has been removed
-    const queriesSet = new Set(queries)
-    chrome.storage.local.get(['thisSessionsQueries'], (result) => {
-      if (result.thisSessionsQueries && Array.isArray(result.thisSessionsQueries)) {
+    const queriesSet = new Set(queries);
+    chrome.storage.local.get(["thisSessionsQueries"], (result) => {
+      if (
+        result.thisSessionsQueries &&
+        Array.isArray(result.thisSessionsQueries)
+      ) {
         const queriesRemoved: string[] = [];
         for (const queryKey of result.thisSessionsQueries) {
           if (!queriesSet.has(queryKey)) {
-            queriesRemoved.push(queryKey)
+            queriesRemoved.push(queryKey);
           }
         }
 
         // get the query keys that were stored from previous sessions
-        chrome.storage.local.get(['selectedQueries'], (result) => {
+        chrome.storage.local.get(["selectedQueries"], (result) => {
           // get the queries out of local storage and store them as an array
           let existingQueries: string[] = [];
           if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
@@ -66,36 +67,38 @@ function App() {
           }
 
           // combine existing queries with the new ones and handle duplicates
-          const combinedQueries = new Set([...existingQueries, ...queries])
+          const combinedQueries = new Set([...existingQueries, ...queries]);
           // remove the queries that users unselected
           const combinedQueriesWithRemovals: string[] = [];
           for (const queryKey of combinedQueries) {
             // if queryKey is not in the removals list, add it to be stored
-            if (!queriesRemoved.includes(queryKey)) { // store as a set for faster access
-              combinedQueriesWithRemovals.push(queryKey)
+            if (!queriesRemoved.includes(queryKey)) {
+              // store as a set for faster access
+              combinedQueriesWithRemovals.push(queryKey);
             }
           }
 
           // add the combinedQueries into local storage
-          chrome.storage.local.set({selectedQueries: combinedQueriesWithRemovals})
+          chrome.storage.local.set({
+            selectedQueries: combinedQueriesWithRemovals,
+          });
 
           // update storage for current session's selections
-          chrome.storage.local.set({thisSessionsQueries: queries})
-
+          chrome.storage.local.set({ thisSessionsQueries: queries });
         });
       }
-    })
+    });
   };
 
   return (
-    <Container maxWidth={false} style={{ height: '100vh', padding: 0 }}>
+    <Container maxWidth={false} style={{ height: "100vh", padding: 0 }}>
       <Box
         sx={{
-          height: '100%',
-          width: '100%',
+          height: "100%",
+          width: "100%",
           p: 5,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <MultiSelect
