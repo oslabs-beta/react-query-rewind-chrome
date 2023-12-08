@@ -11,6 +11,8 @@ function App() {
   // state to store changes to query cache
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
+  // state for switching in and out of timetravel mode 
+  const [timeTravel, setTimeTravel] = useState<boolean>(false);
 
   // adds event listeners when component mounts
   useEffect(() => {
