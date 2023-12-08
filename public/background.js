@@ -21,8 +21,7 @@ const listener = (newEvent, sender, sendResponse) => {
       // tabs[0].id is the ID of the active tab
       chrome.tabs.sendMessage(tabs[0].id, {
         sender: "UpdateUI",
-        queryKey: newEvent.queryKey,
-        queryData: newEvent.queryData,
+        currentQuery: newEvent.currentQuery,
       });
     });
   }

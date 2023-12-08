@@ -8,9 +8,9 @@ import PauseIcon from "@mui/icons-material/Pause";
 import createDisplayArray from "../functions/createDisplayArray";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
 import CustomTabPanel from "../components/CustomTabPanel";
 import SliderSection from "../components/SliderSection";
 
@@ -47,26 +47,6 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
       timeTravel: timeTravel,
     });
   }, [timeTravel]);
-
-  const currentQuery = queryDisplay[currentIndex];
-  console.log(queryDisplay);
-  console.log(currentIndex);
-  console.log(queryDisplay[currentIndex]);
-  console.log('yes');
-
-  useEffect(() => {
-    if (
-      currentQuery &&
-      currentQuery.length !== 0
-    ) {
-      chrome.runtime.sendMessage ({
-        sender: 'UpdateUI',
-        sender1: 'x',
-        currentQuery1: 'a',
-        currentQuery: queryDisplay[currentIndex],
-      })
-    };
-  }, [currentIndex]);
 
   // creates array of all states based on selected queries
   useEffect(() => {
@@ -128,6 +108,21 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     };
   }, [intervalId]);
 
+  const currentQuery = queryDisplay[currentIndex];
+  console.log(queryDisplay);
+  console.log(currentIndex);
+  console.log(queryDisplay[currentIndex]);
+  console.log("yes");
+
+  useEffect(() => {
+    if (currentQuery && currentQuery.length !== 0) {
+      chrome.runtime.sendMessage({
+        sender: "UpdateUI",
+        currentQuery: queryDisplay[currentIndex],
+      });
+    }
+  }, [currentIndex]);
+
   return (
     <Box
       sx={{
@@ -172,8 +167,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           labelPlacement="start"
           onChange={() => setTimeTravel(!timeTravel)}
         />
-    </FormControl>
-
+      </FormControl>
 
       <SliderSection
         queryDisplay={queryDisplay}
