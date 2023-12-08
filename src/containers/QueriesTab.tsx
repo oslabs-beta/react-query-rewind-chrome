@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { QueryTabProps, QueryDisplay } from "../types";
-import a11yProps from "../functions/a11yProps";
+import React, { useState, useEffect } from 'react';
+import { QueryTabProps, QueryDisplay } from '../types';
+import a11yProps from '../functions/a11yProps';
 
-import Box from "@mui/material/Box";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-import createDisplayArray from "../functions/createDisplayArray";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import CustomTabPanel from "../components/CustomTabPanel";
-import SliderSection from "../components/SliderSection";
-import ToggleButton from "@mui/material/ToggleButton";
+import Box from '@mui/material/Box';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import createDisplayArray from '../functions/createDisplayArray';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import CustomTabPanel from '../components/CustomTabPanel';
+import SliderSection from '../components/SliderSection';
+import ToggleButton from '@mui/material/ToggleButton';
 
-import StateTab from "./StateTab";
-import DiffTab from "./DiffTab";
+import StateTab from './StateTab';
+import DiffTab from './DiffTab';
 
 const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
@@ -35,7 +35,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
 
   const [playIcon, setPlayIcon] = useState(
-    <PlayArrowIcon fontSize="inherit" />
+    <PlayArrowIcon fontSize='inherit' />
   );
 
   // state for switching in and out of timetravel mode
@@ -44,7 +44,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   // sends message to the background script whenever timeTravel changes
   useEffect(() => {
     chrome.runtime.sendMessage({
-      sender: "TimeTravel",
+      sender: 'TimeTravel',
       timeTravel: timeTravel,
     });
   }, [timeTravel]);
@@ -55,7 +55,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   useEffect(() => {
     if (currentQuery && currentQuery.length !== 0) {
       chrome.runtime.sendMessage({
-        sender: "UpdateUI",
+        sender: 'UpdateUI',
         currentQuery: queryDisplay[currentIndex],
       });
     }
@@ -106,9 +106,9 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
   useEffect(() => {
     setPlayIcon(
       isPlaying ? (
-        <PauseIcon fontSize="inherit" />
+        <PauseIcon fontSize='inherit' />
       ) : (
-        <PlayArrowIcon fontSize="inherit" />
+        <PlayArrowIcon fontSize='inherit' />
       )
     );
   }, [isPlaying]);
@@ -121,33 +121,32 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
     };
   }, [intervalId]);
 
-
   return (
     <Box
       sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         pt: 1,
       }}
     >
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label='basic tabs example'
         >
-          <Tab label="STATE" {...a11yProps(0)} />
-          <Tab label="DIFF" {...a11yProps(1)} />
+          <Tab label='STATE' {...a11yProps(0)} />
+          <Tab label='DIFF' {...a11yProps(1)} />
         </Tabs>
       </Box>
 
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: "auto",
-          maxHeight: "60vh",
+          overflowY: 'auto',
+          maxHeight: '60vh',
         }}
       >
         <CustomTabPanel value={value} index={0}>
@@ -158,12 +157,12 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         </CustomTabPanel>
       </Box>
 
-      <FormControl component="fieldset">
+      <FormControl component='fieldset'>
         <FormControlLabel
-          value="timeTravel"
-          control={<Switch color="primary" />}
-          label="Time Travel"
-          labelPlacement="start"
+          value='timeTravel'
+          control={<Switch color='primary' />}
+          label='Time Travel'
+          labelPlacement='start'
           onChange={() => setTimeTravel(!timeTravel)}
         />
       </FormControl>
