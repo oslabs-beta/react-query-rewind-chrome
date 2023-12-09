@@ -46,7 +46,8 @@ const ParentTab = ({ queryEvents, selectedQueries }: BasicTabsProps) => {
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <MetricsTab />
+          <MetricsTab 
+          queryEvents={queryEvents} selectedQueries={selectedQueries}/>
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={2}>
