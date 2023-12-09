@@ -45,7 +45,7 @@ const getChildren = (tree) => {
 const parseTreeInTreeStructure = (tree) => {
   if (!tree) return;
   let obj;
-  console.log("parsetree", tree);
+  // console.log("parsetree", tree);
   if (tree === null) return null;
   else {
     // console.log("result of invokign getChildren", getChildren(tree));
@@ -120,7 +120,7 @@ const final = (tree) => {
 
 //event listener logs message from content script, resets eventList array
 document.addEventListener("CustomEventFromContentScript", function (event) {
-  console.log("Message from content script:", event.detail.message);
+  // console.log("Message from content script:", event.detail.message);
   eventList = [];
 });
 
@@ -130,11 +130,11 @@ const customOnCommitFiberRoot = (onCommitFiberRoot) => {
     //extract fiberRoot from args
     const fiberRoot = args[1];
     //log info about fiberRoot
-    console.log(
-      "INJECT.JS: FIBER ROOT FROM THE CUSTOM ONCOMMITFIBERROOT",
-      fiberRoot
-    );
-    console.log("this is the unparsed tree", fiberRoot.current);
+    // console.log(
+    //   "INJECT.JS: FIBER ROOT FROM THE CUSTOM ONCOMMITFIBERROOT",
+    //   fiberRoot
+    // );
+    // console.log("this is the unparsed tree", fiberRoot.current);
     //parse tree and add to eventList
     eventList.push(
       final(parseTreeInTreeStructure(parseTree(fiberRoot.current)))
