@@ -12,7 +12,7 @@ const createDisplayArray = (
     (queryKey: string) => {
       return {
         queryKey: queryKey,
-        queryData: 'N/A',
+        queryData: '',
       };
     }
   );

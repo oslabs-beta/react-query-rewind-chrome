@@ -12,7 +12,7 @@ const theme: ThemeOptions = createTheme({
       main: '#ff6f61',
     },
     secondary: {
-      main: '#5e35b1',
+      main: '#8a5ff0',
     },
     background: {
       default: darkMode ? '#282828' : '#ffffff'
