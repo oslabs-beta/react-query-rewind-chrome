@@ -7,10 +7,10 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   return (
     <>
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-        <div className="data">
+        <div className='data'>
           {queryDisplay[currentIndex].map((queryState, i) => (
             <>
-              <Typography variant="h5">{queryState.queryKey}</Typography>
+              <Typography variant='h5'>{queryState.queryKey}</Typography>
               <JsonDiff
                 key={queryState.queryKey}
                 queryKey={queryState.queryKey}
@@ -18,7 +18,7 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
                 oldJson={
                   currentIndex > 1 && queryState.queryKey
                     ? queryDisplay[currentIndex - 1].find(
-                        obj => obj.queryKey === queryState.queryKey
+                        (obj) => obj.queryKey === queryState.queryKey
                       )?.queryData
                     : null
                 }
@@ -31,4 +31,4 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   );
 };
 
-export default DiffTab; 
+export default DiffTab;

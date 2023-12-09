@@ -21,13 +21,13 @@ const SliderSection = ({
   isPlaying,
 }: SliderSectionProps) => {
   const playIcon = isPlaying ? (
-    <PauseIcon fontSize="inherit" />
+    <PauseIcon fontSize='inherit' />
   ) : (
-    <PlayArrowIcon fontSize="inherit" />
+    <PlayArrowIcon fontSize='inherit' />
   );
 
   return (
-    <div className="navigation">
+    <div className='navigation'>
       <Box
         sx={{
           width: '100%',
@@ -40,8 +40,8 @@ const SliderSection = ({
         }}
       >
         <IconButton
-          aria-label="play-pause"
-          size="large"
+          aria-label='play-pause'
+          size='large'
           onClick={handleAutoPlay}
           sx={{ '&:hover': { display: 'flex' } }}
         >
@@ -55,23 +55,23 @@ const SliderSection = ({
         />
 
         <IconButton
-          aria-label="previous"
-          size="large"
+          aria-label='previous'
+          size='large'
           disabled={currentIndex === 0}
           onClick={() => setCurrentIndex(0)}
           sx={{ '&:hover': { display: 'flex' } }}
         >
-          <KeyboardDoubleArrowLeftIcon fontSize="inherit" />
+          <KeyboardDoubleArrowLeftIcon fontSize='inherit' />
         </IconButton>
 
         <IconButton
-          aria-label="previous"
-          size="large"
+          aria-label='previous'
+          size='large'
           disabled={currentIndex === 0}
           onClick={() => setCurrentIndex(Math.max(currentIndex - 1, 0))}
           sx={{ '&:hover': { display: 'flex' } }}
         >
-          <KeyboardArrowLeftIcon fontSize="inherit" />
+          <KeyboardArrowLeftIcon fontSize='inherit' />
         </IconButton>
 
         <span>
@@ -81,25 +81,25 @@ const SliderSection = ({
         </span>
 
         <IconButton
-          aria-label="next"
-          size="large"
+          aria-label='next'
+          size='large'
           disabled={currentIndex === queryDisplay.length - 1}
           onClick={() =>
             setCurrentIndex(Math.min(currentIndex + 1, queryDisplay.length - 1))
           }
           sx={{ '&:hover': { display: 'flex' } }}
         >
-          <KeyboardArrowRightIcon fontSize="inherit" />
+          <KeyboardArrowRightIcon fontSize='inherit' />
         </IconButton>
 
         <IconButton
-          aria-label="next"
-          size="large"
+          aria-label='next'
+          size='large'
           disabled={currentIndex === queryDisplay.length - 1}
           onClick={() => setCurrentIndex(queryDisplay.length - 1)}
           sx={{ '&:hover': { display: 'flex' } }}
         >
-          <KeyboardDoubleArrowRightIcon fontSize="inherit" />
+          <KeyboardDoubleArrowRightIcon fontSize='inherit' />
         </IconButton>
       </Box>
     </div>

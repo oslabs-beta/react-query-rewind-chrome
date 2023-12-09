@@ -59,6 +59,8 @@ const windowListener = (event) => {
     const message = event.data.payload;
     chrome.runtime.sendMessage({ sender: 'content script', message: message });
     console.log('message: ', message);
+    chrome.runtime.sendMessage({ sender: 'content script', message: message });
+    console.log('message: ', message);
   }
 };
 window.addEventListener('message', windowListener);

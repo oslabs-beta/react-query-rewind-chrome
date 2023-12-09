@@ -29,11 +29,11 @@ const ParentTab = ({ queryEvents, selectedQueries }: BasicTabsProps) => {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label='basic tabs example'
         >
-          <Tab label="QUERIES" {...a11yProps(0)} />
-          <Tab label="METRICS" {...a11yProps(1)} />
-          <Tab label="SETTINGS" {...a11yProps(2)} />
+          <Tab label='QUERIES' {...a11yProps(0)} />
+          <Tab label='METRICS' {...a11yProps(1)} />
+          <Tab label='SETTINGS' {...a11yProps(2)} />
         </Tabs>
       </Box>
 
