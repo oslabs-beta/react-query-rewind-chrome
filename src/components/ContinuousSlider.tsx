@@ -19,7 +19,7 @@ export default function ContinuousSlider({
   };
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ flexGrowth: 1 }}>
       <Stack
         spacing={2}
         direction='row'

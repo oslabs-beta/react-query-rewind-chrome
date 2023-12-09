@@ -36,7 +36,7 @@ const SliderSection = ({
           justifyContent: 'center',
           flexWrap: 'wrap',
           bottom: 0,
-          backgroundColor: 'rgba(40, 40, 40, 1)',
+          backgroundColor: 'rgba(40, 40, 40, 0.5)',
         }}
       >
         <IconButton
@@ -48,11 +48,17 @@ const SliderSection = ({
           {playIcon}
         </IconButton>
 
-        <ContinuousSlider
-          value={currentIndex}
-          maxValue={queryDisplay.length - 1}
-          onChange={(newIndex: number) => setCurrentIndex(newIndex)}
-        />
+        <Box
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <ContinuousSlider
+            value={currentIndex}
+            maxValue={queryDisplay.length - 1}
+            onChange={(newIndex: number) => setCurrentIndex(newIndex)}
+          />
+        </Box>
 
         <IconButton
           aria-label='previous'
