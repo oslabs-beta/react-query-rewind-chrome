@@ -19,9 +19,9 @@ type JsonFormatterType = {
 
 
 const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey, isHidden }) => {
-  console.log('QueryKey: ', queryKey);
-  console.log('old:', oldJson);
-  console.log('currentJson:', currentJson);
+  // console.log('QueryKey: ', queryKey);
+  // console.log('old:', oldJson);
+  // console.log('currentJson:', currentJson);
   
   // handle scenario where we're on the first state - getting currentJson but not oldJson
   if (currentJson === '') return (
@@ -36,7 +36,7 @@ const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey,
   // get comparison obj
   const delta = jsondiffpatch.diff(oldJson, currentJson);
   // delta is undefined if the 2 objects are the exact same - not sure how I can render this
-  console.log('delta: ', delta);
+  // console.log('delta: ', delta);
 
   if (delta) {
     // Use library's html formatter that generates vanilla CSS
