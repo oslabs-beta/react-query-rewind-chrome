@@ -1,6 +1,5 @@
 //retrieve global hook and save in reactdevglobahook variable, used to interact w/react devtools
 const reactDevGlobalHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-
 // store the parsed fiber tree info
 // each element will represent one re-render that has occurred
 let eventList = [];
