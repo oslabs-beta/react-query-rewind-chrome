@@ -126,6 +126,7 @@ function App() {
         />
         <Box sx={{ flexGrow: 1 }}>
           <ParentTab
+            // queryOptions={queryOptions}
             queryEvents={queryEvents}
             selectedQueries={selectedQueries}
           />
