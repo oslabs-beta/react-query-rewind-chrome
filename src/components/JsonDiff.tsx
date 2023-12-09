@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 
 import Container from '@mui/material/Container';
 import jsondiffpatch from 'jsondiffpatch';
-import '../css/global.css';
+import '../css/jsonDiff.css';
 
 type JsonDataType = {
   [key: string]: any;
