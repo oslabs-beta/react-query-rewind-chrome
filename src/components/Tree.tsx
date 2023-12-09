@@ -67,7 +67,7 @@ function ComponentTree({ fiberTree }: ComponentTreeProps) {
   }, [recStat]);
 
   const stringifiedResult = customStringify(fiberTree);
-
+  console.log(fiberTree);
   return (
     <>
       {fiberTree ? (
