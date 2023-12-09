@@ -7,6 +7,7 @@ export type TabPanelProps = {
 };
 
 export type BasicTabsProps = {
+  // queryOptions: string[];
   queryEvents: QueryEvent[];
   selectedQueries: string[];
 };

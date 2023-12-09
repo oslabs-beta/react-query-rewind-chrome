@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "RQRewind",
-    "version": "0.1",
+    "version": "1.0.0",
     "description": "State management DevTools for React Query",
     "devtools_page": "devtools.html",
     "background": {
@@ -19,5 +19,11 @@
         "storage",
         "scripting"
     ],
-    "host_permissions": ["http://localhost/*"]
+    "host_permissions": ["http://localhost/*"],
+    "web_accessible_resources": [
+        {
+          "resources": ["inject.js"],
+          "matches": ["<all_urls>"]
+        }
+      ]
 }
