@@ -5,11 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 const config = {
     entry: {
-        index: "./src/index.tsx",
-        background: path.resolve("public/background.js"),
-        contentScript: path.resolve("public/content.js"),
-        inject: path.resolve("public/inject.js"),
-        devtools: path.resolve("public/devtools.js"),
+        index: "./src/index.tsx"
     },
     module: {
         rules: [

@@ -1,25 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import MultiSelect from '../components/MultiSelect';
-import { TabPanelProps, BasicTabsProps } from '../types';
+import { BasicTabsProps } from '../types';
 import ComponentTree from '../components/Tree';
 import ProfilingToggle from '../components/ProfilingToggle';
 
 const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
   const [value, setValue] = React.useState(0);
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
-  const handleSelectionChange = (queries: string[]) => {
-    setSelectedQueries(queries);
-  };
 
   const [idk, setIdk] = useState<any[]>([]);
   //state for navigating between tree and charts
