@@ -1,5 +1,5 @@
 import './css/styles.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ParentTab from './containers/ParentTab';
 import { QueryEvent } from './types';
 import MultiSelect from './components/MultiSelect';

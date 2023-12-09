@@ -1,3 +1,5 @@
+import React from 'react';
+
 import JsonFormatter from '../components/JsonFormatter';
 
 import { DataTabProps } from '../types';
