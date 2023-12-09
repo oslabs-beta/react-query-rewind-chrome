@@ -1,110 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
 import JsonFormatter from './JsonFormatter';
 import Typography from '@mui/material/Typography';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+
 import Container from '@mui/material/Container';
 import jsondiffpatch from 'jsondiffpatch';
-import '../css/global.css';
-
-// examples for testing
-const example1 = {
-  val: 'test',
-  valAgain: 'test',
-  nested: {
-    first: 1,
-    second: 2,
-  },
-};
-
-const example2 = {
-  val: 'test2',
-  nested: {
-    first: 1,
-    second: 2,
-    other: 5,
-  },
-  third: 3,
-};
+import '../css/jsonDiff.css';
 
 type JsonDataType = {
   [key: string]: any;
 };
 
 type JsonFormatterType = {
-  oldJson?: JsonDataType; // will need to stay as optional in case you're on first state
-  currentJson: JsonDataType;
-  queryKey: string;
+  oldJson?: JsonDataType | string, // optional in case you're on first state
+  currentJson: JsonDataType | string, // or string since state gets initialized to an empty string
+  queryKey: string,
+  isHidden: boolean
 };
 
-const JsonDiff: React.FC<JsonFormatterType> = ({
-  oldJson,
-  currentJson,
-  queryKey,
-}) => {
-  // state to determine if unchanged are hidden or closed (if this needs to persist across time travels, it should live in a parent component)
-  const [isHidden, setIsHidden] = useState(false);
 
-  // handle scenario where we're on the first state (not sure if it should be handled here)
-  if (!oldJson)
-    return (
-      <Typography variant='body1' style={{ fontStyle: 'italic' }}>
-        Initial state - no comparison available
-      </Typography>
-    );
+const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey, isHidden }) => {
+  console.log('QueryKey: ', queryKey);
+  console.log('old:', oldJson);
+  console.log('currentJson:', currentJson);
+  
+  // handle scenario where we're on the first state - getting currentJson but not oldJson
+  if (currentJson === '') return (
+    <Typography
+      variant='body1'
+      style={{fontStyle: 'italic'}}
+    >
+      Initial state - no comparison available
+    </Typography>
+  )
 
   // get comparison obj
   const delta = jsondiffpatch.diff(oldJson, currentJson);
+  // delta is undefined if the 2 objects are the exact same - not sure how I can render this
   console.log('delta: ', delta);
 
   if (delta) {
     // Use library's html formatter that generates vanilla CSS
     const htmlFormatter = jsondiffpatch.formatters.html;
-    const htmlDiff = htmlFormatter.format(delta, example1);
+    const htmlDiff = htmlFormatter.format(delta, oldJson);
     // React-specific functions to handle raw html
     const createMarkupHtml = () => ({ __html: htmlDiff });
 
-    // function to hide/show unchanged data
-    const toggleChange = () => {
-      const jsonDiffContainerElem = document.querySelector(
-        '.json-diff-container'
-      ) as HTMLElement;
-      if (jsonDiffContainerElem) {
-        // if currently hidden, remove class so unchanged are shown
-        if (isHidden) {
-          jsonDiffContainerElem.classList.remove(
-            'jsondiffpatch-unchanged-hidden'
-          );
-          setIsHidden(false);
-          return;
-        }
-        // if currently shown, add class so unchanged are hidden
-        jsonDiffContainerElem.classList.add('jsondiffpatch-unchanged-hidden');
-        setIsHidden(true);
-        return;
-      }
-    };
-
     return (
-      <div className='json-diff-container'>
+      <div className={`json-diff-container ${isHidden ? 'jsondiffpatch-unchanged-hidden' : ''}`}>
         <Container>
-          <FormControlLabel
-            control={<Switch checked={isHidden} onChange={toggleChange} />}
-            label={`${isHidden ? 'Show' : 'Hide'} Unchanged Properties `}
-          />
           <div dangerouslySetInnerHTML={createMarkupHtml()}></div>
         </Container>
       </div>
-    );
+    )
   }
 
-  // handle errors by always returning something
+  // handle errors - this is appearing when there is no change tho?
   return (
-    <Typography variant='body1' style={{ fontStyle: 'italic' }}>
-      No Diff to Show
+    <Typography
+      variant='body1'
+      style={{fontStyle: 'italic'}}
+    >
+      QueryKey data not modified on this state change
     </Typography>
-  );
-};
+
+  )
+}
 
 export default JsonDiff;
