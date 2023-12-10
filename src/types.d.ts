@@ -7,14 +7,21 @@ export type TabPanelProps = {
 };
 
 export type BasicTabsProps = {
+  selectedQueries: string[];
+  queryEvents: QueryEvent[];
+};
+
+export type ParentTabsProps = {
   // queryOptions: string[];
   queryEvents: QueryEvent[];
   selectedQueries: string[];
+  handleSelectionChange: (queries: string[]) => void;
 };
 
 export type QueryTabProps = {
   selectedQueries: string[];
   queryEvents: QueryEvent[];
+  handleSelectionChange: (queries: string[]) => void;
 };
 
 export type DataTabProps = {
@@ -35,7 +42,7 @@ export type SliderSectionProps = {
 
 export type QueryEvent = {
   eventType: string;
-  queryKey: QueryKey;
+  queryKey: string[];
   queryHash: string;
   timestamp: Date;
   queryData?: any;

@@ -110,28 +110,21 @@ function App() {
   };
 
   return (
-    <Container maxWidth={false} style={{ height: '100vh', padding: 0 }}>
-      <Box
-        sx={{
-          height: '100%',
-          width: '100%',
-          p: 5,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <MultiSelect
-          onSelectionChange={handleSelectionChange}
-          queryEvents={queryEvents}
-        />
-        <Box sx={{ flexGrow: 1 }}>
-          <ParentTab
-            // queryOptions={queryOptions}
-            queryEvents={queryEvents}
-            selectedQueries={selectedQueries}
-          />
-        </Box>
-      </Box>
+    <Container
+      maxWidth={false}
+      sx={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <ParentTab
+        // queryOptions={queryOptions}
+        queryEvents={queryEvents}
+        selectedQueries={selectedQueries}
+        handleSelectionChange={handleSelectionChange}
+      />
     </Container>
   );
 }

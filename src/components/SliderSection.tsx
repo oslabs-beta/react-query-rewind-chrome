@@ -27,88 +27,83 @@ const SliderSection = ({
   );
 
   return (
-    <div className='navigation'>
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          bottom: 0,
-          backgroundColor: 'rgba(40, 40, 40, 0.5)',
-        }}
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom: 0,
+        backgroundColor: 'rgba(40, 40, 40, 0.5)',
+      }}
+    >
+      <IconButton
+        aria-label='play-pause'
+        size='large'
+        onClick={handleAutoPlay}
+        sx={{ '&:hover': { display: 'flex' } }}
       >
-        <IconButton
-          aria-label='play-pause'
-          size='large'
-          onClick={handleAutoPlay}
-          sx={{ '&:hover': { display: 'flex' } }}
-        >
-          {playIcon}
-        </IconButton>
+        {playIcon}
+      </IconButton>
 
-        <Box
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <ContinuousSlider
-            value={currentIndex}
-            maxValue={queryDisplay.length - 1}
-            onChange={(newIndex: number) => setCurrentIndex(newIndex)}
-          />
-        </Box>
-
-        <IconButton
-          aria-label='previous'
-          size='large'
-          disabled={currentIndex === 0}
-          onClick={() => setCurrentIndex(0)}
-          sx={{ '&:hover': { display: 'flex' } }}
-        >
-          <KeyboardDoubleArrowLeftIcon fontSize='inherit' />
-        </IconButton>
-
-        <IconButton
-          aria-label='previous'
-          size='large'
-          disabled={currentIndex === 0}
-          onClick={() => setCurrentIndex(Math.max(currentIndex - 1, 0))}
-          sx={{ '&:hover': { display: 'flex' } }}
-        >
-          <KeyboardArrowLeftIcon fontSize='inherit' />
-        </IconButton>
-
-        <span>
-          {selectedQueries.length === 0
-            ? '0 / 0'
-            : `${currentIndex + 1} / ${queryDisplay.length}`}
-        </span>
-
-        <IconButton
-          aria-label='next'
-          size='large'
-          disabled={currentIndex === queryDisplay.length - 1}
-          onClick={() =>
-            setCurrentIndex(Math.min(currentIndex + 1, queryDisplay.length - 1))
-          }
-          sx={{ '&:hover': { display: 'flex' } }}
-        >
-          <KeyboardArrowRightIcon fontSize='inherit' />
-        </IconButton>
-
-        <IconButton
-          aria-label='next'
-          size='large'
-          disabled={currentIndex === queryDisplay.length - 1}
-          onClick={() => setCurrentIndex(queryDisplay.length - 1)}
-          sx={{ '&:hover': { display: 'flex' } }}
-        >
-          <KeyboardDoubleArrowRightIcon fontSize='inherit' />
-        </IconButton>
+      <Box
+        sx={{ flexGrow: 1,}}
+      >
+        <ContinuousSlider
+          value={currentIndex}
+          maxValue={queryDisplay.length - 1}
+          onChange={(newIndex: number) => setCurrentIndex(newIndex)}
+        />
       </Box>
-    </div>
+
+      <IconButton
+        aria-label='previous'
+        size='large'
+        disabled={currentIndex === 0}
+        onClick={() => setCurrentIndex(0)}
+        sx={{ '&:hover': { display: 'flex' } }}
+      >
+        <KeyboardDoubleArrowLeftIcon fontSize='inherit' />
+      </IconButton>
+
+      <IconButton
+        aria-label='previous'
+        size='large'
+        disabled={currentIndex === 0}
+        onClick={() => setCurrentIndex(Math.max(currentIndex - 1, 0))}
+        sx={{ '&:hover': { display: 'flex' } }}
+      >
+        <KeyboardArrowLeftIcon fontSize='inherit' />
+      </IconButton>
+
+      <span style={{ minWidth: '2rem' }}>
+        {selectedQueries.length === 0
+          ? '0 / 0'
+          : `${currentIndex + 1} / ${queryDisplay.length}`}
+      </span>
+
+      <IconButton
+        aria-label='next'
+        size='large'
+        disabled={currentIndex === queryDisplay.length - 1}
+        onClick={() =>
+          setCurrentIndex(Math.min(currentIndex + 1, queryDisplay.length - 1))
+        }
+        sx={{ '&:hover': { display: 'flex' } }}
+      >
+        <KeyboardArrowRightIcon fontSize='inherit' />
+      </IconButton>
+
+      <IconButton
+        aria-label='next'
+        size='large'
+        disabled={currentIndex === queryDisplay.length - 1}
+        onClick={() => setCurrentIndex(queryDisplay.length - 1)}
+        sx={{ '&:hover': { display: 'flex' } }}
+      >
+        <KeyboardDoubleArrowRightIcon fontSize='inherit' />
+      </IconButton>
+    </Box>
   );
 };
 

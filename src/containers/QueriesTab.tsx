@@ -14,11 +14,13 @@ import FormControl from '@mui/material/FormControl';
 import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
 import ToggleButton from '@mui/material/ToggleButton';
+import InfoIcon from '@mui/icons-material/Info';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
+import MultiSelect from '../components/MultiSelect'
 
-const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
+const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -131,6 +133,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         pt: 1,
       }}
     >
+      <MultiSelect queryEvents={queryEvents} handleSelectionChange={handleSelectionChange}/>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
@@ -139,13 +142,13 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           indicatorColor='secondary'
         >
           <Tab
-            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
-            label="STATE"
+            sx={{ '&.Mui-selected': { color: 'secondary.main' } }}
+            label='STATE'
             {...a11yProps(0)}
           />
           <Tab
-            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
-            label="DIFF"
+            sx={{ '&.Mui-selected': { color: 'secondary.main' } }}
+            label='DIFF'
             {...a11yProps(1)}
           />
         </Tabs>
@@ -154,8 +157,7 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: 'auto',
-          maxHeight: '60vh',
+          overflowY: 'scroll',
         }}
       >
         <CustomTabPanel value={value} index={0}>
@@ -165,16 +167,18 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
-
-      <FormControl component='fieldset'>
-        <FormControlLabel
-          value='timeTravel'
-          control={<Switch color='primary' />}
-          label='Time Travel'
-          labelPlacement='start'
-          onChange={() => setTimeTravel(!timeTravel)}
-        />
-      </FormControl>
+      {/* <span>
+        <InfoIcon></InfoIcon>
+        <FormControl component='fieldset'>
+          <FormControlLabel
+            value='timeTravel'
+            control={<Switch color='primary' />}
+            label='Time Travel'
+            labelPlacement='start'
+            onChange={() => setTimeTravel(!timeTravel)}
+          />
+        </FormControl>
+      </span> */}
 
       {/* <ToggleButton
         value="check"
