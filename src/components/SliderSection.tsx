@@ -47,8 +47,21 @@ const SliderSection = ({
       </IconButton>
 
       <Box
-        sx={{ flexGrow: 1,}}
+      mr={3}
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
       >
+        <span style={{ minWidth: '2rem', fontSize: 12, position: 'absolute', top: '-0.5rem', left: '50%' }}>
+          {selectedQueries.length === 0
+            ? '0 / 0'
+            : `${currentIndex + 1} / ${queryDisplay.length}`}
+        </span>
         <ContinuousSlider
           value={currentIndex}
           maxValue={queryDisplay.length - 1}
@@ -58,48 +71,42 @@ const SliderSection = ({
 
       <IconButton
         aria-label='previous'
-        size='large'
+        size='medium'
         disabled={currentIndex === 0}
         onClick={() => setCurrentIndex(0)}
-        sx={{ '&:hover': { display: 'flex' } }}
+        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
       >
         <KeyboardDoubleArrowLeftIcon fontSize='inherit' />
       </IconButton>
 
       <IconButton
         aria-label='previous'
-        size='large'
+        size='medium'
         disabled={currentIndex === 0}
         onClick={() => setCurrentIndex(Math.max(currentIndex - 1, 0))}
-        sx={{ '&:hover': { display: 'flex' } }}
+        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
       >
         <KeyboardArrowLeftIcon fontSize='inherit' />
       </IconButton>
 
-      <span style={{ minWidth: '2rem' }}>
-        {selectedQueries.length === 0
-          ? '0 / 0'
-          : `${currentIndex + 1} / ${queryDisplay.length}`}
-      </span>
-
       <IconButton
         aria-label='next'
-        size='large'
+        size='medium'
         disabled={currentIndex === queryDisplay.length - 1}
         onClick={() =>
           setCurrentIndex(Math.min(currentIndex + 1, queryDisplay.length - 1))
         }
-        sx={{ '&:hover': { display: 'flex' } }}
+        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
       >
         <KeyboardArrowRightIcon fontSize='inherit' />
       </IconButton>
 
       <IconButton
         aria-label='next'
-        size='large'
+        size='medium'
         disabled={currentIndex === queryDisplay.length - 1}
         onClick={() => setCurrentIndex(queryDisplay.length - 1)}
-        sx={{ '&:hover': { display: 'flex' } }}
+        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
       >
         <KeyboardDoubleArrowRightIcon fontSize='inherit' />
       </IconButton>
