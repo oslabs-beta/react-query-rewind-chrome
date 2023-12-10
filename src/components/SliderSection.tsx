@@ -34,7 +34,8 @@ const SliderSection = ({
         alignItems: 'center',
         justifyContent: 'center',
         bottom: 0,
-        backgroundColor: 'rgba(40, 40, 40, 0.5)',
+        paddingRight: '0.5rem',
+        // backgroundColor: 'rgba(40, 40, 40, 0.5)',
       }}
     >
       <IconButton

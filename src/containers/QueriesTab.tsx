@@ -14,13 +14,18 @@ import FormControl from '@mui/material/FormControl';
 import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
 import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import InfoIcon from '@mui/icons-material/Info';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
-import MultiSelect from '../components/MultiSelect'
+import MultiSelect from '../components/MultiSelect';
 
-const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: QueryTabProps) => {
+const QuereisTab = ({
+  queryEvents,
+  selectedQueries,
+  handleSelectionChange,
+}: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -133,13 +138,35 @@ const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Que
         pt: 1,
       }}
     >
-      <MultiSelect queryEvents={queryEvents} handleSelectionChange={handleSelectionChange}/>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <MultiSelect
+        queryEvents={queryEvents}
+        handleSelectionChange={handleSelectionChange}
+      />
+
+      <ToggleButtonGroup
+        color='secondary'
+        sx={{
+          marginTop: '0.5rem',
+        }}
+        value={value}
+        exclusive
+        onChange={handleChange}
+        aria-label='Platform'
+      >
+        <ToggleButton size='small' value={0}>
+          STATE
+        </ToggleButton>
+        <ToggleButton size='small' value={1}>
+          DIFF
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label='basic tabs example'
-          indicatorColor='secondary'
+          indicatorColor='primary'
         >
           <Tab
             sx={{ '&.Mui-selected': { color: 'secondary.main' } }}
@@ -152,8 +179,7 @@ const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Que
             {...a11yProps(1)}
           />
         </Tabs>
-      </Box>
-
+      </Box> */}
       <Box
         sx={{
           flexGrow: 1,
@@ -179,7 +205,6 @@ const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Que
           />
         </FormControl>
       </span> */}
-
       {/* <ToggleButton
         value="check"
         selected={timeTravel}
@@ -187,7 +212,6 @@ const QuereisTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Que
       >
         {timeTravel ? "ON" : "OFF"}
       </ToggleButton> */}
-
       <SliderSection
         queryDisplay={queryDisplay}
         currentIndex={currentIndex}

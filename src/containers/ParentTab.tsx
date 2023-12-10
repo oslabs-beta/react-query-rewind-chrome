@@ -37,7 +37,7 @@ const ParentTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Pare
         </Tabs>
       </Box>
 
-      <Box sx={{ flexGrow: 1, height: 'calc(100vh - 3rem)' }}>
+      <Box sx={{ flexGrow: 1, height: 'calc(100vh - 3rem)', paddingTop: '0.5rem' }}>
         <CustomTabPanel value={value} index={0}>
           <QueriesTab
             selectedQueries={selectedQueries}
