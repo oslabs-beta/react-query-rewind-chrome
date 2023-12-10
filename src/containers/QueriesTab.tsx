@@ -16,6 +16,8 @@ import SliderSection from '../components/SliderSection';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import InfoIcon from '@mui/icons-material/Info';
+import HistoryIcon from '@mui/icons-material/History';
+import Tooltip from '@mui/material/Tooltip';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
@@ -143,23 +145,42 @@ const QuereisTab = ({
         handleSelectionChange={handleSelectionChange}
       />
 
-      <ToggleButtonGroup
-        color='secondary'
+      <Box
         sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'start',
           marginTop: '0.5rem',
         }}
-        value={value}
-        exclusive
-        onChange={handleChange}
-        aria-label='Platform'
       >
-        <ToggleButton size='small' value={0}>
-          STATE
-        </ToggleButton>
-        <ToggleButton size='small' value={1}>
-          DIFF
-        </ToggleButton>
-      </ToggleButtonGroup>
+        <ToggleButtonGroup
+          color='secondary'
+          value={value}
+          exclusive
+          onChange={handleChange}
+          aria-label='Platform'
+        >
+          <ToggleButton size='small' value={0}>
+            STATE
+          </ToggleButton>
+          <ToggleButton size='small' value={1}>
+            DIFF
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        <Tooltip title='Time Travel' placement='bottom'>
+          <ToggleButton
+            sx={{ marginLeft: '1rem' }}
+            size='small'
+            color='secondary'
+            value='check'
+            selected={timeTravel}
+            onChange={() => setTimeTravel(!timeTravel)}
+          >
+            <HistoryIcon />
+          </ToggleButton>
+        </Tooltip>
+      </Box>
 
       {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
@@ -184,6 +205,7 @@ const QuereisTab = ({
         sx={{
           flexGrow: 1,
           overflowY: 'scroll',
+          // backgroundColor: timeTravel? '#cccccc' : ''
         }}
       >
         <CustomTabPanel value={value} index={0}>
