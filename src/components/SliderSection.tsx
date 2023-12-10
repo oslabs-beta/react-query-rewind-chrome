@@ -34,7 +34,7 @@ const SliderSection = ({
         alignItems: 'center',
         justifyContent: 'center',
         bottom: 0,
-        paddingRight: '0.5rem',
+        // paddingRight: '0.5rem',
         // backgroundColor: 'rgba(40, 40, 40, 0.5)',
       }}
     >
@@ -42,13 +42,13 @@ const SliderSection = ({
         aria-label='play-pause'
         size='large'
         onClick={handleAutoPlay}
-        sx={{ '&:hover': { display: 'flex' } }}
+        sx={{ '&:hover': { display: 'flex' }, marginRight: '0.5rem' }}
       >
         {playIcon}
       </IconButton>
 
       <Box
-      mr={3}
+        mr='1rem'
         sx={{
           flexGrow: 1,
           display: 'flex',
@@ -58,7 +58,15 @@ const SliderSection = ({
           position: 'relative',
         }}
       >
-        <span style={{ minWidth: '2rem', fontSize: 12, position: 'absolute', top: '-0.5rem', left: '50%' }}>
+        <span
+          style={{
+            minWidth: '2rem',
+            fontSize: 12,
+            position: 'absolute',
+            top: '-0.5rem',
+            left: '50%',
+          }}
+        >
           {selectedQueries.length === 0
             ? '0 / 0'
             : `${currentIndex + 1} / ${queryDisplay.length}`}
@@ -75,7 +83,10 @@ const SliderSection = ({
         size='medium'
         disabled={currentIndex === 0}
         onClick={() => setCurrentIndex(0)}
-        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
+        sx={{
+          '&:hover': { display: 'flex' },
+          '&.MuiIconButton-root': { padding: '0' },
+        }}
       >
         <KeyboardDoubleArrowLeftIcon fontSize='inherit' />
       </IconButton>
@@ -85,7 +96,10 @@ const SliderSection = ({
         size='medium'
         disabled={currentIndex === 0}
         onClick={() => setCurrentIndex(Math.max(currentIndex - 1, 0))}
-        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
+        sx={{
+          '&:hover': { display: 'flex' },
+          '&.MuiIconButton-root': { padding: '0' },
+        }}
       >
         <KeyboardArrowLeftIcon fontSize='inherit' />
       </IconButton>
@@ -97,7 +111,10 @@ const SliderSection = ({
         onClick={() =>
           setCurrentIndex(Math.min(currentIndex + 1, queryDisplay.length - 1))
         }
-        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
+        sx={{
+          '&:hover': { display: 'flex' },
+          '&.MuiIconButton-root': { padding: '0' },
+        }}
       >
         <KeyboardArrowRightIcon fontSize='inherit' />
       </IconButton>
@@ -107,7 +124,10 @@ const SliderSection = ({
         size='medium'
         disabled={currentIndex === queryDisplay.length - 1}
         onClick={() => setCurrentIndex(queryDisplay.length - 1)}
-        sx={{ '&:hover': { display: 'flex' }, '&.MuiIconButton-root': { padding: '0'} }}
+        sx={{
+          '&:hover': { display: 'flex' },
+          '&.MuiIconButton-root': { padding: '0' },
+        }}
       >
         <KeyboardDoubleArrowRightIcon fontSize='inherit' />
       </IconButton>
