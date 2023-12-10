@@ -6,34 +6,26 @@ const theme = {
   base00: 'transparent',
 };
 
-// Types
+// Types - should be brought into global types file so code is more DRY?
 type JsonDataType = {
   [key: string]: any;
 };
+
+type ExpandNodesFuncType = (
+  keyPath: ReadonlyArray<string | number>,
+  value: any,
+  layer: number
+) => boolean;
+
 type JsonFormatterType = {
   jsonData: JsonDataType;
   queryKey: string;
+  expandNodesFunc: ExpandNodesFuncType;
 };
 
-const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData, queryKey }) => {
+const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData, queryKey, expandNodesFunc }) => {
   // update data so that query key is the root
   const dataWithKey = { [queryKey]: jsonData };
-
-  // function to expand nodes
-  const expand = (
-    keyPath: ReadonlyArray<string | number>,
-    value: any,
-    layer: number
-  ) => {
-    // Gets recurisved called and traverses the json in depth first search so we could use it to trac the nodes that are open at any given time
-
-    // console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)
-    // console.log('value: ', value); // value: value in that keypath
-    // console.log('layer: ', layer); // layer: the depth
-    // expand first level
-    if (layer < 2) return true;
-    return false;
-  };
 
   return (
     <div>
@@ -41,7 +33,7 @@ const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData, queryKey }) => {
         data={dataWithKey}
         theme={theme}
         hideRoot={true}
-        shouldExpandNodeInitially={expand}
+        shouldExpandNodeInitially={expandNodesFunc}
       />
     </div>
   );
