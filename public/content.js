@@ -2,7 +2,7 @@
 let script;
 
 //inject script into current DOM
-const inject = (fileName) => {
+const inject = fileName => {
   // console.log("CONTENTSCRIPT.JS: INJECTING SCRIPT");
   script = document.createElement('script');
   script.setAttribute('type', 'text/javascript');
@@ -15,7 +15,7 @@ const inject = (fileName) => {
 inject('inject.js');
 
 //wait for message from inject.js, when recieved send another message to app.tsx
-window.addEventListener('message', (event) => {
+window.addEventListener('message', event => {
   // console.log("message from inject.js", event.data.eventListStr);
   if (event.data.type && event.data.type === 'EVENT_LIST') {
     // console.log("event", event);
@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // console.log(message);
 });
 
-const windowListener = (event) => {
+const windowListener = event => {
   // Validate the message origin and structure
   if (
     event.source === window &&
@@ -52,7 +52,6 @@ const windowListener = (event) => {
 window.addEventListener('message', windowListener);
 
 const messageListener = async (message, sender, sendResponse) => {
-
   if (message.sender === 'UpdateUI') {
     const event = new CustomEvent('UpdateUI', {
       detail: { currentQuery: message.currentQuery },
@@ -67,4 +66,12 @@ const messageListener = async (message, sender, sendResponse) => {
   }
   return true;
 };
+
 chrome.runtime.onMessage.addListener(messageListener);
+
+// sends message to the window to reload when the chrome dev tool opens
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.type === 'reloadPage') {
+    window.location.reload();
+  }
+});
