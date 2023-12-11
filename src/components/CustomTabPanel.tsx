@@ -1,3 +1,4 @@
+import React from 'react';
 import { TabPanelProps } from '../types';
 
 import Container from '@mui/material/Container';

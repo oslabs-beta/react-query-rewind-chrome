@@ -14,11 +14,20 @@ import FormControl from '@mui/material/FormControl';
 import CustomTabPanel from '../components/CustomTabPanel';
 import SliderSection from '../components/SliderSection';
 import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import InfoIcon from '@mui/icons-material/Info';
+import HistoryIcon from '@mui/icons-material/History';
+import Tooltip from '@mui/material/Tooltip';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
+import MultiSelect from '../components/MultiSelect';
 
-const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
+const QuereisTab = ({
+  queryEvents,
+  selectedQueries,
+  handleSelectionChange,
+}: QueryTabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -131,31 +140,72 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
         pt: 1,
       }}
     >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <MultiSelect
+        queryEvents={queryEvents}
+        handleSelectionChange={handleSelectionChange}
+      />
+
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'start',
+          marginTop: '0.5rem',
+        }}
+      >
+        <ToggleButtonGroup
+          color='secondary'
+          value={value}
+          exclusive
+          onChange={handleChange}
+          aria-label='Platform'
+        >
+          <ToggleButton size='small' value={0}>
+            STATE
+          </ToggleButton>
+          <ToggleButton size='small' value={1}>
+            DIFF
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        <Tooltip title='Time Travel' placement='bottom'>
+          <ToggleButton
+            sx={{ marginLeft: '1rem' }}
+            size='small'
+            color='secondary'
+            value='check'
+            selected={timeTravel}
+            onChange={() => setTimeTravel(!timeTravel)}
+          >
+            <HistoryIcon />
+          </ToggleButton>
+        </Tooltip>
+      </Box>
+
+      {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label='basic tabs example'
-          indicatorColor='secondary'
+          indicatorColor='primary'
         >
           <Tab
-            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
-            label="STATE"
+            sx={{ '&.Mui-selected': { color: 'secondary.main' } }}
+            label='STATE'
             {...a11yProps(0)}
           />
           <Tab
-            sx={{'&.Mui-selected': {color: 'secondary.main'}}} 
-            label="DIFF"
+            sx={{ '&.Mui-selected': { color: 'secondary.main' } }}
+            label='DIFF'
             {...a11yProps(1)}
           />
         </Tabs>
-      </Box>
-
+      </Box> */}
       <Box
         sx={{
           flexGrow: 1,
-          overflowY: 'auto',
-          maxHeight: '60vh',
+          overflowY: 'scroll',
+          // backgroundColor: timeTravel? '#cccccc' : ''
         }}
       >
         <CustomTabPanel value={value} index={0}>
@@ -165,17 +215,18 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
-
-      <FormControl component='fieldset'>
-        <FormControlLabel
-          value='timeTravel'
-          control={<Switch color='primary' />}
-          label='Time Travel'
-          labelPlacement='start'
-          onChange={() => setTimeTravel(!timeTravel)}
-        />
-      </FormControl>
-
+      {/* <span>
+        <InfoIcon></InfoIcon>
+        <FormControl component='fieldset'>
+          <FormControlLabel
+            value='timeTravel'
+            control={<Switch color='primary' />}
+            label='Time Travel'
+            labelPlacement='start'
+            onChange={() => setTimeTravel(!timeTravel)}
+          />
+        </FormControl>
+      </span> */}
       {/* <ToggleButton
         value="check"
         selected={timeTravel}
@@ -183,7 +234,6 @@ const QuereisTab = ({ queryEvents, selectedQueries }: QueryTabProps) => {
       >
         {timeTravel ? "ON" : "OFF"}
       </ToggleButton> */}
-
       <SliderSection
         queryDisplay={queryDisplay}
         currentIndex={currentIndex}

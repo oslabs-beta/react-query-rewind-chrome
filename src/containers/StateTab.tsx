@@ -1,3 +1,5 @@
+import React from 'react';
+
 import JsonFormatter from '../components/JsonFormatter';
 import { useState } from 'react';
 import { DataTabProps } from '../types';
@@ -30,7 +32,7 @@ const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
         <div
           className='data'
-          style={{ maxHeight: '80vh', overflow: 'auto', marginTop: '1rem' }}
+          style={{ height: '100%', overflow: 'auto' }}
         >
           {queryDisplay[currentIndex].map((queryState) => (
             <>

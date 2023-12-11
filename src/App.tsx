@@ -1,11 +1,12 @@
 import './css/styles.css';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ParentTab from './containers/ParentTab';
 import { QueryEvent } from './types';
 import MultiSelect from './components/MultiSelect';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { createTheme } from '@mui/material/styles';
 
 type QueryMetrics = {
   // [queryKey: ]
@@ -110,28 +111,21 @@ function App() {
   };
 
   return (
-    <Container maxWidth={false} style={{ height: '100vh', padding: 0 }}>
-      <Box
-        sx={{
-          height: '100%',
-          width: '100%',
-          p: 5,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <MultiSelect
-          onSelectionChange={handleSelectionChange}
-          queryEvents={queryEvents}
-        />
-        <Box sx={{ flexGrow: 1 }}>
-          <ParentTab
-            // queryOptions={queryOptions}
-            queryEvents={queryEvents}
-            selectedQueries={selectedQueries}
-          />
-        </Box>
-      </Box>
+    <Container
+      maxWidth={false}
+      sx={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <ParentTab
+        // queryOptions={queryOptions}
+        queryEvents={queryEvents}
+        selectedQueries={selectedQueries}
+        handleSelectionChange={handleSelectionChange}
+      />
     </Container>
   );
 }
