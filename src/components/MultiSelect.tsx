@@ -8,13 +8,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { QueryEvent } from '../types';
 
-type MultiSelectProps = {
-  onSelectionChange: (selected: string[]) => void;
+interface MultiSelectProps {
+  handleSelectionChange: (selected: string[]) => void;
   queryEvents: QueryEvent[];
 };
 
 export default function MultiSelect({
-  onSelectionChange,
+  handleSelectionChange,
   queryEvents,
 }: MultiSelectProps) {
   const [isChecked, setIsChecked] = useState<string[]>([]);
@@ -39,7 +39,7 @@ export default function MultiSelect({
         });
         // invoke functions that 1) set checked values in the UI and 2) set the checked values in state so that the correct data is displayed
         setIsChecked(intersectionOfStorageAndAvailable);
-        onSelectionChange(intersectionOfStorageAndAvailable);
+        handleSelectionChange(intersectionOfStorageAndAvailable);
       }
     });
   }, [queryEvents]);
@@ -50,13 +50,12 @@ export default function MultiSelect({
     } = event;
     const newSelection = typeof value === 'string' ? value.split(',') : value;
     setIsChecked(newSelection);
-    onSelectionChange(newSelection);
+    handleSelectionChange(newSelection);
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id='demo-multiple-checkbox-label'>Queries</InputLabel>
+      <FormControl sx={{ width: '100%' }}>
+        <InputLabel id='demo-multiple-checkbox-label' size='small'>Select</InputLabel>
         <Select
           labelId='demo-multiple-checkbox-label'
           id='demo-multiple-checkbox'
@@ -65,15 +64,15 @@ export default function MultiSelect({
           onChange={handleChange}
           input={<OutlinedInput label='Queries' />}
           renderValue={(selected) => selected.join(', ')}
+          size='small'
         >
           {queryOptions.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={isChecked.indexOf(name) > -1} />
+              <Checkbox checked={isChecked.indexOf(name) > -1} size='small'/>
               <ListItemText primary={name} />
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-    </div>
   );
 }

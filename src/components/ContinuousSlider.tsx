@@ -19,20 +19,11 @@ export default function ContinuousSlider({
   };
 
   return (
-    <Box sx={{ width: 300 }}>
-      <Stack
-        spacing={2}
-        direction='row'
-        alignItems='center'
-        justifyContent='center'
-      >
         <Slider
           value={value}
           onChange={handleChange}
           max={maxValue}
           aria-labelledby='continuous-slider'
         />
-      </Stack>
-    </Box>
   );
 }
