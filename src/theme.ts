@@ -3,8 +3,6 @@ import { dark, light } from '@mui/material/styles/createPalette';
 
 const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false;
 
-console.log('Dark Mode: ', darkMode);
-
 const theme: ThemeOptions = createTheme({
   palette: {
     mode: darkMode ? 'dark' : 'light', // dynamically determine mode

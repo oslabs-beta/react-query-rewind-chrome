@@ -54,7 +54,6 @@ function App() {
   const handleSelectionChange = (queries: string[]) => {
     setSelectedQueries(queries);
     saveSelectedQueryKeys(queries);
-  
   };
 
   return (

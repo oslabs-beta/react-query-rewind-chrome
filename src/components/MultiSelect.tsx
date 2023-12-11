@@ -27,7 +27,9 @@ export default function MultiSelect({
     // when there are new query options, we need to check with local storage and see if any of them are set
     chrome.storage.local.get(['selectedQueries'], (result) => {
       // check that data exists and it's an array
+      // console.log('result when setting queries: ', result);
       if (result.selectedQueries && Array.isArray(result.selectedQueries)) {
+        // console.log('criteria is met');
         // get the queries out of local storage
         const arrayQueries = result.selectedQueries;
         const intersectionOfStorageAndAvailable: string[] = [];
