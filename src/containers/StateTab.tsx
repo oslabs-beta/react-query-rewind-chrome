@@ -3,11 +3,6 @@ import JsonFormatter from '../components/JsonFormatter';
 import { useState } from 'react';
 import { DataTabProps, ExpandNodesFuncType } from '../types';
 
-// type ExpandNodesFuncType = (
-//   keyPath: ReadonlyArray<string | number>,
-//   value: any,
-//   layer: number
-// ) => boolean;
 
 const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   // state to handle open nodes
@@ -26,7 +21,6 @@ const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
     // console.log('value: ', value); // value: value in that keypath
     // console.log('layer: ', layer); // layer: the depth
     // expand first level
-
 
     if (layer < 2) return true;
     return false;
