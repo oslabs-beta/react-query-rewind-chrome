@@ -1,14 +1,11 @@
 import React from 'react';
 import JsonFormatter from './JsonFormatter';
 import Typography from '@mui/material/Typography';
-
 import Container from '@mui/material/Container';
 import jsondiffpatch from 'jsondiffpatch';
 import '../css/jsonDiff.css';
+import { JsonDataType } from '../types';
 
-type JsonDataType = {
-  [key: string]: any;
-};
 
 type JsonFormatterType = {
   oldJson?: JsonDataType | string, // optional in case you're on first state

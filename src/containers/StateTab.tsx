@@ -1,14 +1,13 @@
 import React from 'react';
-
 import JsonFormatter from '../components/JsonFormatter';
 import { useState } from 'react';
-import { DataTabProps } from '../types';
+import { DataTabProps, ExpandNodesFuncType } from '../types';
 
-type ExpandNodesFuncType = (
-  keyPath: ReadonlyArray<string | number>,
-  value: any,
-  layer: number
-) => boolean;
+// type ExpandNodesFuncType = (
+//   keyPath: ReadonlyArray<string | number>,
+//   value: any,
+//   layer: number
+// ) => boolean;
 
 const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   // state to handle open nodes
@@ -16,11 +15,11 @@ const StateTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
   // each item in the set the keyValue
 
   // function to expand nodes (types can probably be stored globally so code is more dry)
-  const expandNodesFunc = (
-    keyPath: ReadonlyArray<string | number>,
-    value: any,
-    layer: number
-  ): boolean => {
+  const expandNodesFunc: ExpandNodesFuncType = (
+    keyPath,
+    value,
+    layer
+  ) => {
     // Gets recurisved called and traverses the json in depth first search so we could use it to trac the nodes that are open at any given time
     // console.log('Func called');
     // console.log('keyPath: ', keyPath); // keyPath: the keyPaths (goes in a recursive, depth first approach)

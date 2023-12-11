@@ -58,3 +58,15 @@ export type QueryDisplay = {
   queryKey: string;
   queryData: any;
 };
+
+export type JsonDataType = {
+  [key: string]: any;
+};
+
+// function types
+
+export type ExpandNodesFuncType = (
+  keyPath: ReadonlyArray<string | number>,
+  value: any,
+  layer: number
+) => boolean
