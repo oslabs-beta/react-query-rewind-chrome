@@ -20,7 +20,7 @@ type ExpandNodesFuncType = (
 type JsonFormatterType = {
   jsonData: JsonDataType;
   queryKey: string;
-  expandNodesFunc: ExpandNodesFuncType;
+  expandNodesFunc?: ExpandNodesFuncType; // this should be required but getting errors when it's not
 };
 
 const JsonFormatter: React.FC<JsonFormatterType> = ({ jsonData, queryKey, expandNodesFunc }) => {
