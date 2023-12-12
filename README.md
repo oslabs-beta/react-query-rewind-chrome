@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/oslabs-beta/react-query-rewind-chrome">
-    <img src="https://files.slack.com/files-pri/T05LBETPE2U-F069RTRNQF7/image.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/oslabs-beta/react-query-rewind-chrome/blob/main/public/icon.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">React Query Rewind</h3>
