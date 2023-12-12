@@ -7,6 +7,7 @@ import saveSelectedQueryKeys from './functions/saveSelectedQueryKeys'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 type QueryMetrics = {
   // [queryKey: ]
@@ -17,16 +18,24 @@ function App() {
   const [queryEvents, setQueryEvents] = useState<QueryEvent[]>([]);
   const [queryMetrics, setQueryMetrics] = useState();
   const [selectedQueries, setSelectedQueries] = useState<string[]>([]);
+  const [unableToFindQueryClient, setUnableToFindQueryClient] = useState(false);
 
   // adds event listeners when component mounts
   useEffect(() => {
     // connects to background.js
     let port = chrome.runtime.connect({ name: 'devtools-panel' });
 
+    console.log('TESTING');
     // listents for messages from npm package
     port.onMessage.addListener((message) => {
-      if (message.type === 'event') {
+      // handle errors where custom component is outside of query client provider
+      console.log('message: ', message);
+      if (message.type === 'event' && message.event && message.event.unableToFindQueryClient === true) {
+        setUnableToFindQueryClient(true)
+        console.log('unableToFindQueryClient');
+      } else if (message.type === 'event') {
         setQueryEvents((queryEvents) => [...queryEvents, message.event]);
+        setUnableToFindQueryClient(false); // reset it so that user doesn't need to refresh page?
       }
 
       if (message.type === 'metric') {
@@ -56,6 +65,13 @@ function App() {
     saveSelectedQueryKeys(queries);
   };
 
+  if (unableToFindQueryClient) {
+    return (
+      <>
+        <Typography>Please ensure the ReactQueryRewind component is inside your query client provider</Typography>
+      </>
+    )
+  }
   return (
     <Container
       maxWidth={false}

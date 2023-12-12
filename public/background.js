@@ -13,7 +13,7 @@ const messageListener = async (newEvent, sender, sendResponse) => {
   // console.log('message received from content');
 
   if (newEvent.sender === 'content script' && devToolsPort) {
-    // console.log('send to devtool panel');
+    console.log('send to devtool panel: ', newEvent.message);
     devToolsPort.postMessage({ event: newEvent.message, type: 'event' });
   }
 
