@@ -32,7 +32,7 @@ const ParentTab = ({ queryEvents, selectedQueries, handleSelectionChange }: Pare
           aria-label='basic tabs example'
         >
           <Tab label='QUERIES' {...a11yProps(0)} />
-          <Tab label='METRICS' {...a11yProps(1)} />
+          <Tab label='COMPONENT TREE' {...a11yProps(1)} />
           <Tab label='SETTINGS' {...a11yProps(2)} />
         </Tabs>
       </Box>
