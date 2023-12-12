@@ -17,7 +17,6 @@ const saveSelectedQueryKeys = async (queries: string[]) => {
   }
 
   const queriesSet = new Set(queries);
-  console.log('queriesSet: ', queriesSet);
   const sessionResult = await chrome.storage.local.get(['thisSessionsQueries']);
   
   // if no queries have been stored as part of the session set to an empty array
@@ -26,11 +25,9 @@ const saveSelectedQueryKeys = async (queries: string[]) => {
       sessionResult.thisSessionsQueries :
       [];
 
-  console.log('sessionQueries: ', sessionQueries);
   // determine the queries that the user removed by finding the difference between the queries passed into the function and the queries stored as SessionQueries
   // I'm currently marking queries as removed 
   const queriesRemoved: string[] = sessionQueries.filter( queryKey => !queriesSet.has(queryKey))
-  console.log('queries Removed: ', queriesRemoved);
   // update storage for current session's selections now that we've found if any query keys were removed 
   await chrome.storage.local.set({
     thisSessionsQueries: queries
@@ -63,12 +60,6 @@ const saveSelectedQueryKeys = async (queries: string[]) => {
   await chrome.storage.local.set({
     selectedQueries: combinedQueriesWithRemovals,
   });
-
-  // TESTING - delete later
-  const finalSessionResult = await chrome.storage.local.get(['thisSessionsQueries']);
-  console.log('SessionQueries AFTER: ', finalSessionResult.thisSessionsQueries);
-  const finalResult = await chrome.storage.local.get(['selectedQueries']);
-  console.log('final AFTER: ', finalResult.selectedQueries);
 };
 
 export default saveSelectedQueryKeys;
