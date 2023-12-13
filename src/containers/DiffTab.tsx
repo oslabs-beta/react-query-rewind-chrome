@@ -4,36 +4,35 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import React, { useState } from 'react';
 
-
 import JsonDiff from '../components/JsonDiff';
 
 import { DataTabProps } from '../types';
 
 const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
-
   // state to determine if unchanged are hidden or closed
-  const [isHidden, setIsHidden] = useState(false)
+  const [isHidden, setIsHidden] = useState(false);
 
   // function to hide/show unchanged data
   const toggleChangedProperties = () => {
     setIsHidden(!isHidden);
-  }
+  };
 
   return (
     <>
       <FormControlLabel
-      sx={{color: 'primary.main'}}
-        control={<Switch
-          checked={isHidden}
-          onChange={toggleChangedProperties} />
+        sx={{ color: 'primary.main', marginLeft: 0 }}
+        control={
+          <Switch checked={isHidden} onChange={toggleChangedProperties} />
         }
-        label={`${isHidden ? "Show" : "Hide"} Unchanged Properties `}
+        label={`${isHidden ? 'Show' : 'Hide'} Unchanged Properties `}
       />
       {queryDisplay.length > 0 && queryDisplay[currentIndex] && (
-        <div className="data">
+        <div className='data'>
           {queryDisplay[currentIndex].map((queryState, i) => (
             <>
-              <Typography variant="h6" sx={{ color: 'secondary.main' }}>{queryState.queryKey}</Typography>
+              <Typography variant='h6' sx={{ color: 'secondary.main' }}>
+                {queryState.queryKey}
+              </Typography>
               <JsonDiff
                 key={queryState.queryKey}
                 queryKey={queryState.queryKey}
@@ -42,8 +41,8 @@ const DiffTab = ({ queryDisplay, currentIndex }: DataTabProps) => {
                 oldJson={
                   currentIndex > 1 && queryState.queryKey
                     ? queryDisplay[currentIndex - 1].find(
-                      obj => obj.queryKey === queryState.queryKey
-                    )?.queryData
+                        (obj) => obj.queryKey === queryState.queryKey
+                      )?.queryData
                     : null
                 }
               />

@@ -69,9 +69,9 @@ const messageListener = async (message, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener(messageListener);
 
-// // sends message to the window to reload when the chrome dev tool opens
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   if (request.type === 'reloadPage') {
-//     window.location.reload();
-//   }
-// });
+// sends message to the window to reload when the chrome dev tool opens
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.type === 'reloadPage') {
+    window.location.reload();
+  }
+});

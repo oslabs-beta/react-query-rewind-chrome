@@ -48,7 +48,9 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
         console.log('inside use effect', JSON.parse(request.data));
         switch (request.action) {
           case 'EVENT_LIST':
-            setIdk([...JSON.parse(request.data)]);
+            if (request.data) {
+              setIdk([...JSON.parse(request.data)]);
+            }
             break;
         }
       }
