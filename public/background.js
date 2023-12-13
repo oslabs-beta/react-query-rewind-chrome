@@ -5,15 +5,11 @@ const connectListener = port => {
   if (port.name === 'devtools-panel') {
     devToolsPort = port;
   }
-  return true;
 };
 chrome.runtime.onConnect.addListener(connectListener);
 
 const messageListener = async (newEvent, sender, sendResponse) => {
-  // console.log('message received from content');
-
-  if (newEvent.sender === 'content script' && devToolsPort) {
-    // console.log('send to devtool panel');
+  if (newEvent.sender === 'content script' && devToolsPort !== null) {
     devToolsPort.postMessage({ event: newEvent.message, type: 'event' });
   }
 
@@ -46,7 +42,7 @@ chrome.runtime.onSuspend.addListener(() => {
   chrome.runtime.onMessage.removeListener(messageListener);
 });
 
-// event listener for when the chrome dev tool is shown
+//event listener for when the chrome dev tool is shown
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === 'devtoolsOpened') {
     // find the active tab and send a message to the content script

@@ -11,3 +11,6 @@
     /* Let's also make the radius of leaf nodes larger */
     border-radius: 40;
   }
+  .rd3t-label__title {
+    fill: #808080 !important;
+  }
