@@ -1,28 +1,14 @@
 import React from 'react';
 import JsonFormatter from './JsonFormatter';
 import Typography from '@mui/material/Typography';
-
 import Container from '@mui/material/Container';
 import jsondiffpatch from 'jsondiffpatch';
 import '../css/jsonDiff.css';
-
-type JsonDataType = {
-  [key: string]: any;
-};
-
-type JsonFormatterType = {
-  oldJson?: JsonDataType | string, // optional in case you're on first state
-  currentJson: JsonDataType | string, // or string since state gets initialized to an empty string
-  queryKey: string,
-  isHidden: boolean
-};
+import { JsonDiffType } from '../types';
 
 
-const JsonDiff: React.FC<JsonFormatterType> = ({ oldJson, currentJson, queryKey, isHidden }) => {
-  // console.log('QueryKey: ', queryKey);
-  // console.log('old:', oldJson);
-  // console.log('currentJson:', currentJson);
-  
+const JsonDiff: React.FC<JsonDiffType> = ({ oldJson, currentJson, queryKey, isHidden }) => {
+
   // handle scenario where we're on the first state - getting currentJson but not oldJson
   if (currentJson === '') return (
     <Typography

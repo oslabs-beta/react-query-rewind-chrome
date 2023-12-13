@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import React, { useState } from 'react';
 
+
 import JsonDiff from '../components/JsonDiff';
 
 import { DataTabProps } from '../types';

@@ -95,7 +95,7 @@ function ComponentTree({ fiberTree }: ComponentTreeProps) {
           </div>
         </div>
       ) : (
-        <h2 className="title">COMPONENT TREE</h2>
+        <h2 className="title">COMPONENT TREE - if your component tree isn't rendering, make sure you have React DevTools installed and try again!</h2>
       )}
     </>
   );
