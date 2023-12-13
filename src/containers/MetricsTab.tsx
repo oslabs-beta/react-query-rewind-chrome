@@ -10,10 +10,10 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
 
   const [idk, setIdk] = useState<any[]>([]);
   //state for navigating between tree and charts
-  const [view, setView] = useState<string>("treeView");
+  const [view, setView] = useState<string>('treeView');
   //state for recording status, default to false;
   const [recStat, setRecStat] = useState<boolean>(false);
-  const [recButton, setRecButton] = useState<string>("START PROFILING");
+  const [recButton, setRecButton] = useState<string>('START PROFILING');
   const [chartData, setChartData] = useState<any[]>([]);
 
   const setStatus = () => {
@@ -29,13 +29,13 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
   //update recButton according to recStat
   useEffect(() => {
     if (!recStat) {
-      setRecButton("Start profiling");
+      setRecButton('Start profiling');
       sendMessageToContentScript({
         message: `Hello from popup! ${idk.length}`,
       });
       setChartData([...idk]);
     } else {
-      setRecButton("Stop profiling");
+      setRecButton('Stop profiling');
       sendMessageToContentScript({
         message: `Hello from popup! ${idk.length}`,
       });
@@ -45,9 +45,9 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
   useEffect(() => {
     const msgListener = (request: any, sender: any, sendResponse: any) => {
       if (recStat) {
-        console.log("inside use effect", JSON.parse(request.data));
+        console.log('inside use effect', JSON.parse(request.data));
         switch (request.action) {
-          case "EVENT_LIST":
+          case 'EVENT_LIST':
             setIdk([...JSON.parse(request.data)]);
             break;
         }
@@ -61,15 +61,19 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
     };
   }, [recStat]);
 
-return (
-  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <ProfilingToggle onClick={() => setStatus()}>{recButton}</ProfilingToggle>
-        <div className="ct"></div>
-        {view === "treeView" && <ComponentTree fiberTree={idk[idk.length - 1]} />}
+        <ProfilingToggle onClick={() => setStatus()}>
+          {recButton}
+        </ProfilingToggle>
+        <div className='ct'></div>
+        {view === 'treeView' && (
+          <ComponentTree fiberTree={idk[idk.length - 1]} />
+        )}
       </div>
-  </Box>
-);
+    </Box>
+  );
 };
 
 export default MetricsTab;

@@ -47,11 +47,11 @@ chrome.runtime.onSuspend.addListener(() => {
 });
 
 // event listener for when the chrome dev tool is shown
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.type === 'devtoolsOpened') {
-    // find the active tab and send a message to the content script
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: 'reloadPage' });
-    });
-  }
-});
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+//   if (request.type === 'devtoolsOpened') {
+//     // find the active tab and send a message to the content script
+//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//       chrome.tabs.sendMessage(tabs[0].id, { type: 'reloadPage' });
+//     });
+//   }
+// });
