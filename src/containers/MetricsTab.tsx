@@ -62,7 +62,7 @@ const MetricsTab = ({ queryEvents }: BasicTabsProps) => {
   }, [recStat]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginTop: '1rem' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <ProfilingToggle onClick={() => setStatus()}>
           {recButton}

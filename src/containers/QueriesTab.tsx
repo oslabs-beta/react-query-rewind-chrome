@@ -21,6 +21,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import StateTab from './StateTab';
 import DiffTab from './DiffTab';
+import ChartTab from './ChartTab'
 import MultiSelect from '../components/MultiSelect';
 
 const QuereisTab = ({
@@ -166,6 +167,9 @@ const QuereisTab = ({
           <ToggleButton size='small' value={1}>
             DIFF
           </ToggleButton>
+          <ToggleButton size='small' value={2}>
+            CHART
+          </ToggleButton>
         </ToggleButtonGroup>
 
         <Tooltip title='Time Travel' placement='bottom'>
@@ -213,6 +217,9 @@ const QuereisTab = ({
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <DiffTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <ChartTab queryDisplay={queryDisplay} currentIndex={currentIndex} />
         </CustomTabPanel>
       </Box>
       {/* <span>
